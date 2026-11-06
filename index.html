@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F5F6F0">
+<title>有球必應｜Hakuna Matata</title>
+<style>
+:root{
+  --sage:#98A68D;
+  --deep:#687B62;
+  --ink:#3D433B;
+  --muted:#7C8778;
+  --gold:#B89D67;
+  --gold-light:#E4D1A7;
+  --gold-deep:#927549;
+  --cream:#FBFAF6;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:"Segoe UI","Microsoft JhengHei UI","Microsoft JhengHei",sans-serif;
+  background:
+    radial-gradient(ellipse at 92% 6%, rgba(152,166,141,.27), transparent 48%),
+    radial-gradient(ellipse at 9% 87%, rgba(228,209,167,.19), transparent 42%),
+    linear-gradient(130deg, #FBFAF6 0%, #F0F3EB 60%, #EDF0E8 100%);
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+a:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:4px;
+}
+
+.page{
+  width:min(1144px,calc(100% - 48px));
+  margin:auto;
+  padding:30px 0 40px;
+}
+
+/* 全站柔金漸層定義 */
+.svg-defs{
+  position:absolute;
+  width:0;
+  height:0;
+  overflow:hidden;
+}
+
+/* 品牌區 */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.brand-mark{
+  position:relative;
+  isolation:isolate;
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  border:1px solid rgba(184,157,103,.28);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 29% 24%,
+      rgba(255,255,255,1) 0%,
+      rgba(255,253,246,.87) 28%,
+      rgba(247,237,213,.46) 66%,
+      rgba(223,198,145,.15) 100%);
+  box-shadow:
+    0 0 16px rgba(218,194,149,.13),
+    0 5px 15px rgba(90,80,57,.055),
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(184,157,103,.08);
+}
+
+.brand-mark::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-11px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      rgba(226,200,151,.25) 0%,
+      rgba(226,200,151,.10) 43%,
+      transparent 72%);
+  filter:blur(5px);
+  pointer-events:none;
+}
+
+.brand-mark svg{
+  width:24px;
+  height:24px;
+  filter:
+    drop-shadow(0 1px 1px rgba(255,255,255,.9))
+    drop-shadow(0 2px 3px rgba(173,132,67,.23));
+}
+
+.brand-title{
+  font-size:19px;
+  font-weight:400;
+  letter-spacing:.16em;
+  line-height:1.35;
+}
+
+.brand-cn{
+  margin-top:4px;
+  font-size:11px;
+  color:#838B80;
+  letter-spacing:.025em;
+  line-height:1.5;
+}
+
+.brand-en{
+  margin-top:5px;
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+
+/* 中間標語區 */
+.intro{
+  position:relative;
+  margin-top:74px;
+  margin-bottom:25px;
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.intro-wrap{
+  position:relative;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+}
+
+.intro-side{
+  flex:1 1 0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  opacity:.92;
+}
+
+.intro-side.right{
+  justify-content:flex-start;
+}
+
+.intro-side.left{
+  justify-content:flex-end;
+}
+
+.intro-line{
+  width:min(100%,72px);
+  height:1px;
+  background:linear-gradient(90deg, rgba(184,157,103,.08), rgba(184,157,103,.48));
+}
+
+.intro-side.left .intro-line{
+  background:linear-gradient(90deg, rgba(184,157,103,.48), rgba(184,157,103,.08));
+}
+
+.intro-orn{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.9))
+    drop-shadow(0 2px 3px rgba(173,132,67,.20));
+}
+
+.intro-center{
+  position:relative;
+  flex:0 1 auto;
+  min-width:0;
+  text-align:center;
+  padding:0 6px;
+}
+
+.intro-en{
+  margin:0;
+  font-family:"Palatino Linotype","Book Antiqua",Georgia,serif;
+  font-style:italic;
+  font-size:27px;
+  font-weight:400;
+  letter-spacing:.04em;
+  line-height:1.1;
+  background:linear-gradient(135deg,#F4E5C1 0%, #C7A56A 36%, #F0DEB4 60%, #9A7845 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  opacity:.96;
+  white-space:nowrap;
+  text-shadow:0 2px 10px rgba(184,157,103,.08);
+}
+
+.intro-cn{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-38%);
+  margin:0;
+  padding:0 8px;
+  font-size:12px;
+  font-weight:400;
+  color:#727B71;
+  letter-spacing:.035em;
+  line-height:1.65;
+  white-space:nowrap;
+  background:linear-gradient(180deg, rgba(245,246,240,.85), rgba(245,246,240,.42));
+  border-radius:999px;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+
+/* 四欄卡片 */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+  margin-top:75px;
+}
+
+.card{
+  position:relative;
+  isolation:isolate;
+  min-height:232px;
+  padding:18px 21px 18px;
+  border-radius:24px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:linear-gradient(
+    140deg,
+    rgba(255,255,255,.70) 0%,
+    rgba(255,255,255,.48) 57%,
+    rgba(249,245,235,.25) 100%);
+  border:1px solid rgba(255,255,255,.92);
+  box-shadow:
+    0 16px 32px rgba(71,85,65,.073),
+    inset 0 1px 0 rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  transition:
+    transform .32s ease,
+    box-shadow .32s ease,
+    border-color .32s ease,
+    background .32s ease;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(228,209,167,.15), transparent 57%),
+    linear-gradient(120deg, rgba(255,255,255,.16), transparent 55%);
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65);
+}
+
+.card > *{
+  position:relative;
+  z-index:1;
+}
+
+.card-link{
+  cursor:pointer;
+}
+
+.card-link:hover{
+  transform:translateY(-6px);
+  border-color:rgba(227,209,171,.85);
+  background:linear-gradient(
+    140deg,
+    rgba(255,255,255,.84),
+    rgba(255,255,255,.59) 60%,
+    rgba(241,233,211,.46));
+  box-shadow:
+    0 24px 43px rgba(71,85,65,.11),
+    0 0 23px rgba(184,157,103,.13),
+    inset 0 1px 0 rgba(255,255,255,1);
+}
+
+.card-top{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  min-height:10px;
+}
+
+.card-spark{
+  color:var(--gold);
+  font-size:12px;
+  text-shadow:
+    0 0 5px rgba(255,255,255,.8),
+    0 0 9px rgba(184,157,103,.23);
+}
+
+.card-heading{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:18px;
+}
+
+.card-icon{
+  position:relative;
+  isolation:isolate;
+  flex:0 0 29px;
+  width:29px;
+  height:29px;
+  display:grid;
+  place-items:center;
+}
+
+.card-icon::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-10px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(242,224,187,.47) 0%,
+    rgba(231,208,163,.20) 38%,
+    rgba(231,208,163,.05) 60%,
+    transparent 76%);
+  filter:blur(4px);
+  pointer-events:none;
+}
+
+.card-icon::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:2px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle at 30% 20%,
+    rgba(255,255,255,.85),
+    rgba(255,255,255,.07) 68%,
+    transparent);
+  pointer-events:none;
+}
+
+.card-icon svg{
+  display:block;
+  width:27px;
+  height:27px;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.9))
+    drop-shadow(0 2px 2px rgba(166,126,63,.23));
+  transition:filter .3s ease, transform .3s ease;
+}
+
+.card-link:hover .card-icon svg{
+  transform:translateY(-1px);
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,1))
+    drop-shadow(0 3px 4px rgba(166,126,63,.3));
+}
+
+.card-title{
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:.045em;
+  line-height:1.5;
+}
+
+.card-en{
+  margin-top:3px;
+  font:italic 12px Georgia,serif;
+  color:#839078;
+}
+
+.card-copy{
+  margin-top:20px;
+  color:#788377;
+  font-size:12px;
+  letter-spacing:.018em;
+  line-height:1.9;
+}
+
+.card-copy span{
+  display:block;
+}
+
+.card-bottom{
+  margin-top:auto;
+  padding-top:16px;
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+}
+
+.card-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:32px;
+  padding:5px 7px 5px 11px;
+  border-radius:999px;
+  border:1px solid rgba(184,157,103,.18);
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.52),
+    rgba(249,244,233,.24));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 2px 8px rgba(184,157,103,.04);
+  transition:
+    background .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease,
+    transform .3s ease;
+}
+
+.card-link:hover .card-pill{
+  border-color:rgba(184,157,103,.35);
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.78) 0%,
+    rgba(251,245,231,.62) 38%,
+    rgba(224,201,156,.22) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    0 4px 14px rgba(184,157,103,.10),
+    0 0 10px rgba(230,208,165,.14);
+  transform:translateY(-1px);
+}
+
+.card-status{
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:.10em;
+  color:#9BA398;
+  transition:color .3s ease;
+}
+
+.card-link:hover .card-status{
+  color:#927549;
+}
+
+.card-pill-arrow{
+  display:grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+  border-radius:50%;
+  border:1px solid rgba(184,157,103,.22);
+  color:var(--gold);
+  font-size:12px;
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.62),
+    rgba(238,226,200,.24) 65%,
+    rgba(223,200,152,.13));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 2px 7px rgba(184,157,103,.04);
+  transition:
+    background .3s ease,
+    color .3s ease,
+    border-color .3s ease,
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.card-link:hover .card-pill-arrow{
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.90) 0%,
+    rgba(252,245,229,.75) 32%,
+    rgba(224,201,156,.45) 70%,
+    rgba(184,157,103,.23) 100%);
+  color:#9D7F4B;
+  border-color:rgba(184,157,103,.48);
+  transform:translateX(1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    0 4px 12px rgba(184,157,103,.14),
+    0 0 10px rgba(230,208,165,.20);
+}
+
+.card-soon .card-pill{
+  opacity:.9;
+}
+
+/* 頁尾 */
+.footer{
+  margin-top:44px;
+  padding-top:18px;
+  border-top:1px solid rgba(184,157,103,.19);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  color:#A1A69B;
+  font-size:11px;
+}
+
+.footer em{
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+
+/* RWD */
+@media(max-width:850px){
+  .cards{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .intro{
+    margin-top:62px;
+  }
+
+  .intro-en{
+    font-size:23px;
+  }
+}
+
+@media(max-width:640px){
+  .intro{
+    min-height:auto;
+  }
+
+  .intro-wrap{
+    gap:8px;
+  }
+
+  .intro-side{
+    flex:0 0 auto;
+  }
+
+  .intro-line{
+    width:24px;
+  }
+
+  .intro-en{
+    font-size:19px;
+    white-space:normal;
+  }
+
+  .intro-cn{
+    position:static;
+    transform:none;
+    display:inline-block;
+    margin-top:-2px;
+    background:none;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    padding:0;
+  }
+
+  .intro-center{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+}
+
+@media(max-width:520px){
+  .page{
+    width:calc(100% - 28px);
+    padding:22px 0 30px;
+  }
+
+  .brand-title{font-size:17px}
+  .brand-cn{font-size:10px}
+  .brand-en{font-size:11px}
+
+  .intro{
+    margin-top:48px;
+    margin-bottom:18px;
+  }
+
+  .intro-wrap{
+    gap:6px;
+  }
+
+  .intro-side{
+    display:none;
+  }
+
+  .intro-en{
+    font-size:17px;
+  }
+
+  .intro-cn{
+    font-size:11px;
+  }
+
+  .cards{
+    gap:11px;
+  }
+
+  .card{
+    min-height:222px;
+    padding:17px 13px 15px;
+    border-radius:20px;
+  }
+
+  .card-heading{
+    gap:7px;
+    margin-top:16px;
+  }
+
+  .card-icon{
+    flex-basis:24px;
+    width:24px;
+    height:24px;
+  }
+
+  .card-icon svg{
+    width:23px;
+    height:23px;
+  }
+
+  .card-title{font-size:13px}
+  .card-en{font-size:10px}
+
+  .card-copy{
+    font-size:11px;
+    line-height:1.8;
+    margin-top:17px;
+  }
+
+  .card-status{
+    font-size:9px;
+    letter-spacing:.06em;
+  }
+
+  .card-pill{
+    min-height:29px;
+    padding:4px 6px 4px 10px;
+  }
+
+  .card-pill-arrow{
+    width:18px;
+    height:18px;
+    font-size:11px;
+  }
+
+  .footer{
+    margin-top:32px;
+    align-items:flex-start;
+  }
+
+  .footer em{
+    text-align:right;
+    font-size:10px;
+  }
+}
+
+@media(max-width:350px){
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    min-height:190px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .card,
+  .card-link,
+  .card-icon svg,
+  .card-pill,
+  .card-pill-arrow{
+    transition:none!important;
+  }
+}
+</style>
+</head>
+<body>
+
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="goldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0E1BF"/>
+      <stop offset="28%" stop-color="#BE9E63"/>
+      <stop offset="56%" stop-color="#E5CDA0"/>
+      <stop offset="100%" stop-color="#9A7845"/>
+    </linearGradient>
+    <radialGradient id="goldFill">
+      <stop offset="0%" stop-color="#FFF7E8"/>
+      <stop offset="48%" stop-color="#E7D0A2"/>
+      <stop offset="100%" stop-color="#B89D67"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="page">
+
+  <header class="brand">
+    <div class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" fill="none">
+        <path
+          d="M16 2.5
+             C17.8 12.3 19.7 14.2 29.5 16
+             C19.7 17.8 17.8 19.7 16 29.5
+             C14.2 19.7 12.3 17.8 2.5 16
+             C12.3 14.2 14.2 12.3 16 2.5Z"
+          stroke="url(#goldStroke)"
+          stroke-width=".9"/>
+        <circle cx="16" cy="16" r="2" fill="url(#goldFill)"/>
+        <path
+          d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z"
+          fill="url(#goldFill)"
+          opacity=".75"/>
+      </svg>
+    </div>
+
+    <div>
+      <div class="brand-title">有球必應</div>
+      <div class="brand-cn">大事化小，小事哈哈</div>
+      <div class="brand-en">Hakuna Matata</div>
+    </div>
+  </header>
+
+  <main class="cards" aria-label="有球必應工具">
+
+    <!-- 01 -->
+    <a class="card card-link" href="random-picker.html" aria-label="開啟閉嘴我來抽">
+      <div class="card-top">
+        <span class="card-spark">✧</span>
+      </div>
+
+      <div class="card-heading">
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <rect x="7" y="9" width="16" height="16" rx="2" transform="rotate(-13 7 9)"
+              stroke="url(#goldStroke)" stroke-width="1.1"/>
+            <circle cx="12.5" cy="15" r="1.4" fill="url(#goldFill)"/>
+            <circle cx="18" cy="13.5" r="1.4" fill="url(#goldFill)"/>
+            <circle cx="15" cy="20.5" r="1.4" fill="url(#goldFill)"/>
+            <path d="M28 5L29 9L33 10L29 11L28 15L27 11L23 10L27 9Z"
+              stroke="url(#goldStroke)" stroke-width=".85"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">閉嘴我來抽</div>
+          <div class="card-en">Shut Up &amp; Draw!</div>
+        </div>
+      </div>
+
+      <div class="card-copy">
+        <span>轉盤、抽籤、分組、擲骰子⋯⋯</span>
+        <span>我們選工具就好了哦。</span>
+      </div>
+
+      <div class="card-bottom">
+        <span class="card-pill">
+          <span class="card-status">Let's Gooo!</span>
+          <span class="card-pill-arrow" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </a>
+
+    <!-- 02 -->
+    <a class="card card-link" href="currency-converter.html" aria-label="開啟幣值換算">
+      <div class="card-top">
+        <span class="card-spark">✧</span>
+      </div>
+
+      <div class="card-heading">
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <path
+              d="M6 14H28M6 14L12 9M6 14L12 19M30 23H8M30 23L24 18M30 23L24 28"
+              stroke="url(#goldStroke)" stroke-width="1.1"
+              stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M28 4L29 7L32 8L29 9L28 12L27 9L24 8L27 7Z"
+              stroke="url(#goldStroke)" stroke-width=".85"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">幣值換算</div>
+          <div class="card-en">Currency Converter</div>
+        </div>
+      </div>
+
+      <div class="card-copy">
+        <span>沒有財富自由，</span>
+        <span>但換算自由是有的。</span>
+      </div>
+
+      <div class="card-bottom">
+        <span class="card-pill">
+          <span class="card-status">Let's Gooo!</span>
+          <span class="card-pill-arrow" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </a>
+
+    <!-- 03 -->
+    <article class="card card-soon">
+      <div class="card-top">
+        <span class="card-spark">✧</span>
+      </div>
+
+      <div class="card-heading">
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <rect x="6" y="8" width="24" height="22" rx="3.5"
+              stroke="url(#goldStroke)" stroke-width="1.1"/>
+            <path
+              d="M6 15H30M12 5V11M24 5V11"
+              stroke="url(#goldStroke)" stroke-width="1.1"
+              stroke-linecap="round"/>
+            <path
+              d="M12 21H17M21 21H25M12 25H17"
+              stroke="url(#goldStroke)" stroke-width=".9"
+              stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">放假才是正事</div>
+          <div class="card-en">Born to Take a Break.</div>
+        </div>
+      </div>
+
+      <div class="card-copy">
+        <span>特休攻略，</span>
+        <span>少請幾天、多躺幾天。</span>
+      </div>
+
+      <div class="card-bottom">
+        <span class="card-pill">
+          <span class="card-status">Let's Gooo!</span>
+          <span class="card-pill-arrow" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </article>
+
+    <!-- 04 -->
+    <article class="card card-soon">
+      <div class="card-top">
+        <span class="card-spark">✧</span>
+      </div>
+
+      <div class="card-heading">
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none">
+            <rect x="8" y="7" width="20" height="24" rx="4"
+              stroke="url(#goldStroke)" stroke-width="1.1"/>
+            <path
+              d="M13 19L17 23L24 15"
+              stroke="url(#goldStroke)" stroke-width="1.25"
+              stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z"
+              stroke="url(#goldStroke)" stroke-width=".85"/>
+          </svg>
+        </div>
+        <div>
+          <div class="card-title">點名啦各位</div>
+          <div class="card-en">Roll Call!</div>
+        </div>
+      </div>
+
+      <div class="card-copy">
+        <span>應到、遲到、未到，</span>
+        <span>這裡都看到~</span>
+      </div>
+
+      <div class="card-bottom">
+        <span class="card-pill">
+          <span class="card-status">Let's Gooo!</span>
+          <span class="card-pill-arrow" aria-hidden="true">→</span>
+        </span>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 有球必應</span>
+    <em>A little magic for everyday life.</em>
+  </footer>
+
+</div>
+</body>
+</html>
