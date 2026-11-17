@@ -235,13 +235,22 @@ input,select,textarea{font-size:15px;line-height:1.5}
 .cloud-entry{border-top:1px solid rgba(184,157,103,.16);padding:9px 0;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px}
 .cloud-entry small{color:#756982}
 .cloud-test button:disabled{opacity:.45;cursor:not-allowed}
+.cloud-invite-accept{margin:12px 0;padding:13px;border:1px solid rgba(184,157,103,.22);border-radius:12px;background:rgba(255,255,255,.43)}
+.cloud-invite-accept label{display:block;margin-bottom:9px;font-size:12px;color:#675A76}
+.cloud-invite-accept .cloud-form input{min-width:210px}
+.cloud-member-tools{flex-basis:100%;font-size:12px;border-left:2px solid rgba(184,157,103,.42);padding:9px 12px;margin-top:5px;background:rgba(255,255,255,.5);border-radius:8px}
+.cloud-member-tools .rowline{display:flex;flex-wrap:wrap;align-items:center;gap:9px;padding:5px 0}
+.cloud-member-tools button{padding:5px 10px;font-size:12px}
+.cloud-secret{overflow-wrap:anywhere;background:#F8F3E9;border:1px solid rgba(184,157,103,.28);padding:9px;border-radius:8px;font-family:monospace;user-select:all}
+.cloud-member-tools .muted{font-size:11px;color:#7E7984}
+.cloud-status{overflow-wrap:anywhere}
 @media(max-width:650px){.cloud-form input,.cloud-form input[type=date]{flex:1 1 100%}}
 </style>
 </head><body>
 <div class="page">
 <svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden"><defs><linearGradient id="checkinGoldStroke" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0E1BF"/><stop offset="28%" stop-color="#BE9E63"/><stop offset="56%" stop-color="#E5CDA0"/><stop offset="100%" stop-color="#9A7845"/></linearGradient><radialGradient id="checkinGoldFill"><stop offset="0%" stop-color="#FFF7E8"/><stop offset="48%" stop-color="#E7D0A2"/><stop offset="100%" stop-color="#B89D67"/></radialGradient></defs></svg>
 <header class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 C17.8 12.3 19.7 14.2 29.5 16 C19.7 17.8 17.8 19.7 16 29.5 C14.2 19.7 12.3 17.8 2.5 16 C12.3 14.2 14.2 12.3 16 2.5Z" stroke="url(#checkinGoldStroke)" stroke-width=".9"/><circle cx="16" cy="16" r="2" fill="url(#checkinGoldFill)"/><path d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z" fill="url(#checkinGoldFill)" opacity=".75"/></svg></div><div><div class="brand-cn">有球必應</div><div class="brand-en">Hakuna Matata</div></div><a class="back" href="index.html">← 返回首頁</a></header>
-<div class="hero"><div class="hero-name"><span class="gold-icon"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="7" width="20" height="24" rx="4" stroke="url(#checkinGoldStroke)" stroke-width="1.1"/><path d="M13 19L17 23L24 15" stroke="url(#checkinGoldStroke)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z" stroke="url(#checkinGoldStroke)" stroke-width=".85"/></svg></span><div><h1>點名啦各位</h1><div class="eng">Roll Call!</div></div></div><span class="tiny" id="modeTag">V1.5.1 雲端測試活動 · 本機名單尚未同步</span></div>
+<div class="hero"><div class="hero-name"><span class="gold-icon"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="7" width="20" height="24" rx="4" stroke="url(#checkinGoldStroke)" stroke-width="1.1"/><path d="M13 19L17 23L24 15" stroke="url(#checkinGoldStroke)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z" stroke="url(#checkinGoldStroke)" stroke-width=".85"/></svg></span><div><h1>點名啦各位</h1><div class="eng">Roll Call!</div></div></div><span class="tiny" id="modeTag">V1.5.2 協作者邀請測試 · 本機名單尚未同步</span></div>
 <section id="googleLoginPanel" class="login-test" aria-live="polite">
  <div class="login-test-copy"><strong id="googleLoginState">Google 登入｜尚未驗證</strong><small id="googleLoginHint">此處僅測試雲端身分驗證。下方活動仍保存在這台裝置，尚未同步。</small></div>
  <div class="login-test-actions"><div id="googleSignIn"></div><button type="button" class="btn small" id="googleLogout">登出測試</button></div>
@@ -946,6 +955,10 @@ $('manageImportFields').onclick=manageImportedFields;
  const cloudName=document.getElementById('cloudName');
  const cloudDate=document.getElementById('cloudDate');
  const cloudSubmit=document.getElementById('cloudSubmit');
+ const joinCode=document.getElementById('joinCode');
+ const joinSubmit=document.getElementById('joinSubmit');
+ const joinForm=document.getElementById('joinForm');
+ const inviteStatus=document.getElementById('inviteStatus');
  let credential=null, initialized=false, busy=false;
  const today=new Date();
  cloudDate.value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
@@ -961,6 +974,8 @@ $('manageImportFields').onclick=manageImportedFields;
    cloudSubmit.disabled=!enabled;
    cloudName.disabled=!enabled;
    cloudDate.disabled=!enabled;
+   joinCode.disabled=!enabled;
+   joinSubmit.disabled=!enabled;
  }
  async function api(path,method='GET',body) {
    if(!credential)throw Error('請重新使用 Google 登入');
@@ -978,14 +993,74 @@ $('manageImportFields').onclick=manageImportedFields;
      return data;
    } finally {clearTimeout(timer);}
  }
+ function el(tag,text,cls){const node=document.createElement(tag);if(text!==undefined&&text!==null)node.textContent=String(text);if(cls)node.className=cls;return node;}
+ function action(text,fn){const btn=el('button',text,'btn small');btn.type='button';btn.addEventListener('click',fn);return btn;}
+ async function showMembers(event,box){
+   box.replaceChildren(el('div','正在讀取協作者與邀請…','muted'));
+   try{
+     const data=await api('/events/'+encodeURIComponent(event.id)+'/members');
+     box.replaceChildren();
+     box.append(el('strong','協作成員（建立者與協作者）'));
+     for(const member of data.members||[]){
+       const row=el('div',null,'rowline');
+       row.append(el('span',member.label+' · '+(member.role==='owner'?'活動建立者':'協作者')));
+       if(event.role==='owner' && member.role==='collaborator'){
+         row.append(action('移除',async()=>{
+           if(!confirm('確定移除這位協作者？對方將無法再看到此活動。'))return;
+           try{await api('/events/'+encodeURIComponent(event.id)+'/members/'+encodeURIComponent(member.member_id),'DELETE');await showMembers(event,box);}catch(err){alert(String(err.message||err));}
+         }));
+       }
+       box.append(row);
+     }
+     if(event.role!=='owner'){
+       box.append(el('p','目前只能查看你有權限存取的雲端測試活動；報到名單尚未同步。','muted'));
+       return;
+     }
+     const inviteData=await api('/events/'+encodeURIComponent(event.id)+'/invitations');
+     const row=el('div',null,'rowline');
+     row.append(action('＋ 產生一次性邀請碼',async()=>{
+       try{
+         const made=await api('/events/'+encodeURIComponent(event.id)+'/invitations','POST',{});
+         const secret=el('div',made.code,'cloud-secret');
+         const notice=el('div','請立即複製並私下分享，這組邀請碼只有此刻可見；24 小時內限用一次。','muted');
+         const copy=action('複製邀請碼',()=>navigator.clipboard?.writeText(made.code).then(()=>{copy.textContent='已複製';}).catch(()=>{alert('無法自動複製，請長按選取邀請碼。');}));
+         const group=el('div',null,'rowline');group.append(secret,copy);
+         box.prepend(notice,group);
+         await showInvites(event,box);
+       }catch(err){alert('產生邀請碼失敗：'+String(err.message||err));}
+     }));
+     row.append(el('span','上限 5 位協作者，每組邀請碼限一人使用。','muted'));
+     box.append(row);
+     await showInvites(event,box,inviteData.invitations);
+   }catch(err){box.replaceChildren(el('p','讀取協作者失敗：'+String(err.message||err)));}
+ }
+ async function showInvites(event,box,provided){
+   box.querySelectorAll('.invite-row').forEach(e=>e.remove());
+   const invites=provided|| (await api('/events/'+encodeURIComponent(event.id)+'/invitations')).invitations||[];
+   for(const inv of invites){
+     const row=el('div',null,'rowline invite-row');
+     row.append(el('span','待使用邀請 · 到期 '+new Date(inv.expires_at).toLocaleString('zh-TW')));
+     row.append(action('取消邀請',async()=>{
+       if(!confirm('確定取消這張邀請？'))return;
+       try{await api('/events/'+encodeURIComponent(event.id)+'/invitations/'+encodeURIComponent(inv.id),'DELETE');await showInvites(event,box);}catch(err){alert(String(err.message||err));}
+     }));
+     box.append(row);
+   }
+ }
  function renderCloud(events){
    cloudList.replaceChildren();
-   if(!events.length){const p=document.createElement('p');p.textContent='雲端目前沒有測試活動。';cloudList.append(p);return;}
+   if(!events.length){cloudList.append(el('p','雲端目前沒有測試活動。'));return;}
    for(const e of events){
-     const line=document.createElement('div');line.className='cloud-entry';
-     const name=document.createElement('strong');name.textContent=e.name;
-     const info=document.createElement('small');info.textContent=(e.event_date||'')+' · '+(e.status==='draft'?'未開始':e.status==='active'?'進行中':'已結束')+' · '+(e.role==='owner'?'活動建立者':'協作者');
-     line.append(name,info);cloudList.append(line);
+     const line=el('div',null,'cloud-entry');
+     const name=el('strong',e.name);
+     const info=el('small',(e.event_date||'')+' · '+(e.status==='draft'?'未開始':e.status==='active'?'進行中':'已結束')+' · '+(e.role==='owner'?'活動建立者':'協作者'));
+     const tools=el('div',null,'cloud-member-tools');tools.hidden=true;
+     const toggle=action('協作管理／查看成員',async()=>{
+       tools.hidden=!tools.hidden;
+       if(!tools.hidden)await showMembers(e,tools);
+     });
+     const panel=el('div',null,'rowline');panel.append(name,info,toggle);
+     line.append(panel,tools);cloudList.append(line);
    }
  }
  async function refreshCloud(){
@@ -1015,6 +1090,16 @@ $('manageImportFields').onclick=manageImportedFields;
      cloudMessage('請重新登入 Google。');
    }
  }
+ joinForm.addEventListener('submit',async(ev)=>{
+   ev.preventDefault();if(!credential||busy)return;
+   const code=joinCode.value.trim();
+   if(!/^[A-Za-z0-9_-]{32}$/.test(code)){inviteStatus.textContent='邀請碼應為 32 個字元。';return;}
+   if(!confirm('確認加入這場測試活動？加入後活動建立者將能看到你是協作者。'))return;
+   busy=true;controls();inviteStatus.textContent='正在接受邀請…';
+   try{const data=await api('/invitations/accept','POST',{code});joinCode.value='';inviteStatus.textContent='已加入「'+data.event.name+'」，正在重新讀取活動。';}
+   catch(err){inviteStatus.textContent='加入失敗：'+String(err.message||err);busy=false;controls();return;}
+   busy=false;controls();await refreshCloud();
+ });
  cloudRefresh.addEventListener('click',refreshCloud);
  cloudCreate.addEventListener('submit',async(e)=>{
    e.preventDefault();if(!credential||busy)return;
@@ -1034,7 +1119,7 @@ $('manageImportFields').onclick=manageImportedFields;
  }
  logout.addEventListener('click',()=>{
    try {window.google?.accounts?.id?.disableAutoSelect();}catch(e){}
-   credential=null;controls();cloudList.replaceChildren();cloudMessage('已登出，雲端活動清單已隱藏。');
+   credential=null;controls();cloudList.replaceChildren();joinCode.value='';inviteStatus.textContent='';cloudMessage('已登出，雲端活動清單已隱藏。');
    message('Google 登入｜尚未驗證','已退出本次測試；下方本機活動資料不受影響。');
  });
  const script=document.createElement('script');
