@@ -217,12 +217,21 @@ input,select,textarea{font-size:15px;line-height:1.5}
 @media(max-width:950px){.event-toolbar{gap:7px}.event-current-title strong{font-size:14px}.event-status-help{font-size:12px}}
 @media(max-width:700px){.event-toolbar{flex-wrap:wrap}.event-current-title{flex:1 1 120px}.event-toolbar-actions{margin-left:auto;max-width:100%}}
 @media(max-width:480px){.event-toolbar{row-gap:7px}.event-current-title{flex-basis:calc(100% - 115px)}.event-current-title strong{font-size:14px}.event-toolbar-actions{width:100%;justify-content:flex-end;margin-left:0}.event-status-help{font-size:11px}}
+
+/* Google 登入連線測試：只有驗證身分，不連接任何活動資料 */
+.login-test{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;padding:12px 15px;border:1px solid rgba(184,157,103,.32);border-radius:16px;background:linear-gradient(125deg,rgba(248,246,255,.91),rgba(255,253,248,.7));box-shadow:0 6px 20px rgba(77,66,93,.045)}
+.login-test-copy{flex:1 1 220px;min-width:0}.login-test-copy strong{display:block;color:#68587b;font-weight:600;font-size:13px}.login-test-copy small{display:block;color:#7e7784;font-size:11px;margin-top:3px;line-height:1.5}.login-test-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.login-test #googleSignIn{min-height:38px}.login-test #googleLogout{display:none}.login-test.is-logged-in #googleSignIn{display:none}.login-test.is-logged-in #googleLogout{display:inline-flex}
+@media(max-width:550px){.login-test{align-items:flex-start}.login-test-actions{width:100%}}
 </style>
 </head><body>
 <div class="page">
 <svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden"><defs><linearGradient id="checkinGoldStroke" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0E1BF"/><stop offset="28%" stop-color="#BE9E63"/><stop offset="56%" stop-color="#E5CDA0"/><stop offset="100%" stop-color="#9A7845"/></linearGradient><radialGradient id="checkinGoldFill"><stop offset="0%" stop-color="#FFF7E8"/><stop offset="48%" stop-color="#E7D0A2"/><stop offset="100%" stop-color="#B89D67"/></radialGradient></defs></svg>
 <header class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 C17.8 12.3 19.7 14.2 29.5 16 C19.7 17.8 17.8 19.7 16 29.5 C14.2 19.7 12.3 17.8 2.5 16 C12.3 14.2 14.2 12.3 16 2.5Z" stroke="url(#checkinGoldStroke)" stroke-width=".9"/><circle cx="16" cy="16" r="2" fill="url(#checkinGoldFill)"/><path d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z" fill="url(#checkinGoldFill)" opacity=".75"/></svg></div><div><div class="brand-cn">有球必應</div><div class="brand-en">Hakuna Matata</div></div><a class="back" href="index.html">← 返回首頁</a></header>
-<div class="hero"><div class="hero-name"><span class="gold-icon"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="7" width="20" height="24" rx="4" stroke="url(#checkinGoldStroke)" stroke-width="1.1"/><path d="M13 19L17 23L24 15" stroke="url(#checkinGoldStroke)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z" stroke="url(#checkinGoldStroke)" stroke-width=".85"/></svg></span><div><h1>點名啦各位</h1><div class="eng">Roll Call!</div></div></div><span class="tiny" id="modeTag">V1.4.9 本機測試版 · 無雲端同步</span></div>
+<div class="hero"><div class="hero-name"><span class="gold-icon"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="7" width="20" height="24" rx="4" stroke="url(#checkinGoldStroke)" stroke-width="1.1"/><path d="M13 19L17 23L24 15" stroke="url(#checkinGoldStroke)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z" stroke="url(#checkinGoldStroke)" stroke-width=".85"/></svg></span><div><h1>點名啦各位</h1><div class="eng">Roll Call!</div></div></div><span class="tiny" id="modeTag">V1.5.0 Google 登入測試 · 活動仍為本機儲存</span></div>
+<section id="googleLoginPanel" class="login-test" aria-live="polite">
+ <div class="login-test-copy"><strong id="googleLoginState">Google 登入｜尚未驗證</strong><small id="googleLoginHint">此處僅測試雲端身分驗證。下方活動仍保存在這台裝置，尚未同步。</small></div>
+ <div class="login-test-actions"><div id="googleSignIn"></div><button type="button" class="btn small" id="googleLogout">登出測試</button></div>
+</section>
 <section id="homeView" class="glass pad"><div class="section-top"><div><h2 class="section-title">我的活動</h2><span class="tiny">所有活動依日期排列</span></div><button class="btn mainbtn" id="createEvent">＋ 建立活動</button></div><div class="controls"><input id="eventSearch" type="search" placeholder="搜尋活動名稱…"></div><div id="eventList" class="list"></div></section>
 <section id="detailView" hidden><div class="event-toolbar"><button class="btn small" id="goList">← 我的活動</button><div class="event-current-title" title="目前活動"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><rect x="3.5" y="5.5" width="17" height="15" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><strong id="currentEventName" title="目前活動名稱"></strong></div><div class="event-toolbar-actions"><span id="eventStatus" class="pill"></span><span id="eventStatusHelp" class="event-status-help" aria-live="polite"></span><button class="btn small" id="toggleEventStatus"></button></div></div><div class="glass stats" id="stats"></div><div class="columns" id="columns"><aside class="glass pad" id="settingsPanel"><div class="section-top" style="margin:0"><strong class="section-title" id="settingsHeaderText">活動資訊與名單設定</strong><button class="btn small" id="collapseBtn" title="收合或展開左側設定">◀</button></div><div id="settingsContent"><div class="line"></div><div class="stack"><div class="field"><label for="eventTitle">活動名稱</label><input id="eventTitle" maxlength="100"></div><div class="field"><label for="eventDate">活動日期</label><input type="date" id="eventDate"></div><div class="row"><button id="saveEventInfo" class="btn small">儲存活動資訊</button><span id="ownerHint" class="tiny">本機測試：無真實角色權限</span></div></div><div class="line"></div><div class="stack"><strong>自訂欄位</strong><div id="fieldList" class="stack"></div><div class="row"><button class="btn small" id="addFieldBtn">＋ 新增欄位</button><button class="btn small" id="presetFieldBtn">☆ 常用清單</button></div><div class="hint">按住左側 ⠿ 拖曳欄位排序，報到名單與輸入表單會同步；欄位名稱、輸入方式、核對及常用設定可直接在卡片中修改，按「套用」後同步至名單。</div></div><div class="line"></div><div class="stack"><strong>名單管理</strong><button id="addPersonBtn" class="btn mainbtn">＋ 新增／匯入名單</button><button id="exportBtn" class="btn">匯出完整 CSV</button><button id="manageImportFields" class="btn">管理已匯入欄位</button><div class="hint">支援一筆／多筆、CSV／XLSX 檔案匯入。匯入後可管理欄位，或重新選擇原檔補入漏匯欄位。</div></div></div></aside><div class="glass pad" id="rosterPanel"><div class="section-top"><h2 class="section-title">報到名單</h2><div class="row"><button class="btn small" id="noteBtn">✎ 活動筆記 <span id="noteCount"></span></button><button class="btn small" id="quickAdd">＋ 臨時新增</button></div></div><div class="controls"><input id="personSearch" type="search" placeholder="搜尋姓名、手機、Email、車號…"><select id="statusFilter" aria-label="報到篩選"><option value="all">全部</option><option value="pending">未報到</option><option value="arrived">已報到</option><option value="cancelled">取消參加</option><option value="missing">必填資料未完成</option></select></div><div class="row between" style="margin:2px 0 9px"><button class="btn small" id="progressBtn">核對進度 ▾</button><span class="tiny" id="rosterCount"></span></div><div id="progressPanel" class="subbox hidden" style="margin-bottom:10px"></div><div class="table-scroller" tabindex="0" aria-label="報到名單，可上下左右捲動；欄位表頭會固定"><table class="roster" id="rosterTable"><thead></thead><tbody></tbody></table></div><div class="hint" style="margin-top:8px">點擊文字或「—」即可直接修改；可核對資料點擊內容確認，旁邊 ✎ 用來修改原始值。按 Enter 儲存、Esc 取消。</div><div id="detailMsg" class="status-msg" role="status"></div></div></div><div class="notice">這是單一瀏覽器的 V1.4.9 測試版，資料只保存在此瀏覽器。請勿放入真實參加者個資。Google 登入、協作權限、QR Code 自助報到、雲端同步、離線跨裝置同步及 90 天自動清理尚未實作。</div></section>
 <footer class="foot"><span>© 2026 有球必應</span><span class="eng">Roll Call!</span></footer></div>
@@ -896,5 +905,58 @@ function manageImportedFields(){
  },()=>true,'完成');
 }
 $('manageImportFields').onclick=manageImportedFields;
+
+// Google 登入驗證測試：不將活動內容傳給 API，也不保存 ID token。
+(() => {
+ const CLIENT_ID='160853315907-40fg7ten1b8eut5sbiqjsb3iq269vl9q.apps.googleusercontent.com';
+ const API='https://ball-toolbox-api.aa16067630.workers.dev';
+ const panel=document.getElementById('googleLoginPanel');
+ const status=document.getElementById('googleLoginState');
+ const hint=document.getElementById('googleLoginHint');
+ const logout=document.getElementById('googleLogout');
+ let initialized=false;
+ function message(title,detail,loggedIn=false) {
+   panel.classList.toggle('is-logged-in',loggedIn);
+   status.textContent=title;
+   hint.textContent=detail;
+ }
+ async function handleCredential(response) {
+   message('正在驗證 Google 身分…','驗證由 Cloudflare Worker 執行，活動名單不會上傳。');
+   try {
+     if (!response || !response.credential) throw Error('未取得登入憑證');
+     const controller=new AbortController();
+     const timeout=setTimeout(()=>controller.abort(),12000);
+     let res;
+     try {
+       res=await fetch(API+'/auth/google',{
+         method:'POST',headers:{'Content-Type':'application/json'},
+         body:JSON.stringify({credential:response.credential}),signal:controller.signal
+       });
+     } finally {clearTimeout(timeout);}
+     const data=await res.json().catch(()=>({}));
+     if(!res.ok || !data.ok) throw Error(data.error||('驗證失敗（HTTP '+res.status+'）'));
+     message('Google 身分驗證成功｜'+(data.name||data.email||'已登入'),
+        '這次只確認 Google 帳號有效；活動資料仍僅儲存在本機，尚未連接雲端。',true);
+   } catch(err) {
+     message('登入驗證未完成',String(err.message||err)+'。請確認 Worker 已部署新版程式碼。');
+   }
+ }
+ function setup() {
+   if(initialized || !window.google?.accounts?.id) return;
+   initialized=true;
+   google.accounts.id.initialize({client_id:CLIENT_ID,callback:handleCredential,auto_select:false});
+   google.accounts.id.renderButton(document.getElementById('googleSignIn'),
+     {theme:'outline',size:'medium',shape:'pill',text:'signin_with',locale:'zh_TW'});
+ }
+ logout.addEventListener('click',()=>{
+   try {window.google?.accounts?.id?.disableAutoSelect();} catch(e) {}
+   message('Google 登入｜尚未驗證','已退出本次測試；下方本機活動資料不受影響。');
+ });
+ const script=document.createElement('script');
+ script.src='https://accounts.google.com/gsi/client';script.async=true;script.defer=true;
+ script.onload=setup;
+ script.onerror=()=>message('Google 登入載入失敗','請檢查網路或瀏覽器是否封鎖 Google 登入服務。');
+ document.head.appendChild(script);
+})();
 </script>
 </body></html>
