@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>點名啦各位｜有球必應 V1.4.9</title>
+<style>
+/* V1.3 自訂欄位拖曳、常用欄位與筆記操作樣式 */
+.field-drag-card{display:flex;align-items:center;gap:8px;transition:background .15s,border-color .15s}
+.field-drag-card.drag-over{border-color:#ad8b55;background:#f8edda;box-shadow:inset 0 0 0 1px #c5a66b}
+.field-drag-card.dragging{opacity:.55}
+.drag-handle{flex:0 0 auto;touch-action:none;cursor:grab;border:1px solid #cfbd99;border-radius:8px;background:#fffaf0;color:#94794f;font-size:19px;line-height:1;padding:10px 7px;user-select:none}
+.drag-handle:active{cursor:grabbing}
+.field-card-info{flex:1;min-width:0}
+.field-card-info strong{overflow-wrap:anywhere}
+.preset-card{border:1px solid var(--line);border-radius:11px;padding:11px;background:#fffdf8;display:flex;gap:10px;align-items:flex-start}
+.preset-description{font-size:11px;color:var(--sub);line-height:1.6;overflow-wrap:anywhere}
+.modal-action-note{font-size:11px;color:var(--sub);margin-top:6px}
+
+.tipbox{padding:10px 12px;border:1px solid #d8caa9;border-radius:10px;background:#fffaf0;color:#746b53;font-size:12px;line-height:1.7}
+.example{padding:9px 11px;border:1px dashed #cfc4a9;background:#ffffffac;border-radius:9px;font-size:12px}
+.field-actions{display:flex;gap:4px;flex-shrink:0}
+.field-actions button{padding:3px 6px!important}
+.import-preview{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:9px}
+.import-preview table{border-collapse:collapse;white-space:nowrap;font-size:11px;width:100%}
+.import-preview td,.import-preview th{border-bottom:1px solid var(--line);padding:6px 9px;text-align:left}
+.import-preview th{background:#edf1e9;position:sticky;top:0}
+.roster .mini-edit{border:0;background:transparent;color:#9b8b6f;cursor:pointer;margin-left:4px;font-size:12px;padding:1px 3px}
+.roster .inline-editor{width:100%;min-width:75px;max-width:260px;padding:4px 5px;font-size:12px;border-color:#b89d67;background:#fffaf0}
+.roster .editable{cursor:text;min-width:54px;display:block;border-radius:5px;padding:3px 4px;margin:-3px -4px}
+.roster .editable:hover{background:#f7edd9}
+.roster .editlabel{font-size:10px;color:#9b8b6f;margin-left:3px}
+.roster .note-short{max-width:200px}
+.import-mapping{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.import-mapping label{font-size:11px;color:var(--sub)}
+.import-mapping select{width:100%}
+@media(max-width:560px){.import-mapping{grid-template-columns:1fr}}
+
+:root{--ink:#3d433b;--sub:#788072;--sage:#687b62;--gold:#b89d67;--line:rgba(172,157,117,.25);--white:rgba(255,255,255,.70)}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font:13px/1.6 'Microsoft JhengHei UI','Microsoft JhengHei',system-ui,sans-serif;background:radial-gradient(ellipse at 94% 8%,#dce5d9 0,transparent 42%),radial-gradient(ellipse at 10% 85%,#f0e7d4 0,transparent 40%),linear-gradient(130deg,#faf9f5,#eef2eb)}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}a{color:inherit;text-decoration:none}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}[hidden]{display:none!important}
+.page{max-width:1180px;width:calc(100% - 36px);margin:auto;padding:25px 0 40px}.brand{display:flex;align-items:center;gap:12px;margin-bottom:23px}.mark{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;border:1px solid #d8c59e;background:radial-gradient(circle at 30% 20%,white,#faf3e5 65%,#eee3ce);box-shadow:0 0 17px #e7d6b7,0 4px 15px #59685114}.mark svg{width:27px}.brand-cn{font-size:17px;letter-spacing:.16em}.brand-en,.eng{font:italic 12px Georgia,serif;color:#a5967d}.back{margin-left:auto;color:var(--sage);font-size:12px}.glass{border:1px solid rgba(255,255,255,.95);border-radius:21px;background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.40) 68%,rgba(250,244,232,.28));box-shadow:0 12px 28px #485f4b12,inset 0 1px white;backdrop-filter:blur(12px)}.pad{padding:18px}.hero{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px;flex-wrap:wrap}.hero-name{display:flex;align-items:center;gap:12px}.gold-icon{font-size:28px;color:#b89d67;text-shadow:0 0 15px #e5cfa5,0 2px 2px #99734250}h1{font-weight:400;font-size:17px;letter-spacing:.15em;margin:0}.tiny{color:var(--sub);font-size:11px}.muted{color:var(--sub)}.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.between{justify-content:space-between}.btn{border:1px solid #b3a58155;border-radius:10px;padding:7px 12px;background:#fffaf3;color:#66775f}.btn.mainbtn{color:white;background:linear-gradient(120deg,#72866d,#91a186);border-color:#81977a}.btn.light{background:#ffffff9c}.btn.gold{background:#eedfbe;color:#896b36}.btn.danger{color:#9b645d}.btn.small{padding:5px 8px;font-size:11px;border-radius:8px}.btn.ok{background:#e8d5ab;color:#7d602f;border-color:#d8bc82}.btn.checkok{background:#e0ebdc;border-color:#b5d0ae}.btn:disabled{opacity:.5}input,select,textarea{border:1px solid #a4b29f66;border-radius:10px;padding:8px 10px;background:#fffffff0;color:var(--ink);min-width:0}input[type=checkbox]{width:auto}textarea{width:100%;resize:vertical;min-height:75px}.field{display:grid;gap:4px}.field label{font-size:11px;color:var(--sub)}.field input,.field select{width:100%}.list{display:grid;gap:10px}.event-card{padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:#ffffffab;display:flex;justify-content:space-between;align-items:center;gap:12px}.event-card strong{font-size:14px;font-weight:500}.pill{font-size:11px;color:#70816a;border:1px solid var(--line);background:#ffffffe0;border-radius:40px;padding:3px 8px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:9px 14px;margin-bottom:12px}.stat{display:flex;align-items:baseline;justify-content:center;gap:8px;border-right:1px solid var(--line)}.stat:last-child{border:0}.stat b{font-size:23px;font-weight:400;color:#63775d}.columns{display:grid;grid-template-columns:minmax(205px,24%) minmax(0,1fr);gap:12px;align-items:start}.columns.collapsed{grid-template-columns:44px minmax(0,1fr)}.columns.collapsed #settingsContent{display:none}.columns.collapsed #settingsPanel{padding:10px 5px;min-height:80px}.columns.collapsed #settingsHeaderText{display:none}.section-title{font-size:14px;font-weight:500;margin:0}.line{height:1px;background:var(--line);margin:13px 0}.stack{display:grid;gap:9px}.hint{font-size:11px;color:var(--sub);line-height:1.6}.subbox{padding:10px;border:1px solid var(--line);border-radius:12px;background:#ffffff73}.section-top{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}.controls{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px}.controls input[type=search]{flex:1;min-width:170px}.table-scroller{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:#fff8}.roster{border-collapse:separate;border-spacing:0;white-space:nowrap;min-width:100%;font-size:12px}.roster th{background:#eaf0e6f2;text-align:left;color:#61715f;position:sticky;top:0;z-index:2;font-size:11px;font-weight:500}.roster td,.roster th{padding:7px 10px;border-right:1px solid #c4c9b858;border-bottom:1px solid #c4c9b858;height:44px;vertical-align:middle}.roster th:last-child,.roster td:last-child{border-right:0}.roster tr:last-child td{border-bottom:0}.roster tbody tr:nth-child(even){background:#f2f3eb55}.roster .pin1{position:sticky;left:0;z-index:3;min-width:104px;width:104px;background:#f9faf6}.roster .pin2{position:sticky;left:104px;z-index:3;min-width:116px;width:116px;background:#f9faf6;box-shadow:2px 0 3px #3f493b0d}.roster th.pin1,.roster th.pin2{z-index:5;background:#e7eee4}.roster tbody tr:nth-child(even) .pin1,.roster tbody tr:nth-child(even) .pin2{background:#f0f2eb}.roster .value{display:inline-block;max-width:180px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}.roster .mutedval{color:#a8aca2}.roster .attention{color:#ad7c33;margin-left:4px}.roster .cellbtn{border:1px solid #d7c6a1;border-radius:7px;background:#fffcf7;color:#5e6859;padding:3px 8px;white-space:nowrap}.roster .cellbtn.verified{background:#edd9ae;border-color:#bc985c;color:#795a29}.roster .cellbtn.arrived{background:#e3eddf;border-color:#b0c9aa}.roster .cellbtn:disabled{opacity:.5}.note-short{max-width:170px;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:middle}.actions{display:flex;align-items:center;gap:5px}.empty{padding:22px;text-align:center;color:var(--sub)}.status-msg{font-size:11px;color:#7b815f;min-height:20px;margin-top:8px}.notice{font-size:11px;padding:11px;background:#fbf5e9b8;border:1px solid #e0cfab;border-radius:11px;color:#7c765f;margin-top:14px}.modal-back{position:fixed;inset:0;background:#26352c55;display:grid;place-items:center;z-index:30;padding:15px}.modal{max-height:90vh;overflow:auto;width:min(560px,100%);padding:20px;background:#f8faf5;border-radius:20px;box-shadow:0 20px 70px #22332660}.modal h2{font-weight:500;font-size:17px;margin:0 0 14px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.nav-row{display:flex;justify-content:flex-end;gap:8px;margin-top:15px;flex-wrap:wrap}.notes-panel{border:1px solid var(--line);border-radius:12px;padding:12px;background:#ffffff9c;margin-bottom:12px}.note-row{display:flex;gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}.note-row:last-child{border:0}.note-row span{flex:1;overflow-wrap:anywhere}.note-row.done span{text-decoration:line-through;color:#92998e}.hidden{display:none!important}.mini-check{display:flex;gap:6px;align-items:center;font-size:12px}.foot{margin-top:28px;font-size:11px;color:#9fa69c;display:flex;justify-content:space-between}
+/* V1.4：對齊「放假才是正事」的品牌與金線圖示 */
+.page{max-width:1144px;width:calc(100% - 40px);padding:27px 0 40px}
+.brand{gap:13px;margin-bottom:25px}
+.mark{position:relative;isolation:isolate;flex:0 0 42px;width:42px;height:42px;border:1px solid rgba(184,157,103,.28);background:radial-gradient(circle at 29% 24%,#fff 0%,rgba(255,253,246,.87) 28%,rgba(247,237,213,.46) 66%,rgba(223,198,145,.15) 100%);box-shadow:0 0 16px rgba(218,194,149,.13),0 5px 15px rgba(90,80,57,.055),inset 0 1px 0 white,inset 0 -1px 0 rgba(184,157,103,.08)}
+.mark::before{content:"";position:absolute;z-index:-1;inset:-11px;border-radius:50%;background:radial-gradient(circle,rgba(226,200,151,.25),rgba(226,200,151,.10) 43%,transparent 72%);filter:blur(5px);pointer-events:none}
+.mark svg{width:24px;height:24px;filter:drop-shadow(0 1px 1px rgba(255,255,255,.9)) drop-shadow(0 2px 3px rgba(173,132,67,.23))}
+.brand-cn{font-size:17px;font-weight:400;letter-spacing:.16em;line-height:1.35}
+.brand-en{margin-top:4px}
+.hero-name{gap:13px}.gold-icon{position:relative;display:grid;place-items:center;width:33px;height:33px;flex:0 0 33px;font-size:0;text-shadow:none;isolation:isolate}
+.gold-icon::before{content:"";position:absolute;inset:-10px;z-index:-1;border-radius:50%;background:radial-gradient(circle,rgba(242,224,187,.47),rgba(231,208,163,.20) 38%,rgba(231,208,163,.05) 60%,transparent 76%);filter:blur(4px);pointer-events:none}
+.gold-icon svg{width:30px;height:30px;filter:drop-shadow(0 1px 0 #fff) drop-shadow(0 2px 2px rgba(166,126,63,.23))}
+.glass{border-radius:24px;background:linear-gradient(140deg,rgba(255,255,255,.77),rgba(255,255,255,.49) 57%,rgba(249,245,235,.29));box-shadow:0 16px 32px rgba(71,85,65,.073),inset 0 1px 0 rgba(255,255,255,.96);backdrop-filter:blur(14px)}
+/* 表頭固定於名單的上下捲動區；第一、二欄也維持橫向固定 */
+.table-scroller{max-height:min(62vh,620px);overflow:auto;overscroll-behavior:contain;position:relative}
+.roster thead th{position:sticky;top:0;z-index:6;background:#e7eee4;box-shadow:0 2px 0 rgba(151,161,141,.45)}
+.roster thead th.pin1,.roster thead th.pin2{z-index:9}
+.roster tbody .pin1,.roster tbody .pin2{z-index:3}
+.roster .attention{display:inline-flex;align-items:center;justify-content:center;font-size:11px;margin-left:5px;color:#a47b3e}
+@media(max-width:800px){.columns{grid-template-columns:minmax(170px,32%) minmax(0,1fr)}.columns.collapsed{grid-template-columns:38px minmax(0,1fr)}.page{width:calc(100% - 20px)}.pad{padding:13px}}
+@media(max-width:620px){.columns{grid-template-columns:1fr}.columns.collapsed{grid-template-columns:1fr}.columns.collapsed #settingsPanel{min-height:0}.columns.collapsed #settingsHeaderText{display:none}.columns.collapsed #settingsContent{display:none}.formgrid{grid-template-columns:1fr}.stats{padding:8px 3px}.stat{display:grid;justify-items:center;gap:0}.stat b{font-size:19px}.stat span{font-size:10px}.back{font-size:11px}}
+
+/* V1.4.1：表格欄內編輯操作明確顯示儲存／取消，不用點空白處 */
+.roster .inline-edit-group{display:inline-flex;align-items:center;gap:4px;max-width:100%;vertical-align:middle}
+.roster .inline-edit-group .inline-editor{width:clamp(75px,12vw,145px);flex:1;min-width:60px}
+.roster .inline-edit-action{flex:0 0 auto;min-width:25px;height:26px;padding:0 5px;border:1px solid #d7c6a1;border-radius:6px;background:#f5ead0;color:#7d602f;cursor:pointer}
+.roster .inline-edit-action.cancel{background:#f6f6f2;border-color:#d7ddd0;color:#7b8176}
+
+/* V1.4.2：收合設定側欄仍顯示名稱；增強桌機及手機文字可讀性 */
+body{font-size:15px;line-height:1.65}
+.section-title{font-size:16px}
+.tiny,.hint,.status-msg,.notice,.pill,.preset-description,.modal-action-note,.import-mapping label{font-size:13px}
+.field label{font-size:13px}
+input,select,textarea{font-size:15px;line-height:1.5}
+.btn{font-size:14px}
+.btn.small{font-size:13px;padding:7px 10px;min-height:33px}
+.roster{font-size:14px}
+.roster th,.roster thead th{font-size:13px}
+.roster td,.roster th{padding:9px 11px;height:48px}
+.roster .cellbtn{font-size:13px;padding:5px 9px;min-height:32px}
+.roster .mini-edit{font-size:15px;padding:4px 6px}
+.roster .inline-editor{font-size:14px}
+.roster .editlabel{font-size:12px}
+.roster .attention{font-size:14px}
+.import-preview table{font-size:13px}
+.tipbox,.example{font-size:13px}
+.stat span{font-size:13px}
+.columns.collapsed{grid-template-columns:70px minmax(0,1fr)}
+.columns.collapsed #settingsPanel{padding:12px 7px;min-height:195px}
+.columns.collapsed #settingsPanel .section-top{display:flex;flex-direction:column-reverse;justify-content:flex-end;align-items:center;flex-wrap:nowrap;gap:15px}
+.columns.collapsed #settingsHeaderText{display:block;font-size:14px;line-height:1.65;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.1em;white-space:nowrap;font-weight:500}
+.columns.collapsed #collapseBtn{flex-shrink:0;min-width:35px}
+@media(max-width:800px){
+  .columns.collapsed{grid-template-columns:62px minmax(0,1fr)}
+  .roster{font-size:14px}
+}
+@media(max-width:620px){
+  .columns.collapsed{grid-template-columns:48px minmax(0,1fr)}
+  .columns.collapsed #settingsPanel{min-height:180px;padding:10px 3px}
+  .columns.collapsed #settingsHeaderText{display:block;font-size:12px}
+  .columns.collapsed #collapseBtn{min-width:35px;padding:6px 5px}
+  .roster td,.roster th{padding:9px 10px}
+  .roster th{font-size:13px}
+  .roster .cellbtn{min-height:34px}
+  input,select,textarea{font-size:16px}
+  .controls input[type=search]{min-width:0;flex-basis:155px}
+  .btn.small{font-size:13px}
+  .stat span{font-size:12px}
+}
+/* V1.4.3：檔案匯入改成直觀的勾選／不勾選，保留來源欄位名稱 */
+.import-choice{padding:10px 12px;border:1px solid rgba(184,157,103,.16);border-radius:12px;background:rgba(255,255,255,.42)}
+.import-source-name{font-size:14px;font-weight:500;overflow-wrap:anywhere;margin-bottom:5px}
+.import-toggle{display:flex;align-items:center;gap:9px;margin:0;font-size:14px;color:#65765d;cursor:pointer}
+.import-toggle input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:#788b73;flex:0 0 auto}
+.import-toggle input:disabled{cursor:not-allowed}
+.import-choice .hint{font-size:12px;margin-top:5px}
+
+/* V1.4.4：我的活動提供獨立刪除入口與防誤刪確認 */
+.event-card .row{justify-content:flex-end}
+.event-card .btn.danger{border-color:rgba(165,111,91,.30);color:#98695f;background:rgba(255,250,247,.82)}
+.delete-warning{padding:13px 14px;border:1px solid rgba(165,111,91,.30);background:rgba(250,238,228,.72);border-radius:12px;line-height:1.75;color:#805e57;margin:0 0 12px}
+@media(max-width:620px){.event-card{align-items:flex-start;flex-direction:column}.event-card .row{width:100%;justify-content:flex-end}}
+
+/* V1.4.6：活動狀態與操作按鈕統一單排，準備階段明顯提示 */
+.event-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;min-height:35px}
+.event-toolbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.event-status-help{font-size:12px;font-weight:500;white-space:nowrap;color:#657760}
+.event-status-help.prep{color:#946e35}
+.event-toolbar .pill{white-space:nowrap}
+.event-toolbar .pill.prep{background:rgba(246,234,205,.88);color:#8b6a32;border-color:rgba(184,157,103,.46);font-weight:600}
+.event-toolbar #toggleEventStatus{white-space:nowrap}
+.event-toolbar[data-phase="draft"] #toggleEventStatus{background:linear-gradient(125deg,#7a8c70,#91a186);border-color:#7d9477;color:white;font-weight:600}
+@media(max-width:680px){.event-toolbar{flex-wrap:wrap;gap:7px}.event-toolbar-actions{gap:6px}.event-status-help{font-size:11px;white-space:normal}.event-toolbar .btn.small{font-size:12px}}
+/* V1.4.5：自訂欄位直接編輯，不必進入設定視窗 */
+.field-drag-card{align-items:flex-start;padding:11px 9px;gap:8px}
+.field-card-info{width:100%;display:grid;gap:9px}
+.inline-field-title{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.inline-field-title strong{font-size:14px;font-weight:500}
+.inline-field-form{display:grid;gap:8px}
+.inline-field-form .field{gap:3px}
+.inline-field-form .field label{font-size:12px}
+.inline-field-form input:not([type=checkbox]),.inline-field-form select,.inline-field-form textarea{width:100%;font-size:13px;padding:7px 8px}
+.inline-field-form textarea{min-height:56px;line-height:1.45}
+.inline-field-form .mini-check{font-size:12px;line-height:1.55;display:flex;align-items:flex-start;gap:7px;cursor:pointer}
+.inline-field-form .mini-check input{flex:0 0 auto;width:16px;height:16px;margin:1px 0;accent-color:#829677}
+.inline-field-form .hint{font-size:11px}
+.inline-field-form .inline-field-controls{display:flex;gap:5px;justify-content:flex-end;flex-wrap:wrap}
+.inline-field-form .inline-field-controls button{font-size:12px}
+.inline-field-form .field-status{min-height:16px;color:#6d805f;font-size:11px}
+.inline-field-form .field-preview{border:1px dashed rgba(184,157,103,.32);border-radius:8px;background:#fffdf7;padding:7px 9px;font-size:12px;color:#6a705f}
+.inline-field-form .field-preview.is-warning{color:#9a6d39;background:#fff8eb}
+.inline-field-form .inline-field-condition{display:grid;gap:6px}
+.inline-field-form .inline-field-required{background:rgba(255,255,255,.40);border-radius:8px;padding:7px}
+@media(max-width:700px){.inline-field-form input:not([type=checkbox]),.inline-field-form select,.inline-field-form textarea{font-size:16px}}
+
+/* V1.4.8：三階段活動狀態顯眼且不額外占用第二排 */
+:root{--phase-ready:#976D29;--phase-active:#41684B;--phase-ended:#687578}
+.event-toolbar{gap:9px;min-height:42px;margin-bottom:10px}
+.event-toolbar-actions{border:1px solid transparent;border-radius:13px;padding:5px 7px;gap:7px;flex-wrap:nowrap}
+.event-toolbar[data-phase="draft"] .event-toolbar-actions{background:linear-gradient(110deg,#fff5dc,#f6e9c9);border-color:#e2c998}
+.event-toolbar[data-phase="active"] .event-toolbar-actions{background:linear-gradient(110deg,#e7f0e3,#dbe9d8);border-color:#b8d0b3}
+.event-toolbar[data-phase="ended"] .event-toolbar-actions{background:linear-gradient(110deg,#eff0ef,#e6e9e8);border-color:#cad0cd}
+.event-toolbar .pill{font-size:12px;font-weight:700;border:1px solid transparent;flex:0 0 auto}
+.pill.phase-draft{color:#8c6429!important;background:#fff1d5!important;border-color:#dcbf87!important}
+.pill.phase-active{color:#37613f!important;background:#e1f0df!important;border-color:#a7c8a4!important}
+.pill.phase-ended{color:#627077!important;background:#e8eae9!important;border-color:#bdc8c8!important}
+.event-status-help{font-size:13px;font-weight:650;white-space:nowrap;letter-spacing:.01em}
+.event-status-help.phase-draft{color:#82591f}
+.event-status-help.phase-active{color:#355f3f}
+.event-status-help.phase-ended{color:#677274}
+.event-toolbar #toggleEventStatus{font-size:13px;padding:8px 14px;border-radius:10px;font-weight:650;white-space:nowrap;box-shadow:0 2px 6px #3b533518}
+.event-toolbar[data-phase="draft"] #toggleEventStatus{background:linear-gradient(125deg,#a07839,#bd9958);border:1px solid #a77e3f;color:#fff;font-weight:700}
+.event-toolbar[data-phase="active"] #toggleEventStatus{background:#fffaf3;color:#54684f;border:1px solid #a9bca4}
+.event-toolbar[data-phase="ended"] #toggleEventStatus{background:#6d8271;color:#fff;border:1px solid #687b6b}
+@media(max-width:700px){.event-toolbar{flex-wrap:wrap}.event-toolbar-actions{flex-wrap:wrap;justify-content:flex-end;margin-left:auto}.event-status-help{font-size:12px;white-space:normal}}
+/* 我的活動：只讓狀態標籤上色，不改整張卡片 */
+.event-card .pill{font-size:12px;font-weight:650;padding:4px 10px}
+/* V1.4.8：緊湊型自訂欄位卡片，名稱點擊直接編輯，套用與刪除集中右上 */
+.field-drag-card{padding:8px 7px;gap:6px;align-items:flex-start}
+.drag-handle{padding:8px 5px;font-size:17px}
+.field-card-info{gap:5px}
+.inline-field-title{display:flex;align-items:center;gap:4px;justify-content:space-between;flex-wrap:nowrap;min-width:0}
+.inline-field-title .inline-name-input{flex:1 1 auto;min-width:55px;width:0;max-width:100%;font-size:13px;font-weight:600;padding:5px 4px;background:transparent;border:1px solid transparent;border-radius:6px;color:var(--ink);text-overflow:ellipsis}
+.inline-field-title .inline-name-input:hover{background:#ffffffb0;border-color:#d4c8ac}
+.inline-field-title .inline-name-input:focus{background:#fffdf7;border-color:var(--gold)}
+.inline-field-title .btn{flex:0 0 auto;padding:5px 6px!important;font-size:11px}
+.inline-field-form{gap:6px}
+.inline-field-form .field{gap:2px}
+.inline-field-form .field label{font-size:11px;line-height:1.3}
+.inline-field-form select,.inline-field-form textarea{padding:6px 8px;font-size:12px}
+.inline-field-form textarea{min-height:47px;max-height:120px}
+.inline-field-form .inline-field-required{display:flex;align-items:center;gap:6px 9px;flex-wrap:wrap;padding:4px 0;background:transparent}
+.inline-field-form .mini-check{font-size:11px;line-height:1.2;align-items:center;gap:4px;white-space:nowrap}
+.inline-field-form .mini-check input{width:15px;height:15px;margin:0}
+.inline-field-form .field-preview{padding:5px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.inline-field-form .field-status:empty{display:none}
+.inline-field-form .field-status{min-height:0;line-height:1.4}
+.inline-field-form .inline-field-condition{gap:3px}
+@media(max-width:700px){.inline-field-title .inline-name-input,.inline-field-form select,.inline-field-form textarea{font-size:16px}.inline-field-form .mini-check{font-size:12px}}
+
+/* V1.4.8: low-saturation lavender activity status with subtle gold border */
+.event-toolbar[data-phase="active"] .event-toolbar-actions{background:linear-gradient(115deg,#eee7f3,#e6ddef);border:1px solid #c9ac78;box-shadow:inset 0 1px 0 #fff8}
+.event-toolbar .pill.phase-active{color:#694c81!important;background:#f5eef9!important;border-color:#c9ac78!important}
+.event-status-help.phase-active{color:#654c7b;font-weight:650}
+.event-toolbar[data-phase="active"] #toggleEventStatus{background:#fff9f2;color:#6d537d;border-color:#c9ac78}
+.event-card .pill.phase-active{color:#694c81!important;background:#eee5f4!important;border-color:#c9ac78!important}
+.preset-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.preset-actions .btn{white-space:nowrap}
+@media(max-width:500px){.preset-card{flex-wrap:wrap}.preset-actions{margin-left:auto}}
+
+/* V1.4.9：活動名稱放在返回按鈕右側，保持同列且不增加高度 */
+.event-toolbar{justify-content:flex-start}
+.event-toolbar #goList{flex:0 0 auto}
+.event-current-title{display:flex;align-items:center;gap:7px;min-width:0;flex:1 1 auto;max-width:100%;padding-left:3px;color:#465448}
+.event-current-title svg{width:17px;height:17px;flex:0 0 17px;color:#b89d67;filter:drop-shadow(0 1px 2px rgba(184,157,103,.23))}
+.event-current-title strong{font-size:15px;font-weight:500;letter-spacing:.035em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;display:block}
+.event-toolbar-actions{margin-left:auto;flex:0 0 auto}
+@media(max-width:950px){.event-toolbar{gap:7px}.event-current-title strong{font-size:14px}.event-status-help{font-size:12px}}
+@media(max-width:700px){.event-toolbar{flex-wrap:wrap}.event-current-title{flex:1 1 120px}.event-toolbar-actions{margin-left:auto;max-width:100%}}
+@media(max-width:480px){.event-toolbar{row-gap:7px}.event-current-title{flex-basis:calc(100% - 115px)}.event-current-title strong{font-size:14px}.event-toolbar-actions{width:100%;justify-content:flex-end;margin-left:0}.event-status-help{font-size:11px}}
+</style>
+</head><body>
+<div class="page">
+<svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden"><defs><linearGradient id="checkinGoldStroke" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F0E1BF"/><stop offset="28%" stop-color="#BE9E63"/><stop offset="56%" stop-color="#E5CDA0"/><stop offset="100%" stop-color="#9A7845"/></linearGradient><radialGradient id="checkinGoldFill"><stop offset="0%" stop-color="#FFF7E8"/><stop offset="48%" stop-color="#E7D0A2"/><stop offset="100%" stop-color="#B89D67"/></radialGradient></defs></svg>
+<header class="brand"><div class="mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 2.5 C17.8 12.3 19.7 14.2 29.5 16 C19.7 17.8 17.8 19.7 16 29.5 C14.2 19.7 12.3 17.8 2.5 16 C12.3 14.2 14.2 12.3 16 2.5Z" stroke="url(#checkinGoldStroke)" stroke-width=".9"/><circle cx="16" cy="16" r="2" fill="url(#checkinGoldFill)"/><path d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z" fill="url(#checkinGoldFill)" opacity=".75"/></svg></div><div><div class="brand-cn">有球必應</div><div class="brand-en">Hakuna Matata</div></div><a class="back" href="index.html">← 返回首頁</a></header>
+<div class="hero"><div class="hero-name"><span class="gold-icon"><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="8" y="7" width="20" height="24" rx="4" stroke="url(#checkinGoldStroke)" stroke-width="1.1"/><path d="M13 19L17 23L24 15" stroke="url(#checkinGoldStroke)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 3L29 6L32 7L29 8L28 11L27 8L24 7L27 6Z" stroke="url(#checkinGoldStroke)" stroke-width=".85"/></svg></span><div><h1>點名啦各位</h1><div class="eng">Roll Call!</div></div></div><span class="tiny" id="modeTag">V1.4.9 本機測試版 · 無雲端同步</span></div>
+<section id="homeView" class="glass pad"><div class="section-top"><div><h2 class="section-title">我的活動</h2><span class="tiny">所有活動依日期排列</span></div><button class="btn mainbtn" id="createEvent">＋ 建立活動</button></div><div class="controls"><input id="eventSearch" type="search" placeholder="搜尋活動名稱…"></div><div id="eventList" class="list"></div></section>
+<section id="detailView" hidden><div class="event-toolbar"><button class="btn small" id="goList">← 我的活動</button><div class="event-current-title" title="目前活動"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><rect x="3.5" y="5.5" width="17" height="15" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><strong id="currentEventName" title="目前活動名稱"></strong></div><div class="event-toolbar-actions"><span id="eventStatus" class="pill"></span><span id="eventStatusHelp" class="event-status-help" aria-live="polite"></span><button class="btn small" id="toggleEventStatus"></button></div></div><div class="glass stats" id="stats"></div><div class="columns" id="columns"><aside class="glass pad" id="settingsPanel"><div class="section-top" style="margin:0"><strong class="section-title" id="settingsHeaderText">活動資訊與名單設定</strong><button class="btn small" id="collapseBtn" title="收合或展開左側設定">◀</button></div><div id="settingsContent"><div class="line"></div><div class="stack"><div class="field"><label for="eventTitle">活動名稱</label><input id="eventTitle" maxlength="100"></div><div class="field"><label for="eventDate">活動日期</label><input type="date" id="eventDate"></div><div class="row"><button id="saveEventInfo" class="btn small">儲存活動資訊</button><span id="ownerHint" class="tiny">本機測試：無真實角色權限</span></div></div><div class="line"></div><div class="stack"><strong>自訂欄位</strong><div id="fieldList" class="stack"></div><div class="row"><button class="btn small" id="addFieldBtn">＋ 新增欄位</button><button class="btn small" id="presetFieldBtn">☆ 常用清單</button></div><div class="hint">按住左側 ⠿ 拖曳欄位排序，報到名單與輸入表單會同步；欄位名稱、輸入方式、核對及常用設定可直接在卡片中修改，按「套用」後同步至名單。</div></div><div class="line"></div><div class="stack"><strong>名單管理</strong><button id="addPersonBtn" class="btn mainbtn">＋ 新增／匯入名單</button><button id="exportBtn" class="btn">匯出完整 CSV</button><button id="manageImportFields" class="btn">管理已匯入欄位</button><div class="hint">支援一筆／多筆、CSV／XLSX 檔案匯入。匯入後可管理欄位，或重新選擇原檔補入漏匯欄位。</div></div></div></aside><div class="glass pad" id="rosterPanel"><div class="section-top"><h2 class="section-title">報到名單</h2><div class="row"><button class="btn small" id="noteBtn">✎ 活動筆記 <span id="noteCount"></span></button><button class="btn small" id="quickAdd">＋ 臨時新增</button></div></div><div class="controls"><input id="personSearch" type="search" placeholder="搜尋姓名、手機、Email、車號…"><select id="statusFilter" aria-label="報到篩選"><option value="all">全部</option><option value="pending">未報到</option><option value="arrived">已報到</option><option value="cancelled">取消參加</option><option value="missing">必填資料未完成</option></select></div><div class="row between" style="margin:2px 0 9px"><button class="btn small" id="progressBtn">核對進度 ▾</button><span class="tiny" id="rosterCount"></span></div><div id="progressPanel" class="subbox hidden" style="margin-bottom:10px"></div><div class="table-scroller" tabindex="0" aria-label="報到名單，可上下左右捲動；欄位表頭會固定"><table class="roster" id="rosterTable"><thead></thead><tbody></tbody></table></div><div class="hint" style="margin-top:8px">點擊文字或「—」即可直接修改；可核對資料點擊內容確認，旁邊 ✎ 用來修改原始值。按 Enter 儲存、Esc 取消。</div><div id="detailMsg" class="status-msg" role="status"></div></div></div><div class="notice">這是單一瀏覽器的 V1.4.9 測試版，資料只保存在此瀏覽器。請勿放入真實參加者個資。Google 登入、協作權限、QR Code 自助報到、雲端同步、離線跨裝置同步及 90 天自動清理尚未實作。</div></section>
+<footer class="foot"><span>© 2026 有球必應</span><span class="eng">Roll Call!</span></footer></div>
+<div id="modalOverlay" class="modal-back hidden" role="dialog" aria-modal="true"><div class="modal"><h2 id="modalTitle"></h2><div id="modalBody"></div><div class="nav-row"><button class="btn" id="modalCancel">取消</button><button class="btn mainbtn" id="modalSave">確認</button></div></div></div>
+<script>
+'use strict';
+const KEY='ball-toolbox-checkin-v11-local';const $=id=>document.getElementById(id);let state={events:[]},currentId=null,modalSave=()=>{},freezeId=null;
+const uuid=()=>crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&Array.isArray(d.events))state=d;}catch(e){console.warn(e)}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){alert('瀏覽器儲存失敗，請不要關閉頁面。');return false}}
+function eventNow(){return state.events.find(e=>e.id===currentId)}
+function h(tag,attrs={},text){const el=document.createElement(tag);for(const [k,v] of Object.entries(attrs)){if(k==='class')el.className=v;else if(k==='title')el.title=v;else el.setAttribute(k,v)}if(text!==undefined)el.textContent=String(text);return el}
+function clear(node){node.replaceChildren()}
+function modal(title,build,save,label='確認'){document.querySelectorAll('.note-add-action').forEach(el=>el.remove()); $('modalCancel').textContent='取消'; $('modalTitle').textContent=title;clear($('modalBody'));build($('modalBody'));modalSave=save;$('modalSave').textContent=label;$('modalOverlay').classList.remove('hidden')}
+function closeModal(){$('modalOverlay').classList.add('hidden');document.querySelectorAll('.note-add-action').forEach(el=>el.remove())}
+$('modalCancel').onclick=closeModal;$('modalSave').onclick=()=>{const ok=modalSave();if(ok!==false)closeModal()};
+function field(parent,label,value='',type='text',options={}){let wrap=h('div',{class:'field'}),id='f'+uuid().replaceAll('-','');wrap.append(h('label',{for:id},label));let input=h(type==='textarea'?'textarea':'input',{id});if(type!=='textarea')input.type=type;input.value=value;if(options.placeholder)input.placeholder=options.placeholder;if(options.maxLength)input.maxLength=options.maxLength;parent.append(wrap);wrap.append(input);return input}
+function dropdown(parent,label,options,value){let wrap=h('div',{class:'field'});wrap.append(h('label',{},label));let select=h('select');for(const opt of options){const o=h('option',{value:opt.value},opt.label);select.append(o)}select.value=value;wrap.append(select);parent.append(wrap);return select}
+function boxCheck(parent,label,checked=false){const row=h('label',{class:'mini-check'}),inp=h('input');inp.type='checkbox';inp.checked=checked;row.append(inp,document.createTextNode(label));parent.append(row);return inp}
+function showHome(){currentId=null;$('homeView').hidden=false;$('detailView').hidden=true;renderEvents()}
+function renderEvents(){const list=$('eventList');clear(list);const search=$('eventSearch').value.trim().toLowerCase();const found=state.events.filter(e=>e.name.toLowerCase().includes(search)).sort((a,b)=>Math.abs(new Date(a.date||'2100-01-01')-new Date())-Math.abs(new Date(b.date||'2100-01-01')-new Date()));if(!found.length){list.append(h('div',{class:'empty'},'目前沒有符合的活動，按「建立活動」開始。'));return}for(const e of found){const card=h('div',{class:'event-card'}),info=h('div'),name=h('strong',{},e.name),meta=h('div',{class:'tiny'},`${e.date||'未設定日期'} · ${e.people.length} 位名單 · 建立者（本機）`),right=h('div',{class:'row'}),pill=h('span',{class:'pill phase-'+(e.status||'draft')},statusName(e.status)),btn=h('button',{class:'btn small'},'進入活動');btn.onclick=()=>openEvent(e.id);info.append(name,meta);const del=h('button',{class:'btn small danger',title:'永久刪除此活動及其名單','aria-label':'刪除活動 '+e.name},'刪除');del.type='button';del.onclick=()=>deleteEvent(e.id);right.append(pill,btn,del);card.append(info,right);list.append(card)}}
+function deleteEvent(id){
+ const e=state.events.find(x=>x.id===id);if(!e)return;
+ modal('刪除活動',root=>{
+  root.append(h('p',{class:'delete-warning'},'這會永久刪除「'+e.name+'」及其中的參加者名單、自訂欄位、報到紀錄與活動筆記。本機版無法復原，建議先進入活動匯出 CSV 備份。'));
+  root.append(h('p',{class:'hint'},'為避免誤刪，請輸入完整活動名稱以確認：'));
+  const input=field(root,'活動名稱', '', 'text',{placeholder:e.name});root._deleteName=input;
+  const msg=h('div',{class:'status-msg',role:'status'});root._deleteMsg=msg;root.append(msg);
+ },()=>{
+  const root=$('modalBody');
+  if(root._deleteName.value.trim()!==e.name){root._deleteMsg.textContent='活動名稱不相符，尚未刪除。';return false}
+  const index=state.events.findIndex(x=>x.id===id);if(index<0)return false;
+  const removed=state.events.splice(index,1)[0];
+  if(!persist()){state.events.splice(index,0,removed);root._deleteMsg.textContent='儲存失敗，活動未刪除。';return false}
+  renderEvents();return true;
+ },'永久刪除');
+}
+function statusName(s){return ({draft:'未開始',active:'進行中',ended:'已結束'})[s]||'未開始'}
+function openEvent(id){currentId=id;freezeId=null;$('homeView').hidden=true;$('detailView').hidden=false;$('personSearch').value='';$('statusFilter').value='all';$('progressPanel').classList.add('hidden');renderDetail()}
+function renderDetail(){const e=eventNow();if(!e)return showHome();$('eventTitle').value=e.name;$('eventDate').value=e.date;$('currentEventName').textContent=e.name;$('currentEventName').title=e.name;$('eventStatus').textContent=statusName(e.status);$('eventStatus').className='pill phase-'+(e.status||'draft');$('eventStatusHelp').textContent=e.status==='draft'?'活動準備階段｜報到尚未開放':e.status==='active'?'活動進行中｜可進行報到與核對':'活動已結束｜目前為唯讀';$('eventStatusHelp').className='event-status-help phase-'+(e.status||'draft');document.querySelector('.event-toolbar').dataset.phase=e.status;$('toggleEventStatus').textContent=e.status==='draft'?'▶ 開始使用表單':e.status==='active'?'結束活動':'重新開啟';renderStats();renderFields();renderRoster();$('noteCount').textContent=e.notes.filter(n=>!n.done).length;const active=e.status!=='ended';$('addPersonBtn').disabled=!active;$('quickAdd').disabled=e.status!=='active';$('addFieldBtn').disabled=!active;$('saveEventInfo').disabled=!active;}
+function renderStats(){const e=eventNow(),eligible=e.people.filter(p=>!p.cancelled),arrived=eligible.filter(p=>p.arrived).length;const nums=[['應到',eligible.length],['實到',arrived],['未到',eligible.length-arrived],['取消參加',e.people.length-eligible.length]];clear($('stats'));nums.forEach(([n,v])=>{const d=h('div',{class:'stat'});d.append(h('span',{},n),h('b',{},v));$('stats').append(d)})}
+function renderFields(){
+ const e=eventNow(),list=$('fieldList');clear(list);
+ if(!e.fields.length)list.append(h('div',{class:'hint'},'目前尚未建立欄位。可選「＋ 新增欄位」，或從「☆ 常用清單」選取。'));
+ e.fields.forEach(f=>{
+  const ended=e.status==='ended';
+  const item=h('div',{class:'subbox field-drag-card'});item.dataset.fieldId=f.id;
+  const handle=h('button',{class:'drag-handle',title:'拖曳調整欄位順序','aria-label':'拖曳排序 '+f.name},'⠿');handle.type='button';handle.disabled=ended;
+  const info=h('div',{class:'field-card-info'}),head=h('div',{class:'inline-field-title'});
+  const name=h('input',{type:'text',class:'inline-name-input','aria-label':'直接修改欄位名稱',title:'點擊名稱直接修改，完成後按套用'});name.value=f.name;name.placeholder='欄位名稱';name.maxLength=100;name.disabled=ended;
+  const saveBtn=h('button',{type:'button',class:'btn small mainbtn',title:'儲存這個欄位的設定'},'套用');
+  const del=h('button',{class:'btn small danger',type:'button',title:'刪除此欄位'},'刪除');del.disabled=ended;del.onclick=()=>deleteField(f);head.append(name,saveBtn,del);info.append(head);
+  const form=h('div',{class:'inline-field-form'});info.append(form);
+  const type=dropdown(form,'輸入方式',[{value:'text',label:'文字｜自由輸入'},{value:'single',label:'單選｜設定選項清單'},{value:'boolean',label:'是／否｜兩種選擇'}],f.type);
+  const options=field(form,'單選選項（每行一項）',(f.options||[]).join('\n'),'textarea',{placeholder:'葷食\n素食\n不訂餐'});
+  const toggles=h('div',{class:'inline-field-required'});form.append(toggles);
+  const required=boxCheck(toggles,'必填',!!f.required);required.parentElement.title='未填寫時提醒，不會阻止報到';
+  const verify=boxCheck(toggles,'現場核對',!!f.verify);verify.parentElement.title='啟用後點擊報到名單內的資料即可核對';
+  const condition=h('div',{class:'inline-field-condition'});form.append(condition);
+  const verifyValues=field(condition,'要核對的選項（每行一項；留白＝全部有值的選項）',(f.verifyValues||[]).join('\n'),'textarea',{placeholder:'葷食\n素食'});
+  const saveCommon=boxCheck(toggles,'加入常用',false);saveCommon.parentElement.title='套用時同步儲存或更新常用欄位範本';
+  const sample=h('div',{class:'field-preview',title:'報到名單中將呈現的資料範例'});form.append(sample);
+  const status=h('div',{class:'field-status',role:'status'});form.append(status);
+  const refresh=()=>{
+   options.parentElement.hidden=type.value!=='single';
+   condition.hidden=!verify.checked||type.value==='text';
+   const sampleValue=e.people.map(p=>p.values?.[f.id]||'').find(v=>v.trim())||'';
+   const sampleText=type.value==='text'?(sampleValue||'例如：0912-345-678'):type.value==='boolean'?'是／否':(options.value.split(/\r?\n/).map(v=>v.trim()).find(Boolean)||'請輸入單選項目');
+   sample.textContent=verify.checked?`名單核對示意：［${sampleText}］→ 點擊後淡金色 ✓`:`名單顯示示意：${sampleText}（一般文字，不可核對）`;
+   sample.classList.toggle('is-warning',!verify.checked);
+   if(type.value!=='text'&&verify.checked&&(f.verifyValues||[]).length){
+    const values=options.value.split(/\r?\n/).map(v=>v.trim());
+    if((f.verifyValues||[]).some(v=>!values.includes(v)))status.textContent='提醒：原本的核對條件可能與選項不一致，請重新設定後套用。';
+   }
+  };
+  type.onchange=refresh;verify.onchange=refresh;options.oninput=refresh;name.onkeydown=ev=>{if(ev.key==='Enter'){ev.preventDefault();saveBtn.click()}};refresh();
+  for(const input of form.querySelectorAll('input,select,textarea'))input.disabled=ended;
+  saveBtn.disabled=ended;
+  if(ended)status.textContent='活動已結束，設定為唯讀；由建立者重新開啟活動後才能修改。';
+  saveBtn.onclick=()=>{
+   if(ended)return;
+   const newName=name.value.trim(),newType=type.value;
+   const newOptions=newType==='single'?options.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean):newType==='boolean'?['是','否']:[];
+   const newVerifyValues=newType==='text'?[]:verifyValues.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+   if(!newName){status.textContent='請輸入欄位名稱。';name.focus();return}
+   if(e.fields.some(other=>other.id!==f.id&&other.name===newName)){status.textContent='欄位名稱不可重複。';return}
+   if(newType==='single'&&!newOptions.length){status.textContent='單選至少需要一個選項。';return}
+   if(new Set(newOptions).size!==newOptions.length){status.textContent='選項內容不可重複。';return}
+   if(newVerifyValues.some(v=>!newOptions.includes(v))){status.textContent='核對條件必須與單選／是非選項完全相同，或留白表示全部核對。';return}
+   const invalid=e.people.filter(p=>{const v=p.values?.[f.id]||'';return v&&newType!=='text'&&!newOptions.includes(v)});
+   if(invalid.length){status.textContent=`有 ${invalid.length} 位參加者原有資料不符合新選項，請先修改名單資料或保留文字類型。`;return}
+   const oldType=f.type,oldOptions=JSON.stringify(f.options||[]),oldVerify=!!f.verify,oldValues=JSON.stringify(f.verifyValues||[]);
+   const newPreset={name:newName,type:newType,required:required.checked,verify:verify.checked,options:newOptions,verifyValues:verify.checked?newVerifyValues:[]};
+   if(saveCommon.checked){
+    const custom=getCustomPresets(),index=custom.findIndex(p=>p.name===newName);
+    if(index>=0){if(!confirm(`常用清單已有「${newName}」，是否以目前設定更新？`))return;custom[index]=newPreset}
+    else custom.push(newPreset);
+    if(!saveCustomPresets(custom)){status.textContent='常用清單儲存失敗，尚未套用欄位設定。';return}
+   }
+   Object.assign(f,newPreset);
+   const conditionsChanged=oldType!==newType||oldOptions!==JSON.stringify(newOptions)||oldVerify!==!!verify.checked||oldValues!==JSON.stringify(newPreset.verifyValues);
+   if(conditionsChanged)for(const p of e.people){p.checked=p.checked||{};p.checked[f.id]=false}
+   if(!persist()){status.textContent='儲存失敗，請不要關閉頁面。';return}
+   renderFields();renderRoster();renderProgress();
+   $('detailMsg').textContent=`「${newName}」欄位設定已更新。${conditionsChanged?'核對規則變更，舊核對狀態已重置。':''}`;
+  };
+  item.append(handle,info);list.append(item);
+  if(!ended)handle.addEventListener('pointerdown',ev=>startFieldDrag(ev,item,f.id));
+ });
+}
+
+let activeFieldDrag=null;
+function startFieldDrag(ev,item,id){
+ if(ev.button!==0||activeFieldDrag)return;
+ ev.preventDefault();const handle=ev.currentTarget;
+ activeFieldDrag={id,handle,item,startX:ev.clientX,startY:ev.clientY,targetId:null,after:false};
+ handle.setPointerCapture(ev.pointerId);item.classList.add('dragging');
+ handle.addEventListener('pointermove',duringFieldDrag);
+ handle.addEventListener('pointerup',finishFieldDrag,{once:true});
+ handle.addEventListener('pointercancel',cancelFieldDrag,{once:true});
+}
+function duringFieldDrag(ev){
+ const drag=activeFieldDrag;if(!drag)return;
+ const over=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('.field-drag-card');
+ document.querySelectorAll('.field-drag-card.drag-over').forEach(el=>el.classList.remove('drag-over'));
+ drag.targetId=over&&over.dataset.fieldId!==drag.id?over.dataset.fieldId:null;
+ drag.after=!!over&&ev.clientY>over.getBoundingClientRect().top+over.offsetHeight/2;
+ if(drag.targetId)over.classList.add('drag-over');
+}
+function cancelFieldDrag(){finishFieldDrag(null,true)}
+function finishFieldDrag(ev,cancelled=false){
+ const drag=activeFieldDrag;if(!drag)return;
+ drag.handle.removeEventListener('pointermove',duringFieldDrag);
+ drag.item.classList.remove('dragging');document.querySelectorAll('.field-drag-card.drag-over').forEach(el=>el.classList.remove('drag-over'));
+ activeFieldDrag=null;
+ if(cancelled||!drag.targetId)return;
+ const e=eventNow(),from=e.fields.findIndex(f=>f.id===drag.id);
+ if(from<0)return;
+ const [moved]=e.fields.splice(from,1);
+ let target=e.fields.findIndex(f=>f.id===drag.targetId);
+ if(target<0){e.fields.splice(from,0,moved);return}
+ if(drag.after)target++;
+ e.fields.splice(target,0,moved);
+ persist();renderFields();renderRoster();renderProgress();
+}
+function deleteField(f){
+ const e=eventNow();if(!e||e.status==='ended')return;
+ const count=e.people.filter(p=>String(p.values?.[f.id]||'').trim()||p.checked?.[f.id]).length;
+ const message=count
+  ? `「${f.name}」有 ${count} 位參加者的資料或核對紀錄。\n\n移除後，此欄不會再顯示於報到表或匯出檔；原資料會暫存於本活動的「已移除欄位」，可在本機恢復。是否繼續？`
+  : `確定移除欄位「${f.name}」？\n此欄將從名單及匯出資料移除，可透過「已移除欄位」恢復。`;
+ if(!confirm(message))return;
+ e.removedFields=e.removedFields||[];
+ const members=e.people.map(p=>({id:p.id,value:p.values?.[f.id]||'',checked:!!p.checked?.[f.id]}));
+ e.removedFields.push({field:{...f},members,removedAt:new Date().toISOString()});
+ e.fields=e.fields.filter(x=>x.id!==f.id);
+ for(const p of e.people){if(p.values)delete p.values[f.id];if(p.checked)delete p.checked[f.id]}
+ persist();renderFields();renderRoster();renderProgress();
+ $('detailMsg').textContent=`已移除「${f.name}」，可從「管理已匯入欄位」恢復。`;
+}
+function restoreRemovedField(index){
+ const e=eventNow();const item=e?.removedFields?.[index];if(!item||e.status==='ended')return;
+ if(e.fields.some(f=>f.name===item.field.name)){alert('目前已有同名欄位，請先修改現有欄位名稱再恢復。');return}
+ if(!confirm(`恢復欄位「${item.field.name}」及先前的資料、核對狀態？`))return;
+ e.fields.push(item.field);
+ const lookup=new Map(item.members.map(m=>[m.id,m]));
+ for(const p of e.people){const v=lookup.get(p.id);if(!v)continue;p.values=p.values||{};p.checked=p.checked||{};p.values[item.field.id]=v.value;p.checked[item.field.id]=v.checked}
+ e.removedFields.splice(index,1);persist();renderDetail();manageImportedFields();
+}
+
+const PRESETS=[
+ {name:'手機',type:'text',required:false,verify:false},
+ {name:'Email',type:'text',required:false,verify:false},
+ {name:'餐點',type:'single',options:['葷食','素食','不訂餐'],verify:true,verifyValues:['葷食','素食']},
+ {name:'車號',type:'text',verify:false},
+ {name:'桌號',type:'text',verify:false},
+ {name:'部門',type:'text',verify:false},
+ {name:'是否開車',type:'boolean',verify:false},
+ {name:'是否訂餐',type:'boolean',verify:false}
+];
+const COMMON_KEY='ball-toolbox-checkin-common-fields-v1';
+function getCustomPresets(){try{const data=JSON.parse(localStorage.getItem(COMMON_KEY)||'[]');return Array.isArray(data)?data.filter(x=>x&&typeof x.name==='string'):[]}catch{return []}}
+function saveCustomPresets(data){try{localStorage.setItem(COMMON_KEY,JSON.stringify(data));return true}catch{alert('常用清單儲存失敗，請確認瀏覽器可儲存資料。');return false}}
+function typeDesc(p){return ({text:'文字',single:'單選',boolean:'是／否'})[p.type]||'文字'}
+function describePreset(p){
+ const values=p.type==='single'?(p.options||[]).join('／'):p.type==='boolean'?'是／否':'自由輸入';
+ const ver=p.verify?(p.type==='text'?'有值可直接點擊核對':`可核對：${(p.verifyValues||[]).length?p.verifyValues.join('、'):'有填寫的選項'}`):'不需核對';
+ return `${typeDesc(p)}｜${values}｜${p.required?'必填':'選填'}｜${ver}`;
+}
+function toPreset(f){return {name:f.name,type:f.type,required:!!f.required,verify:!!f.verify,options:(f.options||[]).slice(),verifyValues:(f.verifyValues||[]).slice()}}
+function presetKey(name){return String(name||'').trim().normalize('NFKC').toLocaleLowerCase('zh-TW')}
+function cleanedCustomPresets(items){
+ // Newer saved item wins if the browser already contains duplicate names.
+ const seen=new Set(),result=[];
+ for(let i=items.length-1;i>=0;i--){const item=items[i],key=presetKey(item.name);if(!key||seen.has(key))continue;seen.add(key);result.unshift(item)}
+ return result;
+}
+function editCommonPreset(source){
+ // System defaults aren't edited in place. Saving produces a personal override.
+ const p=toPreset(source);
+ modal('編輯常用欄位',root=>{
+  const stack=h('div',{class:'stack'});root.append(stack);
+  stack.append(h('div',{class:'hint'},'修改常用範本不會更動已建立活動或已匯入的名單。系統範本可建立個人版本；移除個人版本後會恢復系統預設。'));
+  root._name=field(stack,'欄位名稱',p.name);
+  root._type=dropdown(stack,'輸入方式',[{value:'text',label:'文字｜自由輸入'},{value:'single',label:'單選｜設定選項'},{value:'boolean',label:'是／否'}],p.type);
+  root._opts=field(stack,'單選選項（每行一項）',(p.options||[]).join('\n'),'textarea');
+  root._req=boxCheck(stack,'必填',!!p.required);
+  root._verify=boxCheck(stack,'啟用現場核對',!!p.verify);
+  root._verifyVals=field(stack,'需要核對的選項（每行一項；留白＝全部有值的選項）',(p.verifyValues||[]).join('\n'),'textarea');
+  const hint=h('div',{class:'hint'});stack.append(hint);
+  const refresh=()=>{
+   root._opts.parentElement.hidden=root._type.value!=='single';
+   root._verifyVals.parentElement.hidden=!root._verify.checked||root._type.value==='text';
+   hint.textContent=root._type.value==='text'?'文字欄位可設定有值時點擊核對。':root._type.value==='single'?'單選欄位可指定哪些選項需要核對。':'是／否欄位也可以指定需要核對的選項。';
+  };
+  root._type.onchange=refresh;root._verify.onchange=refresh;refresh();
+ },()=>{
+  const r=$('modalBody'),name=r._name.value.trim(),type=r._type.value;
+  if(!name){alert('請輸入欄位名稱。');return false}
+  const opts=type==='single'?r._opts.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean):type==='boolean'?['是','否']:[];
+  const vals=type==='text'||!r._verify.checked?[]:r._verifyVals.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+  if(type==='single'&&!opts.length){alert('請至少設定一個單選選項。');return false}
+  if(new Set(opts).size!==opts.length){alert('單選選項不可重複。');return false}
+  if(vals.some(v=>!opts.includes(v))){alert('核對條件必須是欄位已有的選項。');return false}
+  const data=getCustomPresets(),originalKey=presetKey(source.name),newKey=presetKey(name);
+  // A system default can be overridden, but do not silently overwrite another custom preset.
+  const conflicting=data.filter(x=>presetKey(x.name)===newKey&&newKey!==originalKey);
+  if(conflicting.length&&!confirm('常用清單已有同名「'+name+'」，確定合併並以這次設定取代嗎？'))return false;
+  const next={name,type,required:r._req.checked,verify:r._verify.checked,options:opts,verifyValues:vals};
+  const updated=data.filter(x=>presetKey(x.name)!==originalKey&&presetKey(x.name)!==newKey);
+  updated.push(next);
+  if(!saveCustomPresets(updated))return false;
+  $('detailMsg').textContent='常用欄位「'+name+'」已儲存。重新開啟常用清單即可查看。';
+  return true;
+ },'儲存常用欄位');
+}
+function presetDialog(){
+ const e=eventNow();if(!e||e.status==='ended')return;
+ modal('常用欄位清單',root=>{
+  root.append(h('div',{class:'tipbox'},'勾選要使用的範本，再按「加入選取欄位」。右側「編輯」可修改欄位名稱、輸入方式、選項、必填和核對設定。與系統範本同名時，只顯示你儲存的版本。'));
+  const g=h('div',{class:'stack',style:'margin-top:12px'});root.append(g);root._picked=[];
+  const customs=getCustomPresets(),unique=cleanedCustomPresets(customs);
+  const customKeys=new Set(unique.map(p=>presetKey(p.name)));
+  // Prefer personal variants over built-ins to prevent duplicate display.
+  const all=[...PRESETS.filter(p=>!customKeys.has(presetKey(p.name))).map(p=>({...p,_builtIn:true})),...unique.map(p=>({...p,_builtIn:false}))];
+  for(const p of all){
+   const card=h('div',{class:'preset-card'}),pick=h('input');pick.type='checkbox';pick.style.marginTop='4px';pick.setAttribute('aria-label','加入 '+p.name);
+   const description=h('div',{style:'flex:1;min-width:0'}),title=h('div');
+   title.append(h('strong',{},p.name),h('span',{class:'tiny'},p._builtIn?' · 系統常用':' · 我的常用'));
+   description.append(title,h('div',{class:'preset-description'},describePreset(p)));card.append(pick,description);
+   const controls=h('div',{class:'preset-actions'});
+   const edit=h('button',{class:'btn small',type:'button'},'編輯');edit.onclick=()=>editCommonPreset(p);controls.append(edit);
+   if(!p._builtIn){
+    const remove=h('button',{class:'btn small danger',type:'button'},'刪除');remove.onclick=()=>{
+     if(!confirm('確定從常用清單刪除「'+p.name+'」？\n已加入活動的欄位不受影響。'))return;
+     const data=getCustomPresets().filter(x=>presetKey(x.name)!==presetKey(p.name));
+     if(saveCustomPresets(data))presetDialog();
+    };controls.append(remove);
+   }
+   card.append(controls);
+   if(e.fields.some(f=>presetKey(f.name)===presetKey(p.name))){pick.disabled=true;description.append(h('div',{class:'tiny'},'本活動已加入同名欄位'))}
+   g.append(card);root._picked.push([p,pick]);
+  }
+  if(unique.length<customs.length){
+   const cleanup=h('button',{type:'button',class:'btn small'},'清理重複的自訂常用欄位');
+   cleanup.onclick=()=>{
+    if(!confirm('常用清單中發現同名範本。是否只保留各名稱最新的設定？'))return;
+    if(saveCustomPresets(cleanedCustomPresets(getCustomPresets())))presetDialog();
+   };root.append(cleanup);
+  }
+ },()=>{
+  const r=$('modalBody'),selected=r._picked.filter(([p,checked])=>checked.checked&&!checked.disabled).map(([p])=>p);
+  if(!selected.length){alert('請先勾選至少一項欄位');return false}
+  for(const p of selected){if(!e.fields.some(f=>presetKey(f.name)===presetKey(p.name)))e.fields.push({...toPreset(p),id:uuid()})}
+  persist();renderDetail();return true;
+ },'加入選取欄位');
+}
+function createEvent(){modal('建立活動',root=>{const g=h('div',{class:'formgrid'});root.append(g);root._name=field(g,'活動名稱');root._date=field(g,'活動日期','','date')},()=>{const root=$('modalBody'),name=root._name.value.trim();if(!name){alert('請填寫活動名稱');return false}const e={id:uuid(),name,date:root._date.value,status:'draft',fields:[],people:[],notes:[]};state.events.push(e);persist();openEvent(e.id)})}
+function editField(existing){
+ const e=eventNow();if(e.status==='ended')return;
+ const f=existing||{name:'',type:'text',required:false,verify:false,options:[],verifyValues:[]};
+ modal(existing?'編輯自訂欄位':'新增自訂欄位',root=>{
+  const g=h('div',{class:'stack'});root.append(g);
+  g.append(h('div',{class:'tipbox'},'① 先取欄位名稱 → ② 選擇輸入方式 → ③ 決定要不要現場點擊核對。更改欄位類型時會檢查已填資料，不會直接清除。'));
+  root._name=field(g,'① 欄位名稱',f.name,'text',{placeholder:'例如：餐點、車牌、桌號'});
+  root._type=dropdown(g,'② 輸入方式',[{value:'text',label:'文字｜自由輸入：車號、手機、桌號'},{value:'single',label:'單選｜從清單選一個：葷食／素食'},{value:'boolean',label:'是／否｜只有兩種選擇'}],f.type);
+  const sample=h('div',{class:'example'});g.append(sample);
+  root._options=field(g,'單選選項：每行一個',f.type==='single'?(f.options||[]).join('\n'):'','textarea',{placeholder:'葷食\n素食\n不訂餐'});
+  root._required=boxCheck(g,'設為必填（缺漏時顯示提醒，但不阻止報到）',f.required);
+  root._verify=boxCheck(g,'③ 啟用現場核對｜名單上的資料變成可點擊按鈕',f.verify);
+  const verifyBox=h('div',{class:'stack'});g.append(verifyBox);
+  root._verifyValues=field(verifyBox,'哪些選項需要核對？每行一個（留白＝全部有值的選項）',(f.verifyValues||[]).join('\n'),'textarea',{placeholder:'葷食\n素食'});
+  root._saveCommon=boxCheck(g,'☆ 將這組欄位設定加入我的常用清單（下次建立其他活動可直接套用）',false);
+  g.append(h('div',{class:'hint'},'常用清單會記住欄位名稱、類型、選項、必填及核對設定；不包含參加者資料。'));
+  const refresh=()=>{
+   const type=root._type.value;
+   sample.textContent=type==='text'?'顯示示例：ABC-1234｜自由輸入一段文字':type==='single'?'顯示示例：［葷食 ▾］｜只能選設定好的項目':'顯示示例：［是 ▾］／［否 ▾］';
+   root._options.parentElement.hidden=type!=='single';
+   verifyBox.hidden=!root._verify.checked;
+   root._verifyValues.parentElement.hidden=type==='text';
+  };
+  root._type.onchange=refresh;root._verify.onchange=refresh;refresh();
+  if(existing)g.append(h('div',{class:'hint'},'修改類型或單選選項後，系統會檢查現有值；若有不相容資料，會先請你確認，不會直接覆蓋。'));
+ },()=>{
+  const r=$('modalBody'),name=r._name.value.trim(),type=r._type.value;
+  const options=(type==='single'?r._options.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean):type==='boolean'?['是','否']:[]);
+  const verifyValues=(type==='text'?[]:r._verifyValues.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean));
+  if(!name){alert('請輸入欄位名稱');return false}
+  if(type==='single'&&!options.length){alert('單選至少設定一個選項');return false}
+  if(new Set(options).size!==options.length){alert('選項內容不可重複');return false}
+  if(verifyValues.some(v=>!options.includes(v))){alert('需要核對的選項，必須包含在欄位選項內');return false}
+  if(e.fields.some(o=>o.id!==existing?.id&&o.name===name)){alert('欄位名稱不可重複');return false}
+  if(existing){
+   const invalid=e.people.filter(p=>{const val=p.values?.[existing.id]||'';return val&&type!=='text'&&!options.includes(val)});
+   if(invalid.length){alert(`有 ${invalid.length} 位參加者的舊資料無法套用新的「${name}」選項。\n\n請先在報到名單內修改這些資料，或保留文字類型，再調整欄位。`);return false}
+   const changed=(existing.type!==type||JSON.stringify(existing.options)!==JSON.stringify(options));
+   Object.assign(existing,{name,type,required:r._required.checked,verify:r._verify.checked,options,verifyValues});
+   if(changed)for(const p of e.people){p.checked=p.checked||{};p.checked[existing.id]=false}
+  }else e.fields.push({id:uuid(),name,type,required:r._required.checked,verify:r._verify.checked,options,verifyValues});
+  if(r._saveCommon.checked){
+   const preset=toPreset({name,type,required:r._required.checked,verify:r._verify.checked,options,verifyValues});
+   const custom=getCustomPresets();const i=custom.findIndex(p=>p.name===name);
+   if(i>=0){if(!confirm(`常用清單中已有「${name}」，是否以目前的欄位設定取代？`))return false;custom[i]=preset}
+   else custom.push(preset);
+   if(!saveCustomPresets(custom))return false;
+  }
+  persist();renderDetail();return true;
+ });
+}
+function editableInput(parent,f,value){let ctrl;if(f.type==='text'){ctrl=field(parent,f.name+(f.required?' *':''),value)}else{ctrl=dropdown(parent,f.name+(f.required?' *':''),[{value:'',label:'— 未填寫 —'},...(f.type==='boolean'?['是','否']:f.options).map(v=>({value:v,label:v}))],value)}return ctrl}
+function personDialog(person=null){const e=eventNow(),isEdit=!!person;if(e.status==='ended')return;modal(isEdit?'編輯參加者':'臨時新增參加者',root=>{root._name=field(root,'姓名',person?.name||'');const grid=h('div',{class:'formgrid',style:'margin-top:11px'});root.append(grid);root._values={};for(const f of e.fields)root._values[f.id]=editableInput(grid,f,person?.values?.[f.id]||'');root._note=field(root,'個人備註',person?.note||'','textarea');if(isEdit){const row=h('div',{class:'row'});row.style.marginTop='12px';const cancel=h('button',{class:'btn small'},person.cancelled?'恢復參加':'取消參加');cancel.onclick=()=>{if(person.arrived){alert('已報到者請先更正報到狀態，再進行取消參加。');return}if(!confirm(person.cancelled?'恢復此參加者？':'將此人標記為取消參加？'))return;person.cancelled=!person.cancelled;persist();closeModal();freezeId=null;renderDetail()};row.append(cancel);if(!person.arrived&&!Object.values(person.checked||{}).some(Boolean)){const del=h('button',{class:'btn small danger'},'刪除誤新增');del.onclick=()=>{if(!confirm('確定刪除這位參加者？'))return;e.people=e.people.filter(p=>p.id!==person.id);persist();closeModal();freezeId=null;renderDetail()};row.append(del)}root.append(row)}},()=>{const root=$('modalBody'),name=root._name.value.trim();if(!name){alert('姓名不可空白');return false}const values=Object.fromEntries(e.fields.map(f=>[f.id,root._values[f.id].value.trim()]));if(isEdit){for(const f of e.fields)if((person.values[f.id]||'')!==values[f.id])person.checked[f.id]=false;person.name=name;person.values=values;person.note=root._note.value.trim()}else e.people.push({id:uuid(),name,values,note:root._note.value.trim(),arrived:false,arrivedAt:null,cancelled:false,checked:{}});persist();freezeId=isEdit?person.id:null;renderDetail();$('detailMsg').textContent=isEdit?'資料已儲存。':'已新增參加者。'})}
+function parseDelimited(text){
+ text=text.replace(/^\uFEFF/,'');const first=text.split(/\r?\n/,1)[0]||'';
+ const delim=first.includes('\t')?'\t':first.split(';').length>first.split(',').length?';':',';
+ const rows=[];let row=[],value='',quoted=false;
+ for(let i=0;i<text.length;i++){
+  const ch=text[i];
+  if(ch==='"'){
+   if(quoted&&text[i+1]==='"'){value+='"';i++}else quoted=!quoted;
+  }else if(ch===delim&&!quoted){row.push(value);value=''}
+  else if((ch==='\n'||ch==='\r')&&!quoted){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(value);rows.push(row);row=[];value=''}
+  else value+=ch;
+ }
+ if(quoted)throw Error('CSV 引號未正確成對，請確認檔案格式');
+ row.push(value);rows.push(row);
+ return rows.filter(r=>r.some(v=>String(v).trim()));
+}
+function xmlNodes(node,tag){return Array.from(node.getElementsByTagNameNS('*',tag))}
+function xmlOne(node,tag){return xmlNodes(node,tag)[0]}
+function zipEntries(buffer){
+ const b=new Uint8Array(buffer),v=new DataView(buffer);let end=-1;
+ for(let i=b.length-22;i>=Math.max(0,b.length-65557);i--)if(v.getUint32(i,true)===0x06054b50){end=i;break}
+ if(end<0)throw Error('找不到 XLSX 壓縮檔目錄，請確認是 .xlsx');
+ const count=v.getUint16(end+10,true),at=v.getUint32(end+16,true);let offset=at;
+ const entries=new Map(),decode=new TextDecoder();
+ for(let i=0;i<count;i++){
+  if(v.getUint32(offset,true)!==0x02014b50)throw Error('XLSX 目錄格式不正確');
+  const method=v.getUint16(offset+10,true),size=v.getUint32(offset+20,true),nlen=v.getUint16(offset+28,true),elen=v.getUint16(offset+30,true),clen=v.getUint16(offset+32,true),local=v.getUint32(offset+42,true);
+  const name=decode.decode(b.slice(offset+46,offset+46+nlen));
+  entries.set(name,{method,size,local});offset+=46+nlen+elen+clen;
+ }
+ return {entries,b,v};
+}
+async function zipRead(zip,name){
+ const info=zip.entries.get(name);if(!info)throw Error('XLSX 缺少必要資料：'+name);
+ const pos=info.local,v=zip.v;if(v.getUint32(pos,true)!==0x04034b50)throw Error('XLSX 檔案內容不正確');
+ const start=pos+30+v.getUint16(pos+26,true)+v.getUint16(pos+28,true),raw=zip.b.slice(start,start+info.size);
+ if(info.method===0)return new TextDecoder().decode(raw);
+ if(info.method!==8||typeof DecompressionStream==='undefined')throw Error('瀏覽器無法解壓縮此 XLSX，請改存 CSV 匯入');
+ try{const ds=new DecompressionStream('deflate-raw');const stream=new Blob([raw]).stream().pipeThrough(ds);return await new Response(stream).text()}
+ catch(err){throw Error('XLSX 解壓縮失敗，請將試算表另存 CSV 再匯入')}
+}
+function xmlParse(text){const doc=new DOMParser().parseFromString(text,'application/xml');if(doc.querySelector('parsererror'))throw Error('XLSX XML 格式不正確');return doc}
+function colNum(ref){let v=0;for(const c of (ref.match(/^[A-Z]+/i)?.[0]||''))v=v*26+c.toUpperCase().charCodeAt(0)-64;return v-1}
+async function readXlsx(file){
+ const zip=zipEntries(await file.arrayBuffer());
+ const workbook=xmlParse(await zipRead(zip,'xl/workbook.xml'));
+ const sheet=xmlOne(workbook,'sheet');if(!sheet)throw Error('XLSX 沒有工作表');
+ const relationship=sheet.getAttribute('r:id')||sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
+ let sheetPath='xl/worksheets/sheet1.xml';
+ if(zip.entries.has('xl/_rels/workbook.xml.rels')&&relationship){
+  const rels=xmlParse(await zipRead(zip,'xl/_rels/workbook.xml.rels'));
+  const rel=xmlNodes(rels,'Relationship').find(r=>r.getAttribute('Id')===relationship);
+  if(rel){const target=rel.getAttribute('Target')||'';sheetPath=target.startsWith('/')?target.slice(1):(target.startsWith('xl/')?target:'xl/'+target.replace(/^\.\//,''));sheetPath=sheetPath.replace(/\\/g,'/').replace(/(^|\/)\.\//g,'');}
+ }
+ let shared=[];
+ if(zip.entries.has('xl/sharedStrings.xml')){
+  const strings=xmlParse(await zipRead(zip,'xl/sharedStrings.xml'));
+  shared=xmlNodes(strings,'si').map(si=>xmlNodes(si,'t').map(t=>t.textContent||'').join(''));
+ }
+ const page=xmlParse(await zipRead(zip,sheetPath));let rows=[];
+ for(const row of xmlNodes(page,'row')){
+  const cells=[];
+  for(const c of xmlNodes(row,'c')){
+   const idx=colNum(c.getAttribute('r')||'');if(idx<0||idx>200)continue;
+   const type=c.getAttribute('t')||'',raw=(xmlOne(c,'v')?.textContent||'');
+   cells[idx]=type==='s'?(shared[Number(raw)]||''):type==='inlineStr'?xmlNodes(c,'t').map(t=>t.textContent||'').join(''):type==='b'?(raw==='1'?'是':'否'):raw;
+  }
+  rows.push(Array.from({length:cells.length},(_,i)=>String(cells[i]??'')));
+ }
+ rows=rows.filter(row=>row.some(v=>v.trim()));
+ if(!rows.length)throw Error('第一張工作表沒有可匯入的資料');
+ return rows;
+}
+function suggestMap(column,e){
+ const name=String(column||'').trim().toLowerCase().replace(/[\s_()（）]/g,'');
+ if(['姓名','名字','name','參加者','參加者姓名','員工姓名'].includes(name))return 'name';
+ const aliases={手機:['電話','聯絡電話','手機號碼','mobile','phone'],Email:['電子郵件','電子信箱','信箱','emailaddress','mail'],車號:['車牌','車牌號碼','licenseplate'],餐點:['餐點種類','葷素','訂餐','飲食'],桌號:['桌次','桌別','桌位']};
+ for(const f of e.fields)if(f.name.trim().toLowerCase()===name||[f.name,...(aliases[f.name]||[])].some(a=>a.toLowerCase()===name))return f.id;
+ if(['個人備註','備註','note','remark'].includes(name))return 'note';return '';
+}
+function findDuplicate(e,name,values){
+ const mobile=e.fields.find(f=>/手機|電話|mobile|phone/i.test(f.name)),email=e.fields.find(f=>/email|信箱|郵件/i.test(f.name));
+ const m=mobile&&values[mobile.id],em=email&&values[email.id];
+ let matches=[];
+ if(m&&String(m).replace(/\D/g,'').length>=7)matches=e.people.filter(p=>String(p.values?.[mobile.id]||'').replace(/\D/g,'')===String(m).replace(/\D/g,''));
+ if(!matches.length&&em)matches=e.people.filter(p=>String(p.values?.[email.id]||'').toLowerCase()===String(em).toLowerCase());
+ if(!matches.length)matches=e.people.filter(p=>p.name===name);
+ return matches.length===1?matches[0]:matches.length>1?{ambiguous:true}:null;
+}
+function importDialog(){
+ const e=eventNow();modal('新增／匯入名單',root=>{
+  root.append(h('div',{class:'tipbox'},'直接貼上一位或多位姓名（每行一人），或選擇 CSV／XLSX 檔案。檔案讀取後，每個來源欄位只要選擇是否匯入，欄位名稱沿用 Excel／CSV 第一列原文；確認預覽後按「確認匯入」。不需要額外安裝或連線。'));
+  root._names=field(root,'直接貼上姓名（每行一位）','','textarea',{placeholder:'王小明\n陳小美\n林小華'});
+  const sep=h('div',{class:'hint',style:'margin:10px 0'},'或上傳檔案（CSV／XLSX，使用第一張工作表；第一列為欄位名稱）');root.append(sep);
+  root._file=h('input',{type:'file',accept:'.csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});root.append(root._file);
+  root._feedback=h('div',{class:'hint',style:'margin-top:7px'},'CSV 請使用 UTF-8 編碼。Excel 請另存為 .xlsx（不支援舊版 .xls）。');root.append(root._feedback);
+  root._map=h('div',{class:'import-mapping',style:'margin-top:12px'});root.append(root._map);
+  root._preview=h('div',{class:'import-preview'});root._preview.hidden=true;root.append(root._preview);
+  root._dups=h('div',{class:'stack',style:'margin-top:12px'});root.append(root._dups);
+  root._rows=null;root._decisions=new Map();
+  function collect(){
+   const mappings=root._selects?.map((el,i)=>el.checked?root._targets[i]:'')||[];
+   if(!mappings.includes('name'))throw Error('必須匯入「姓名」欄。請確認檔案第一列含有「姓名／Name」標題。');
+   const used=mappings.filter(Boolean);if(new Set(used).size!==used.length)throw Error('匯入的欄位中有重複欄名，請取消其中一個，或修改來源 Excel 的欄位名稱。');
+   return root._rows.slice(1).map((row,i)=>{
+    const person={name:'',values:{},note:''};
+    mappings.forEach((target,col)=>{const value=String(row[col]||'').trim();if(target==='name')person.name=value;else if(target==='note')person.note=value;else if(target)person.values[target]=value});
+    return {...person,index:i};
+   }).filter(p=>p.name);
+  }
+  function redrawDups(){
+   clear(root._dups);if(!root._rows)return;
+   let entries;try{entries=collect()}catch(err){root._feedback.textContent=err.message;return}
+   const detected=entries.filter(p=>findDuplicate(e,p.name,p.values));
+   root._feedback.textContent=`檔案共 ${entries.length} 筆有效姓名，偵測到 ${detected.length} 筆可能重複。請確認匯入欄位與下方預覽。`;
+   if(!detected.length)return;
+   root._dups.append(h('div',{class:'tipbox'},'疑似重複名單：預設略過。可逐筆選「新增」、「略過」或「更新既有資料」；更新會保留原報到狀態，變動的欄位會重置核對。'));
+   const list=h('div',{class:'import-preview'});root._dups.append(list);
+   for(const p of detected){const existing=findDuplicate(e,p.name,p.values);const div=h('div',{class:'row between',style:'padding:6px 9px;border-bottom:1px solid var(--line)'});
+    div.append(h('span',{},p.name+(existing?.ambiguous?'（有多位同名）':'')));
+    const select=h('select',{style:'max-width:190px'});
+    for(const [v,label] of [['skip','略過'],['add','仍要新增'],...(existing?.ambiguous?[]:[['update','更新既有']])])select.append(h('option',{value:v},label));
+    select.value=root._decisions.get(p.index)||'skip';select.onchange=()=>root._decisions.set(p.index,select.value);div.append(select);list.append(div);
+   }
+  }
+  root._file.onchange=async()=>{
+   root._rows=null;root._decisions.clear();clear(root._map);clear(root._dups);root._preview.hidden=true;
+   const file=root._file.files?.[0];if(!file)return;
+   if(file.size>5*1024*1024){root._feedback.textContent='檔案超過 5MB，請分批匯入';return}
+   root._feedback.textContent='正在解析檔案…';
+   try{
+    const ext=file.name.split('.').pop().toLowerCase();if(!['csv','xlsx'].includes(ext))throw Error('只支援 .csv 或 .xlsx');
+    const rows=ext==='csv'?parseDelimited(await file.text()):await readXlsx(file);
+    if(rows.length<2)throw Error('檔案至少需要一列標題與一列資料');
+    if(rows.length>2001)throw Error('一次最多匯入 2000 位，請分批處理');
+    root._rows=rows;root._names.value='';
+    const columns=rows[0].map(n=>String(n??'').trim());
+    const normalize=n=>String(n||'').trim().toLowerCase().replace(/[\s_()（）【】\[\]\-]/g,'');
+    const isName=n=>/^(姓名|名字|參加者|參加者姓名|員工姓名|name|fullname|姓名[\/／]name|name[\/／]姓名)$/.test(normalize(n))||/^姓名[（(]/.test(String(n||''));
+    const nameCols=columns.map((n,i)=>isName(n)?i:-1).filter(i=>i>=0);
+    if(!nameCols.length)throw Error('找不到姓名欄，請確認 Excel 第一列有「姓名」或「姓名/Name」等標題；其餘欄位可以保留原名稱。');
+    if(nameCols.length>1)throw Error('找到多個姓名欄，請保留其中一個姓名欄再匯入。');
+    const nameIndex=nameCols[0];
+    root._selects=[];root._targets=[];
+    const existingNames=new Map(e.fields.map(f=>[normalize(f.name),f.id]));
+    for(let i=0;i<columns.length;i++){
+     const title=columns[i];
+     const target=i===nameIndex?'name':/^(個人備註|備註)$/.test(title)?'note':existingNames.get(normalize(title))||'new:'+i;
+     root._targets.push(target);
+     const wrapper=h('div',{class:'field import-choice'});
+     wrapper.append(h('div',{class:'import-source-name'},title||'（未命名欄位）'));
+     const choiceLabel=h('label',{class:'import-toggle'});
+     const select=h('input',{type:'checkbox','aria-label':`匯入 ${title||'未命名欄位'}`});
+     select.checked=i===nameIndex||target==='note'||!target.startsWith('new:');
+     choiceLabel.append(select,h('span',{},'匯入此欄'));
+     wrapper.append(choiceLabel);
+     if(i===nameIndex){select.checked=true;select.disabled=true;wrapper.append(h('div',{class:'hint'},'姓名為名單必要欄位，會自動匯入。'));}
+     else if(!title){select.checked=false;select.disabled=true;wrapper.append(h('div',{class:'hint'},'此欄沒有標題；若要匯入，請先在 Excel 第一列填寫欄位名稱。'));}
+     else if(target.startsWith('new:'))wrapper.append(h('div',{class:'hint'},'勾選後，使用 Excel 原本的欄位名稱新增到活動中。'));
+     else wrapper.append(h('div',{class:'hint'},'此欄已存在，會匯入既有欄位。'));
+     select.onchange=redrawDups;
+     wrapper.append(select);root._map.append(wrapper);root._selects.push(select);
+    }
+    root._preview.hidden=false;clear(root._preview);const table=h('table'),head=h('tr');columns.forEach(v=>head.append(h('th',{},v)));table.append(head);
+    rows.slice(1,9).forEach(row=>{const tr=h('tr');columns.forEach((_,i)=>tr.append(h('td',{},String(row[i]||'').slice(0,60))));table.append(tr)});root._preview.append(table);
+    root._preview.append(h('div',{class:'hint',style:'padding:7px'},'預覽前 8 筆；只有勾選「匯入此欄」的資料會加入名單，且保留來源欄位名稱。'));
+    redrawDups();
+   }catch(err){root._feedback.textContent='檔案無法匯入：'+err.message;root._rows=null}
+  };
+  root._collect=collect;
+ },()=>{
+  const root=$('modalBody');let incoming;
+  if(root._rows){try{incoming=root._collect()}catch(err){alert(err.message);return false}}
+  else{const names=root._names.value.split(/\r?\n/).map(n=>n.trim()).filter(Boolean);incoming=names.map((name,index)=>({name,values:{},note:'',index}))}
+  if(!incoming.length){alert('沒有可匯入的參加者');return false}
+  // 新欄位在完成所有驗證後才真正新增，避免失敗時留下空欄位。
+  const staged=root._rows?(root._selects||[]).map((sel,i)=>({value:sel.checked?root._targets[i]:'',label:String(root._rows[0][i]||'').trim()})).filter(x=>x.value.startsWith('new:')):[];
+  const newNames=staged.map(x=>x.label);
+  if(newNames.some(n=>!n||n.length>80)||new Set(newNames).size!==newNames.length||newNames.some(n=>e.fields.some(f=>f.name===n))){alert('新增欄位的名稱不可空白、重複或與現有欄位相同（最多 80 字）。');return false}
+
+  if(incoming.some(p=>p.name.length>100)){alert('姓名不可超過 100 字');return false}
+  if(incoming.some(p=>/^#(REF!|NAME\?|VALUE!|N\/A|DIV\/0!|NUM!|NULL!)/i.test(p.name))){alert('檔案姓名欄包含 Excel 公式錯誤，請先修正原始表格，再重新匯入。');return false}
+  for(const p of incoming){for(const f of e.fields){const val=p.values[f.id]||'';if(val&&f.type!=='text'&&!(f.type==='boolean'?['是','否']:f.options).includes(val)){alert(`「${p.name}」的「${f.name}」值「${val}」不在設定的選項內，請調整原始檔或欄位設定。`);return false}}}
+  if(!root._rows&&incoming.some(p=>findDuplicate(e,p.name,p.values))&&!confirm('貼上的名單中有與既有名單同名者。確認仍要全部新增嗎？'))return false;
+  const newFields=staged.map(x=>({oldKey:x.value,id:uuid(),name:x.label,type:'text',required:false,verify:false,options:[],verifyValues:[]}));
+  for(const p of incoming)for(const f of newFields)if(Object.hasOwn(p.values,f.oldKey)){p.values[f.id]=p.values[f.oldKey];delete p.values[f.oldKey]}
+  let added=0,updated=0,skipped=0;
+  for(const person of incoming){const dup=findDuplicate(e,person.name,person.values),action=dup?(root._rows?(root._decisions.get(person.index)||'skip'):'add'):'add';
+   if(action==='skip'){skipped++;continue}
+   if(action==='update'&&dup&&!dup.ambiguous){
+    dup.values=dup.values||{};dup.checked=dup.checked||{};
+    for(const [id,value] of Object.entries(person.values)){if(value&&(dup.values[id]||'')!==value){dup.values[id]=value;dup.checked[id]=false}}
+    if(person.note)dup.note=person.note;updated++;continue;
+   }
+   e.people.push({id:uuid(),name:person.name,values:person.values,note:person.note,arrived:false,arrivedAt:null,cancelled:false,checked:{}});added++;
+  }
+  e.fields.push(...newFields.map(({oldKey,...f})=>f));
+  persist();renderDetail();$('detailMsg').textContent=`匯入完成：新增 ${added} 位、更新 ${updated} 位、略過 ${skipped} 位；增加 ${newFields.length} 個欄位。`;
+  return true;
+ },'確認匯入');
+}
+function needsVerify(f,value){if(!f.verify||!value)return false;return f.type==='text'||!(f.verifyValues||[]).length||(f.verifyValues||[]).includes(value)}
+function rosterSorted(){return eventNow().people.slice()}
+
+function inlineCell(cell,person,fieldDef,readOnly){
+ const isName=fieldDef==='name',isNote=fieldDef==='note';
+ const getValue=()=>isName?person.name:isNote?person.note:(person.values?.[fieldDef.id]||'');
+ const preview=h('span',{class:'editable',title:'點擊直接編輯，Enter 儲存、Esc 取消'},getValue()||'—');
+ cell.append(preview);
+ if(readOnly)return;
+ preview.onclick=()=>{
+  const value=getValue();let input;
+  if(!isName&&!isNote&&fieldDef.type!=='text'){
+   input=h('select',{class:'inline-editor'});
+   const choices=fieldDef.type==='boolean'?['是','否']:(fieldDef.options||[]);
+   for(const v of ['',...choices])input.append(h('option',{value:v},v||'— 未填寫 —'));
+   input.value=value;
+  }else{input=h('input',{class:'inline-editor',type:'text'});input.value=value;input.maxLength=isName?100:isNote?400:500}
+  // 提供明確的欄內儲存與取消，不需要點空白處才能恢復核對按鈕。
+  const editor=h('span',{class:'inline-edit-group'});
+  const saveBtn=h('button',{type:'button',class:'inline-edit-action save',title:'儲存修改，恢復核對按鈕','aria-label':'儲存修改'},'✓');
+  const cancelBtn=h('button',{type:'button',class:'inline-edit-action cancel',title:'取消修改','aria-label':'取消修改'},'×');
+  editor.append(input,saveBtn,cancelBtn);
+  cell.replaceChildren(editor);
+  let done=false;
+  const finish=(commit)=>{
+   if(done)return;
+   const next=input.value.trim();
+   if(commit&&isName&&!next){alert('姓名不能留白');input.focus();return}
+   done=true;
+   if(commit&&next!==value){
+    if(isName)person.name=next;
+    else if(isNote)person.note=next;
+    else{person.values=person.values||{};person.checked=person.checked||{};person.values[fieldDef.id]=next;person.checked[fieldDef.id]=false}
+    persist();renderStats();renderRoster();$('detailMsg').textContent='已直接儲存 '+person.name+' 的資料。';
+   }else{cell.replaceChildren(preview)}
+  };
+  // 防止按按鈕時輸入框先 blur，導致按鈕被移除而無法觸發 click。
+  saveBtn.addEventListener('mousedown',ev=>ev.preventDefault());
+  cancelBtn.addEventListener('mousedown',ev=>ev.preventDefault());
+  saveBtn.onclick=()=>finish(true);
+  cancelBtn.onclick=()=>finish(false);
+  input.addEventListener('keydown',ev=>{if(ev.key==='Escape'){ev.preventDefault();finish(false)}if(ev.key==='Enter'){ev.preventDefault();finish(true)}});
+  input.addEventListener('blur',()=>finish(true));
+  if(input.tagName==='SELECT')input.addEventListener('change',()=>finish(true));
+  input.focus();if(input.select)input.select();
+ };
+}
+function renderRoster(){
+ const e=eventNow(),t=$('rosterTable');clear(t.tHead);clear(t.tBodies[0]);
+ const tr=t.tHead.insertRow();const headers=['報到','姓名',...e.fields.map(f=>f.name),'個人備註','管理'];
+ headers.forEach((name,i)=>{const th=h('th',{class:i===0?'pin1':i===1?'pin2':''},name);if(i>=2&&i<2+e.fields.length)th.style.minWidth=(e.fields[i-2].type==='text'?'140px':'105px');tr.append(th)});
+ const needle=$('personSearch').value.trim().toLowerCase(),filter=$('statusFilter').value;
+ const items=rosterSorted().filter(p=>{
+  const searchable=[p.name,p.note,...Object.values(p.values||{})].join(' ').toLowerCase();if(!searchable.includes(needle))return false;
+  if(filter==='arrived'&&!p.arrived)return false;
+  if(filter==='pending'&&(p.arrived||p.cancelled))return false;
+  if(filter==='cancelled'&&!p.cancelled)return false;
+  if(filter==='missing'&&!e.fields.some(f=>f.required&&!(p.values?.[f.id]||'')))return false;
+  return true;
+ });
+ $('rosterCount').textContent=`顯示 ${items.length} / ${e.people.length} 位 · 維持輸入順序`;
+ if(!items.length){const row=t.tBodies[0].insertRow();const cell=row.insertCell();cell.colSpan=headers.length;cell.className='empty';cell.textContent='沒有符合條件的參加者';return}
+ for(const p of items){
+  const row=t.tBodies[0].insertRow(),readonly=e.status==='ended',canCheck=e.status==='active',c0=row.insertCell();c0.className='pin1';
+  const arrive=h('button',{class:'cellbtn'+(p.arrived?' arrived':'')},p.arrived?'✓ 已報到':'確認報到');arrive.disabled=!canCheck||p.cancelled;arrive.title=p.cancelled?'已取消參加':!canCheck?'活動尚未開始或已結束，請先開始／重新開啟活動':'點擊確認／取消報到';
+  arrive.onclick=()=>{p.arrived=!p.arrived;p.arrivedAt=p.arrived?new Date().toISOString():null;persist();renderStats();renderRoster();$('detailMsg').textContent=p.name+(p.arrived?' 已完成報到':' 已取消報到')};c0.append(arrive);
+  const c1=row.insertCell();c1.className='pin2';inlineCell(c1,p,'name',readonly);if(e.fields.some(f=>f.required&&!(p.values?.[f.id]||'')))c1.append(h('span',{class:'attention',title:'必填資料未完成；請點擊缺漏欄位補齊資料','aria-label':'必填資料未完成'},'⚠'));if(p.cancelled)c1.append(h('span',{class:'pill'},'取消'));
+  for(const f of e.fields){
+   const cell=row.insertCell(),v=p.values?.[f.id]||'';
+   if(needsVerify(f,v)){
+    const confirmed=!!p.checked?.[f.id],button=h('button',{class:'cellbtn'+(confirmed?' verified':'')},(confirmed?'✓ ':'')+v);
+    button.disabled=!canCheck||p.cancelled;
+    button.title=p.cancelled?'已取消參加，核對不可操作':!canCheck?'活動尚未開始或已結束，請由建立者開始／重新開啟報到':'點擊切換核對；修改原始值請點旁邊的小筆';
+    button.onclick=()=>{p.checked=p.checked||{};p.checked[f.id]=!p.checked[f.id];persist();renderRoster();renderProgress()};
+    cell.append(button);
+    if(!readonly){const pen=h('button',{class:'mini-edit',title:'直接修改此欄資料'},'✎');pen.onclick=()=>{cell.replaceChildren();inlineCell(cell,p,f,false);cell.querySelector('.editable').click()};cell.append(pen)}
+   }else inlineCell(cell,p,f,readonly);
+  }
+  const note=row.insertCell();inlineCell(note,p,'note',readonly);
+  const action=row.insertCell();const tools=h('div',{class:'actions'});
+  if(!readonly){const cancel=h('button',{class:'btn small'},p.cancelled?'恢復參加':'取消參加');cancel.disabled=p.arrived;cancel.onclick=()=>{if(!confirm(p.cancelled?'恢復此人參加？':'標記此人取消參加？'))return;p.cancelled=!p.cancelled;persist();renderDetail()};tools.append(cancel);
+   if(!p.arrived&&!Object.values(p.checked||{}).some(Boolean)){const del=h('button',{class:'btn small danger',title:'刪除沒有報到或核對紀錄的誤新增者'},'刪除');del.onclick=()=>{if(!confirm('確定刪除此參加者？'))return;e.people=e.people.filter(x=>x.id!==p.id);persist();renderDetail()};tools.append(del)}
+  }action.append(tools);
+ }
+ renderProgress();
+}
+function renderProgress(){const e=eventNow(),panel=$('progressPanel');clear(panel);let count=0;for(const f of e.fields.filter(f=>f.verify)){const need=e.people.filter(p=>!p.cancelled&&needsVerify(f,p.values?.[f.id]||''));const done=need.filter(p=>p.checked?.[f.id]).length;const row=h('div',{class:'row between'});row.append(h('span',{},f.name),h('span',{class:'tiny'},`${done} / ${need.length} 已核對`));panel.append(row);count++}if(!count)panel.append(h('div',{class:'hint'},'尚未啟用需要核對的自訂欄位'))}
+function noteDialog(){
+ const e=eventNow();modal('活動筆記',root=>{
+  root._list=h('div',{class:'notes-panel'});root.append(root._list);
+  function redraw(){
+   clear(root._list);
+   e.notes.forEach(n=>{
+    const row=h('div',{class:'note-row'+(n.done?' done':'')}),check=h('input');check.type='checkbox';check.checked=n.done;check.disabled=e.status==='ended';
+    check.onchange=()=>{n.done=check.checked;persist();redraw();$('noteCount').textContent=e.notes.filter(x=>!x.done).length};
+    const txt=h('span',{},n.text),edit=h('button',{class:'btn small'},'編輯');edit.disabled=e.status==='ended';
+    edit.onclick=()=>{const value=prompt('修改這則筆記',n.text);if(value===null)return;if(value.trim()){n.text=value.trim();persist();redraw()}};
+    const del=h('button',{class:'btn small danger'},'刪除');del.disabled=e.status==='ended';del.onclick=()=>{if(confirm('確定刪除這則筆記？')){e.notes=e.notes.filter(x=>x.id!==n.id);persist();redraw();$('noteCount').textContent=e.notes.filter(x=>!x.done).length}};
+    row.append(check,txt,edit,del);root._list.append(row);
+   });if(!e.notes.length)root._list.append(h('div',{class:'hint'},'目前沒有活動筆記'));
+  }
+  redraw();root.append(h('div',{class:'tipbox'},'可以一次貼入多則筆記，每行自動成為獨立一筆。右下角「加入筆記」只負責新增；「完成」關閉視窗。'));
+  root._input=field(root,'新增筆記（每行一筆）','','textarea',{placeholder:'素食便當放左側桌\n停車需先核對車號\n確認主管抵達時間'});
+  root._input.disabled=e.status==='ended';
+  const add=h('button',{class:'btn gold note-add-action'},'＋ 加入筆記');add.disabled=e.status==='ended';
+  add.onclick=()=>{const lines=root._input.value.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);if(!lines.length){alert('請先輸入筆記內容');return}lines.forEach(text=>e.notes.push({id:uuid(),text,done:false}));persist();root._input.value='';redraw();$('noteCount').textContent=e.notes.filter(n=>!n.done).length};$('modalCancel').before(add);
+ },()=>true,'完成');
+}
+function csvEscape(v){let s=String(v??'');if(/^[\s]*[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'}
+function csvExport(){const e=eventNow();if(!e.people.length){alert('尚無名單');return}const head=['姓名',...e.fields.map(f=>f.name),...e.fields.filter(f=>f.verify).map(f=>f.name+'核對'), '參加狀態','報到狀態','報到時間','個人備註'];const rows=e.people.map(p=>[p.name,...e.fields.map(f=>p.values?.[f.id]||''),...e.fields.filter(f=>f.verify).map(f=>needsVerify(f,p.values?.[f.id]||'')?(p.checked?.[f.id]?'已核對':'未核對'):'不需核對'),p.cancelled?'取消參加':'參加',p.arrived?'已報到':'未報到',p.arrivedAt||'',p.note]);const csv='\ufeff'+[head,...rows].map(r=>r.map(csvEscape).join(',')).join('\r\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=h('a');a.href=url;a.download=(e.name.replace(/[\\/:*?"<>|]/g,'_')||'活動')+'-報到結果.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
+$('createEvent').onclick=createEvent;$('eventSearch').oninput=renderEvents;$('goList').onclick=showHome;$('collapseBtn').onclick=()=>{const c=$('columns');c.classList.toggle('collapsed');$('collapseBtn').textContent=c.classList.contains('collapsed')?'▶':'◀'};
+$('saveEventInfo').onclick=()=>{const e=eventNow(),name=$('eventTitle').value.trim();if(!name)return alert('活動名稱不可為空');e.name=name;e.date=$('eventDate').value;persist();$('currentEventName').textContent=name;$('currentEventName').title=name;$('detailMsg').textContent='活動資訊已儲存'};$('addFieldBtn').onclick=()=>editField();$('presetFieldBtn').onclick=presetDialog;$('addPersonBtn').onclick=importDialog;$('quickAdd').onclick=()=>personDialog();$('personSearch').oninput=()=>{freezeId=null;renderRoster()};$('statusFilter').onchange=()=>{freezeId=null;renderRoster()};$('progressBtn').onclick=()=>$('progressPanel').classList.toggle('hidden');$('noteBtn').onclick=noteDialog;$('exportBtn').onclick=csvExport;
+$('toggleEventStatus').onclick=()=>{const e=eventNow();if(e.status==='draft'){if(!confirm('開始報到後，工作人員便可執行報到與核對。確定開始？'))return;e.status='active'}else if(e.status==='active'){const pending=e.people.filter(p=>!p.cancelled&&!p.arrived).length;const incomplete=e.fields.filter(f=>f.verify).reduce((sum,f)=>sum+e.people.filter(p=>!p.cancelled&&needsVerify(f,p.values?.[f.id]||'')&&!p.checked?.[f.id]).length,0);const undone=e.notes.filter(n=>!n.done).length;if(!confirm(`結束活動前摘要：\n未報到 ${pending} 人\n未完成核對 ${incomplete} 項\n未完成活動筆記 ${undone} 則\n\n仍要結束嗎？`))return;e.status='ended'}else{if(!confirm('重新開啟活動，允許繼續報到及更正？'))return;e.status='active'}persist();freezeId=null;renderDetail()};
+load();showHome();
+
+/* 已匯入欄位管理：新增、編輯、刪除均沿用原有的欄位資料保護機制。
+   如需從 Excel 補回漏選的來源欄位，重新選擇原檔並使用「更新既有資料」。 */
+function manageImportedFields(){
+ const e=eventNow();if(!e)return;
+ modal('管理已匯入／自訂欄位',root=>{
+  root.append(h('div',{class:'tipbox'},'這裡可以新增、修改或刪除欄位設定。若 Excel 有欄位當初未匯入，請重新選擇原檔，勾選來源欄位旁的「匯入此欄」，將疑似重複的參加者改選「更新既有資料」即可補入；不會直接覆蓋已報到狀態。原始 Excel 檔不會被網站保留。'));
+  const list=h('div',{class:'stack',style:'margin-top:12px'});root.append(list);
+  for(const f of e.fields){
+   const row=h('div',{class:'row between subbox'}),info=h('div');info.append(h('strong',{},f.name),h('div',{class:'hint'},typeDesc(f)));
+   const actions=h('div',{class:'row'}),edit=h('button',{class:'btn small'},'編輯'),del=h('button',{class:'btn small danger'},'刪除');
+   edit.disabled=del.disabled=e.status==='ended';edit.onclick=()=>editField(f);del.onclick=()=>deleteField(f);
+   actions.append(edit,del);row.append(info,actions);list.append(row);
+  }
+  if(!e.fields.length)list.append(h('div',{class:'hint'},'還沒有自訂欄位。'));
+  if(e.removedFields?.length){
+   root.append(h('div',{class:'line'}));root.append(h('strong',{},'已移除欄位（可恢復）'));
+   const archived=h('div',{class:'stack',style:'margin-top:8px'});root.append(archived);
+   e.removedFields.forEach((entry,index)=>{const row=h('div',{class:'row between subbox'});
+    row.append(h('span',{},entry.field.name));const restore=h('button',{class:'btn small'},'恢復欄位與資料');restore.disabled=e.status==='ended';restore.onclick=()=>restoreRemovedField(index);row.append(restore);archived.append(row)});
+  }
+
+  const tools=h('div',{class:'row',style:'margin-top:12px'}),add=h('button',{class:'btn small'},'＋ 新增欄位'),again=h('button',{class:'btn small'},'重新選擇 Excel／CSV 補匯入');
+  add.disabled=again.disabled=e.status==='ended';add.onclick=()=>editField();again.onclick=()=>importDialog();tools.append(add,again);root.append(tools);
+ },()=>true,'完成');
+}
+$('manageImportFields').onclick=manageImportedFields;
+</script>
+</body></html>

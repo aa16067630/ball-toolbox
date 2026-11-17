@@ -1,0 +1,2149 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F5F6F0">
+<title>放假才是正事｜有球必應</title>
+<style>
+:root{
+ --ink:#3D433B;--muted:#737C70;
+ --sage:#98A68D;--deep:#687B62;
+ --paper:#F8F7F2;--linen:#E8E3D9;
+ --gold:#B89D67;--darkgold:#927549;
+ --lightgold:#E4D1A7;
+ --line:rgba(184,157,103,.18)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font:14px/1.65 "Segoe UI","Microsoft JhengHei UI",
+    "Microsoft JhengHei",sans-serif;
+  background:
+    radial-gradient(ellipse at 92% 6%,
+      rgba(152,166,141,.27),transparent 48%),
+    radial-gradient(ellipse at 9% 87%,
+      rgba(228,209,167,.19),transparent 42%),
+    linear-gradient(130deg,#FBFAF6 0%,
+      #F0F3EB 60%,#EDF0E8 100%);
+}
+button,select{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.45}
+button:focus-visible,select:focus-visible,
+a:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
+[hidden]{display:none!important}
+a{color:inherit;text-decoration:none}
+
+.page{
+  width:min(1144px,calc(100% - 40px));
+  margin:auto;
+  padding:27px 0 40px;
+}
+.svg-defs{
+  position:absolute;
+  width:0;height:0;
+  overflow:hidden;
+}
+
+/* 首頁原始品牌樣式 */
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:25px;
+}
+.brand-mark{
+  position:relative;
+  isolation:isolate;
+  width:42px;
+  height:42px;
+  flex-shrink:0;
+  border:1px solid rgba(184,157,103,.28);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 29% 24%,
+      #fff 0%,rgba(255,253,246,.87) 28%,
+      rgba(247,237,213,.46) 66%,
+      rgba(223,198,145,.15) 100%);
+  box-shadow:
+    0 0 16px rgba(218,194,149,.13),
+    0 5px 15px rgba(90,80,57,.055),
+    inset 0 1px 0 white,
+    inset 0 -1px 0 rgba(184,157,103,.08);
+}
+.brand-mark:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-11px;
+  border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(226,200,151,.25),
+    rgba(226,200,151,.10) 43%,
+    transparent 72%);
+  filter:blur(5px);
+  pointer-events:none;
+}
+.brand-mark svg{
+  width:24px;height:24px;
+  filter:
+    drop-shadow(0 1px 1px rgba(255,255,255,.9))
+    drop-shadow(0 2px 3px rgba(173,132,67,.23));
+}
+.brand-title{
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:.16em;
+  line-height:1.35;
+}
+.brand-cn{
+  margin-top:4px;
+  font-size:11px;
+  color:#838B80;
+}
+.brand-en{
+  margin-top:4px;
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+
+/* 玻璃介面 */
+
+.surface{
+  position:relative;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.92);
+  background:linear-gradient(140deg,
+    rgba(255,255,255,.77),
+    rgba(255,255,255,.49) 57%,
+    rgba(249,245,235,.29));
+  box-shadow:
+    0 16px 32px rgba(71,85,65,.073),
+    inset 0 1px 0 rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.main{padding:22px}
+.main:before{
+  content:"";
+  position:absolute;
+  inset:9px;
+  border:1px solid rgba(184,157,103,.12);
+  border-radius:18px;
+  pointer-events:none;
+}
+.content{position:relative;z-index:1}
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.tool-heading{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+/* 首頁同款柔金圖示 */
+
+.card-icon{
+  position:relative;
+  isolation:isolate;
+  flex:0 0 33px;
+  width:33px;
+  height:33px;
+  display:grid;
+  place-items:center;
+}
+.card-icon:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-10px;
+  border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(242,224,187,.47),
+    rgba(231,208,163,.20) 38%,
+    rgba(231,208,163,.05) 60%,
+    transparent 76%);
+  filter:blur(4px);
+}
+.card-icon:after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:2px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 20%,
+    rgba(255,255,255,.85),
+    rgba(255,255,255,.07) 68%,
+    transparent);
+}
+.card-icon svg{
+  width:30px;
+  height:30px;
+  display:block;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.9))
+    drop-shadow(0 2px 2px rgba(166,126,63,.23));
+}
+h1{
+  font-size:16.5px;
+  font-weight:400;
+  letter-spacing:.16em;
+  line-height:1.35;
+  margin:0;
+}
+.subtitle{
+  margin:5px 0 0;
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+.year-control{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+}
+.year-control select{
+  min-width:112px;
+  padding:9px 13px;
+  border-radius:24px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.8);
+  color:var(--ink);
+}
+
+/* 年度三張資訊卡 */
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.stat{
+  padding:15px 17px;
+  border-radius:19px;
+  border:1px solid rgba(184,157,103,.18);
+  background:linear-gradient(140deg,
+    rgba(255,255,255,.76),
+    rgba(250,248,241,.49));
+  box-shadow:inset 0 1px 0 #fff;
+  min-width:0;
+}
+.stat-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+}
+.stat-label{
+  font-size:14px;
+  color:#687768;
+  font-weight:500;
+}
+.stat-star{
+  color:var(--gold);
+  font-size:19px;
+  text-shadow:0 0 9px rgba(184,157,103,.20);
+}
+.stat-value{
+  font-size:22px;
+  line-height:1.35;
+  font-weight:500;
+  color:var(--deep);
+  margin-top:5px;
+  overflow-wrap:anywhere;
+}
+.stat-value small{
+  font-size:14px;
+  font-weight:400;
+}
+.stat-note{
+  margin-top:3px;
+  font-size:12px;
+  color:var(--muted);
+}
+.warning{
+  margin-top:12px;
+  padding:11px 13px;
+  background:#FBF2E2;
+  border:1px solid #E8D8BA;
+  border-radius:12px;
+  color:#896C49;
+  font-size:13px;
+  line-height:1.75;
+}
+
+/* 六欄可收合月份地圖 */
+
+.map{
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:19px;
+  background:rgba(255,255,255,.38);
+  overflow:hidden;
+}
+.map-toggle{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border:0;
+  background:transparent;
+  padding:13px 16px;
+  text-align:left;
+  color:var(--ink);
+}
+.map-title{font-size:17px;font-weight:500}
+.map-hint{
+  margin-left:7px;
+  font-size:12px;
+  color:var(--muted);
+}
+.map-action{
+  color:var(--deep);
+  font-size:13px;
+  white-space:nowrap;
+}
+.map-body{padding:0 13px 13px}
+.months{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:9px;
+}
+.month{
+  min-width:0;
+  min-height:127px;
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  border-radius:16px;
+  border:1px solid rgba(184,157,103,.21);
+  padding:12px;
+  color:var(--ink);
+  background:linear-gradient(140deg,
+    rgba(255,255,255,.9),
+    rgba(248,248,242,.70));
+  box-shadow:0 5px 13px rgba(71,85,65,.04);
+  transition:transform .18s,box-shadow .18s;
+}
+.month.good{
+  background:linear-gradient(145deg,
+    rgba(251,253,249,.94),#E9F1E5);
+}
+.month.trip{
+  background:linear-gradient(145deg,
+    #FFFDF8,#F5EFE3);
+}
+.month.tough{
+  background:linear-gradient(145deg,
+    #FFFCF8,#F5EAE1);
+}
+.month:hover{
+  transform:translateY(-2px);
+  box-shadow:0 9px 19px rgba(71,85,65,.10);
+}
+.month.selected{
+  border-color:#839F86;
+  box-shadow:
+    inset 0 0 0 1px rgba(122,153,125,.50),
+    0 7px 17px rgba(71,85,65,.07);
+}
+.month.past{opacity:.72}
+.month-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.month-number{font-size:19px;font-weight:500}
+.month-star{font-size:17px;color:var(--gold)}
+.month-label{
+  font-size:14px;
+  font-weight:600;
+  margin-top:5px;
+}
+.month-copy{
+  font-size:12px;
+  line-height:1.45;
+  color:var(--muted);
+  margin-top:2px;
+  min-height:35px;
+}
+.month-foot{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:4px;
+  border-top:1px solid rgba(160,160,144,.18);
+  margin-top:auto;
+  padding-top:7px;
+  font-size:11px;
+  color:var(--muted);
+}
+.map-note{
+  margin:9px 2px 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* 月份連假資訊 */
+
+.detail{
+  margin-top:16px;
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.53);
+}
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-bottom:11px;
+}
+.section-head h2{
+  font-size:17px;
+  font-weight:500;
+  margin:0;
+}
+.section-count{
+  color:var(--muted);
+  font-size:13px;
+}
+.holiday-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.holiday{
+  min-width:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.76);
+}
+.holiday:only-child{grid-column:1/-1}
+.holiday-name{font-weight:600;font-size:15px}
+.holiday-range{font-size:13px;color:var(--muted)}
+.holiday-days{
+  flex-shrink:0;
+  background:var(--sage-pale,#E2EDDF);
+  color:var(--deep);
+  padding:7px 11px;
+  border-radius:11px;
+  white-space:nowrap;
+}
+.holiday-days strong{font-size:19px;font-weight:500}
+.other{
+  padding-top:9px;
+  margin-top:10px;
+  border-top:1px solid var(--line);
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* 精選特休攻略 */
+
+.planner{margin-top:20px}
+.planner-explain{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+}
+.plan-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:11px;
+}
+.plan-grid.one{grid-template-columns:1fr}
+.plan-grid.two{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.plan{
+  min-width:0;
+  padding:15px;
+  border-radius:18px;
+  border:1px solid rgba(184,157,103,.23);
+  background:
+    radial-gradient(ellipse at 100% 0%,
+      rgba(228,209,167,.14),transparent 52%),
+    linear-gradient(140deg,
+      rgba(255,255,255,.87),
+      rgba(249,247,241,.68));
+  box-shadow:
+    0 9px 22px rgba(71,85,65,.05),
+    inset 0 1px 0 #fff;
+}
+.plan-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.plan-title{font-size:15px;font-weight:600}
+.plan-range{color:var(--muted);font-size:13px}
+.plan-badge{
+  flex-shrink:0;
+  background:linear-gradient(130deg,#526C56,#829681);
+  color:white;
+  text-align:center;
+  border-radius:12px;
+  padding:8px 11px;
+  min-width:83px;
+}
+.plan-badge small{display:block;font-size:12px}
+.plan-badge strong{
+  display:block;
+  font-size:18px;
+  font-weight:500;
+}
+.ribbon-scroll{
+  margin-top:12px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  padding-bottom:5px;
+}
+.ribbon{
+  display:flex;
+  width:max-content;
+  gap:4px;
+}
+.day{
+  flex:0 0 35px;
+  height:49px;
+  border-radius:8px;
+  background:var(--weekly);
+  color:#667467;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+.day.holiday{
+  background:var(--holiday);
+  color:#A66D61;
+}
+.day.leave{
+  background:var(--leave);
+  color:#517959;
+}
+.day strong{font-size:14px;font-weight:500}
+.day small{font-size:12px}
+.day.month-start{
+  box-shadow:inset 2px 0 0 var(--gold);
+}
+.plan-leave{
+  border-top:1px solid var(--line);
+  margin-top:8px;
+  padding-top:9px;
+  font-size:13px;
+  font-weight:500;
+  color:#59775D;
+  overflow-wrap:anywhere;
+}
+.plan-kind{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px;
+}
+.empty{
+  grid-column:1/-1;
+  padding:15px;
+  color:var(--muted);
+  border:1px dashed rgba(152,166,141,.35);
+  border-radius:12px;
+  font-size:13px;
+}
+
+/* 使用說明與頁尾 */
+
+.guide{
+  margin-top:19px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(255,255,255,.48);
+  overflow:hidden;
+}
+.guide-toggle{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  gap:9px;
+  padding:13px 16px;
+  color:var(--deep);
+  background:transparent;
+  border:0;
+  text-align:left;
+  font-size:15px;
+}
+.guide-body{
+  padding:0 17px 16px;
+  font-size:14px;
+  color:#667768;
+  line-height:1.85;
+}
+.guide-body p{margin:10px 0}
+.guide-body strong{color:var(--ink)}
+.source{
+  text-align:right;
+  color:#8D998E;
+  font-size:12px;
+  margin-top:12px;
+}
+.footer{
+  margin-top:38px;
+  padding-top:15px;
+  border-top:1px solid rgba(184,157,103,.19);
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  color:#A1A69B;
+  font-size:11px;
+}
+.footer em{
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+@media(max-width:950px){
+  .months{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .plan-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:650px){
+  .page{
+    width:calc(100% - 26px);
+    padding:20px 0 30px;
+  }
+  .main{padding:15px}
+  .summary{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .summary .stat:last-child{grid-column:1/-1}
+  .stat{padding:12px}
+  .stat-value{font-size:20px}
+  .months{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+  .month{min-height:122px;padding:10px}
+  .month-number{font-size:17px}
+  .month-label{font-size:13px}
+  .month-copy{font-size:11px}
+  .holiday-list{grid-template-columns:1fr}
+  .holiday:only-child{grid-column:auto}
+  .plan-grid,.plan-grid.one,.plan-grid.two{
+    grid-template-columns:1fr;
+  }
+  h1{font-size:19px}
+  .map-hint{display:none}
+  .footer em{text-align:right}
+}
+@media(prefers-reduced-motion:reduce){
+  .month{transition:none}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 首頁同款柔金 SVG 定義 -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="goldStroke"
+      x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F0E1BF"/>
+      <stop offset="28%" stop-color="#BE9E63"/>
+      <stop offset="56%" stop-color="#E5CDA0"/>
+      <stop offset="100%" stop-color="#9A7845"/>
+    </linearGradient>
+    <radialGradient id="goldFill">
+      <stop offset="0%" stop-color="#FFF7E8"/>
+      <stop offset="48%" stop-color="#E7D0A2"/>
+      <stop offset="100%" stop-color="#B89D67"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<div class="page">
+
+<header class="brand">
+  <div class="brand-mark" aria-hidden="true">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path
+        d="M16 2.5
+           C17.8 12.3 19.7 14.2 29.5 16
+           C19.7 17.8 17.8 19.7 16 29.5
+           C14.2 19.7 12.3 17.8 2.5 16
+           C12.3 14.2 14.2 12.3 16 2.5Z"
+        stroke="url(#goldStroke)" stroke-width=".9"/>
+      <circle cx="16" cy="16" r="2"
+        fill="url(#goldFill)"/>
+      <path
+        d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z"
+        fill="url(#goldFill)" opacity=".75"/>
+    </svg>
+  </div>
+  <div>
+    <div class="brand-title">有球必應</div>
+    <div class="brand-en">Hakuna Matata</div>
+  </div>
+</header>
+
+<main class="surface main">
+<div class="content">
+
+  <div class="hero">
+    <div class="tool-heading">
+      <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 36 36" fill="none">
+          <rect x="6" y="8" width="24" height="22"
+            rx="3.5" stroke="url(#goldStroke)"
+            stroke-width="1.1"/>
+          <path
+            d="M6 15H30M12 5V11M24 5V11"
+            stroke="url(#goldStroke)"
+            stroke-width="1.1"
+            stroke-linecap="round"/>
+          <path
+            d="M12 21H17M21 21H25M12 25H17"
+            stroke="url(#goldStroke)"
+            stroke-width=".9"
+            stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>放假才是正事</h1>
+        <p class="subtitle">Born to Take a Break.</p>
+      </div>
+    </div>
+
+    <div class="year-control">
+      <label for="year">查看年份</label>
+      <select id="year" disabled>
+        <option>讀取中…</option>
+      </select>
+    </div>
+  </div>
+
+  <section class="summary">
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">三天以上連假</span>
+        <span class="stat-star">✧</span>
+      </div>
+      <div class="stat-value" id="breakCount">—</div>
+      <div class="stat-note">全年度連假組數</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">國定假日</span>
+        <span class="stat-star">✦</span>
+      </div>
+      <div class="stat-value" id="holidayCount">—</div>
+      <div class="stat-note" id="holidayNote">
+        依已核對的法定日數
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-top">
+        <span class="stat-label">工作日最多的月份</span>
+        <span class="stat-star">✧</span>
+      </div>
+      <div class="stat-value" id="hardestMonth">—</div>
+      <div class="stat-note" id="hardestDays">
+        依辦公日曆計算
+      </div>
+    </div>
+  </section>
+
+  <div id="warning" class="warning" hidden></div>
+
+  <section class="map">
+    <button id="mapToggle" class="map-toggle"
+      type="button" aria-expanded="true">
+      <span>
+        <span class="map-title">
+          ✧ 一整年的放假地圖
+        </span>
+        <span class="map-hint">
+          點選月份，查看連假日程
+        </span>
+      </span>
+      <span id="mapAction" class="map-action">
+        收合 −
+      </span>
+    </button>
+
+    <div id="mapBody" class="map-body">
+      <div id="months" class="months"></div>
+      <p class="map-note">
+        依連假長度與工作日數分類，
+        不代表旅遊價格或個人實際工作壓力。
+      </p>
+    </div>
+  </section>
+
+  <section class="detail">
+    <div class="section-head">
+      <h2 id="detailTitle">正在讀取休假情報…</h2>
+      <span id="detailCount" class="section-count"></span>
+    </div>
+    <div id="holidayList" class="holiday-list"></div>
+    <div id="otherDays" class="other" hidden></div>
+  </section>
+
+  <section class="planner">
+    <div class="section-head">
+      <div>
+        <h2>✧ 精選特休攻略</h2>
+        <p class="planner-explain">
+          依連假前後工作日，精選少請假與長旅行方案；
+          每段連假最多兩組，不列出所有排列組合。
+        </p>
+      </div>
+      <span id="planCount" class="section-count"></span>
+    </div>
+    <div id="planGrid" class="plan-grid"></div>
+  </section>
+
+  <section class="guide">
+    <button id="guideToggle" class="guide-toggle"
+      type="button" aria-expanded="false">
+      <span>✧ 使用說明與資料來源</span>
+      <span id="guideAction">展開 ＋</span>
+    </button>
+
+    <div id="guideBody" class="guide-body" hidden>
+      <p>
+        <strong>① 年份如何自動更新？</strong><br>
+        每次開啟網站，都會從當年度開始，
+        依序檢查未來最多五個年度。
+        只要 TaiwanCalendar 已提供完整年度資料，
+        就會自動加入年份選單。
+        遇到尚未提供完整資料的年份時停止，
+        不會自行猜測未來假日。
+      </p>
+      <p>
+        <strong>② 為什麼沒有某個未來年份？</strong><br>
+        可能是政府尚未公布，
+        或第三方 TaiwanCalendar 尚未整理完成。
+        資料來源與政府公告之間可能存在更新時間差。
+        不會為了顯示年份而使用不完整資料。
+      </p>
+      <p>
+        <strong>③ 國定假日為什麼有時不顯示數字？</strong><br>
+        2026、2027 年已依現行法定國定假日日數
+        核對為每年 16 天，包含勞動節。
+        新年度若尚未經法規核對，
+        會顯示「待核對」，
+        不直接把前一年度的 16 天延用。
+      </p>
+      <p>
+        <strong>④ 放假地圖怎麼使用？</strong><br>
+        桌機六欄、兩列，整區可以收合。
+        點選月份後，下方會列出當月的連假日程，
+        不重複顯示月份摘要資訊。
+      </p>
+      <p>
+        <strong>⑤ 月份狀態怎麼判斷？</strong><br>
+        五天以上連假：放假旺季。<br>
+        三至四天連假：小旅行月。<br>
+        無三天以上連假且工作日達 22 天：
+        上班耐力賽。<br>
+        其餘月份：日常模式。
+      </p>
+      <p>
+        <strong>⑥ 特休攻略怎麼產生？</strong><br>
+        以官方連假為基礎，
+        查找前後能用特休串接的工作日。
+        每組最多使用七天特休，
+        精選較省特休與可安排較長旅行的方案。
+        如果兩種方案完全相同，只顯示一組。
+      </p>
+      <p>
+        <strong>⑦ 日期色塊代表什麼？</strong><br>
+        粉色：官方休假。<br>
+        綠色：需要請特休。<br>
+        灰色：一般週休六日。<br>
+        下方會直接列出實際請假的日期，
+        日期列超出卡片時可左右滑動。
+      </p>
+      <p>
+        <strong>⑧ 跨年假期怎麼處理？</strong><br>
+        有完整下一年度日曆時，
+        可以計算跨年連休與特休攻略。
+        若資料尚未完整公布，
+        只標示已經官方核對的特定跨年假期，
+        不推估未知工作日。
+      </p>
+      <p>
+        <strong>⑨ 資料來源與使用提醒</strong><br>
+        使用 TaiwanCalendar 整理的政府行政機關
+        辦公日曆，透過免費 jsDelivr CDN 讀取。
+        格式完整不代表已逐日核對最新官方公告。
+        民間企業與排班工作者的休假可能不同，
+        請假前請再核對公司規定。
+      </p>
+      <p>
+        參考：
+        <a href="https://www.dgpa.gov.tw/information?pid=12983&uid=2"
+          target="_blank" rel="noopener">
+          行政院人事行政總處 2027 年公告
+        </a>、
+        <a href="https://github.com/ruyut/TaiwanCalendar"
+          target="_blank" rel="noopener">
+          TaiwanCalendar
+        </a>、
+        <a href="https://www.mol.gov.tw/"
+          target="_blank" rel="noopener">
+          勞動部
+        </a>。
+      </p>
+    </div>
+  </section>
+
+  <div class="source" id="sourceStatus"></div>
+</div>
+</main>
+
+<footer class="footer">
+  <span>© 2026 有球必應</span>
+  <em>A little magic for everyday life.</em>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const CDN=
+ "https://cdn.jsdelivr.net/gh/ruyut/TaiwanCalendar/data/";
+
+const CACHE="ball-toolbox-v65-calendar-";
+const YEAR_KEY="ball-toolbox-v65-year";
+const MAP_KEY="ball-toolbox-v65-map";
+const MISSING_KEY="ball-toolbox-v65-missing-";
+
+const WEEK=["日","一","二","三","四","五","六"];
+
+const today=new Date();
+today.setHours(12,0,0,0);
+
+const currentYear=today.getFullYear();
+
+/*
+ * 年度自動延續設定
+ *
+ * 當年度 + 未來最多五年。
+ * 遇到第一個尚未取得完整資料的年度便停止。
+ * 缺少資料的年度最多暫存 12 小時，
+ * 避免每次重新整理都反覆請求 404。
+ *
+ * 不用付費服務、不需後端或 Firebase。
+ */
+const FUTURE_YEARS=5;
+const MISSING_TTL=12*60*60*1000;
+
+/*
+ * 已另外核對的法定國定假日總日數。
+ * 新年度必須另外核對，不能直接延用。
+ */
+const VERIFIED_LEGAL_HOLIDAYS={
+  2026:16,
+  2027:16
+};
+
+/*
+ * 可核對的 2027 年已公布年度摘要。
+ * 用來協助發現第三方資料異常。
+ * 不把這些摘要自動套用到未來年份。
+ */
+const VERIFIED_YEAR_SUMMARY={
+  2026:{breaks:9,offDays:120},
+  2027:{breaks:9,offDays:121}
+};
+
+/*
+ * 2027 年底至 2028 元旦的已公告跨年連假。
+ * 只在 2028 年完整資料尚未取得時使用。
+ * 不推估其他 2028 假日。
+ */
+const KNOWN_BOUNDARIES={
+  "2028-01-01":{
+    off:true,
+    name:"跨年元旦",
+    type:"holiday",
+    partial:true
+  },
+  "2028-01-02":{
+    off:true,
+    name:"跨年元旦",
+    type:"weekly",
+    partial:true
+  }
+};
+
+let calendars={};
+let sources={};
+let availableYears=[];
+let selectedYear=currentYear;
+let selectedMonth=today.getMonth()+1;
+
+/* ===== 日期與本機儲存 ===== */
+
+function dayKey(date){
+  return date.getFullYear()+"-"+
+    String(date.getMonth()+1).padStart(2,"0")+"-"+
+    String(date.getDate()).padStart(2,"0");
+}
+
+function dateFromKey(key){
+  const [year,month,day]=key.split("-").map(Number);
+  return new Date(year,month-1,day,12);
+}
+
+function addDays(date,count=1){
+  const result=new Date(date);
+  result.setDate(result.getDate()+count);
+  return result;
+}
+
+function shortDate(key,withYear=false){
+  const date=dateFromKey(key);
+  return (withYear?date.getFullYear()+"/":"")+
+    (date.getMonth()+1)+"/"+date.getDate();
+}
+
+function readJSON(key){
+  try{
+    return JSON.parse(localStorage.getItem(key));
+  }catch{
+    return null;
+  }
+}
+
+function writeJSON(key,value){
+  try{
+    localStorage.setItem(key,JSON.stringify(value));
+  }catch(error){
+    console.warn("無法儲存本機資料",error);
+  }
+}
+
+function warning(message){
+  $("warning").hidden=!message;
+  $("warning").textContent=message||"";
+}
+
+function expectedDays(year){
+  return new Date(year,1,29).getMonth()===1?366:365;
+}
+
+/* ===== 驗證年度日曆 ===== */
+
+function validateRows(rows,year){
+  if(!Array.isArray(rows)||
+     rows.length!==expectedDays(year)){
+    throw Error(year+" 年資料筆數不完整");
+  }
+
+  const output={};
+
+  for(const item of rows){
+    const raw=String(item.date||"");
+
+    if(!/^\d{8}$/.test(raw)||
+       Number(raw.slice(0,4))!==year||
+       typeof item.isHoliday!=="boolean"){
+      throw Error("資料格式錯誤");
+    }
+
+    const month=Number(raw.slice(4,6));
+    const day=Number(raw.slice(6,8));
+    const date=new Date(year,month-1,day,12);
+
+    if(date.getFullYear()!==year||
+       date.getMonth()!==month-1||
+       date.getDate()!==day){
+      throw Error("資料包含無效日期");
+    }
+
+    const key=dayKey(date);
+
+    if(output[key]){
+      throw Error("資料包含重複日期");
+    }
+
+    output[key]={
+      off:item.isHoliday,
+      name:String(item.description||"").trim()
+    };
+  }
+
+  if(Object.keys(output).length!==expectedDays(year)){
+    throw Error("年度日期有缺漏");
+  }
+
+  return output;
+}
+
+/* ===== 本機年度快取 ===== */
+
+function findCachedCalendar(year){
+  const keys=[
+    CACHE+year,
+    "ball-toolbox-v64-calendar-"+year,
+    "ball-toolbox-v63-calendar-"+year,
+    "ball-toolbox-v62-calendar-"+year,
+    "ball-toolbox-v61-calendar-"+year,
+    "ball-toolbox-v6-calendar-"+year,
+    "ball-toolbox-leave-v3-calendar-"+year
+  ];
+
+  for(const key of keys){
+    const item=readJSON(key);
+    if(!item?.data)continue;
+
+    try{
+      return {
+        days:validateRows(item.data,year),
+        savedAt:item.savedAt||""
+      };
+    }catch{
+      continue;
+    }
+  }
+
+  return null;
+}
+
+/* ===== 判斷是否暫時跳過不存在的年份 ===== */
+
+function recentlyMissing(year){
+  const record=readJSON(MISSING_KEY+year);
+
+  if(!record||!record.time)return false;
+
+  const age=Date.now()-Number(record.time);
+
+  return age>=0&&age<MISSING_TTL;
+}
+
+function markMissing(year){
+  writeJSON(MISSING_KEY+year,{
+    time:Date.now()
+  });
+}
+
+function clearMissing(year){
+  try{
+    localStorage.removeItem(MISSING_KEY+year);
+  }catch{}
+}
+
+/* ===== 自動讀取一個年份 ===== */
+
+async function loadCalendar(year){
+  const cached=findCachedCalendar(year);
+
+  /*
+   * 最近已確認尚未提供該年份，
+   * 且沒有有效本機快取，就暫時不重試。
+   */
+  if(!cached&&recentlyMissing(year)){
+    return null;
+  }
+
+  /*
+   * 即使有快取，仍嘗試取得線上最新資料。
+   */
+  try{
+    const response=await fetch(CDN+year+".json",{
+      cache:"no-cache"
+    });
+
+    if(!response.ok){
+      throw Error("HTTP "+response.status);
+    }
+
+    const rows=await response.json();
+    const days=validateRows(rows,year);
+
+    writeJSON(CACHE+year,{
+      data:rows,
+      savedAt:new Date().toISOString()
+    });
+
+    clearMissing(year);
+
+    return {
+      year,
+      days,
+      source:"online",
+      savedAt:new Date().toISOString()
+    };
+
+  }catch(error){
+    if(cached){
+      return {
+        year,
+        days:cached.days,
+        source:"cache",
+        savedAt:cached.savedAt
+      };
+    }
+
+    /*
+     * 在缺少資料時暫存 12 小時。
+     * 若是暫時性網路問題，也可能造成短暫略過；
+     * 不會因此建立不存在的年度。
+     */
+    markMissing(year);
+    return null;
+  }
+}
+
+/* ===== 年份自動探索 ===== */
+
+async function discoverYears(){
+  const found=[];
+
+  for(let offset=0;offset<=FUTURE_YEARS;offset++){
+    const year=currentYear+offset;
+    const item=await loadCalendar(year);
+
+    /*
+     * 如果第一年讀不到，繼續嘗試下一年，
+     * 避免舊年度未更新造成所有年份消失。
+     */
+    if(!item){
+      if(offset===0)continue;
+      break;
+    }
+
+    calendars[item.year]=item.days;
+    sources[item.year]=item;
+    found.push(item.year);
+  }
+
+  return found.sort((a,b)=>a-b);
+}
+
+/* ===== 每日放假狀態 ===== */
+
+function dayInfo(key){
+  const date=dateFromKey(key);
+  const year=date.getFullYear();
+  const row=calendars[year]?.[key];
+
+  if(!row){
+    if(calendars[2027]&&!calendars[2028]&&
+       KNOWN_BOUNDARIES[key]){
+      return KNOWN_BOUNDARIES[key];
+    }
+    return null;
+  }
+
+  if(/補行上班|調整上班/.test(row.name)){
+    return {
+      off:false,
+      type:"work",
+      name:row.name
+    };
+  }
+
+  const weekend=[0,6].includes(date.getDay());
+
+  if(row.off){
+    return {
+      off:true,
+      type:weekend?"weekly":"holiday",
+      name:row.name||"官方休假"
+    };
+  }
+
+  if(weekend){
+    return {
+      off:true,
+      type:"weekly",
+      name:"週休"
+    };
+  }
+
+  return {
+    off:false,
+    type:"work",
+    name:"工作日"
+  };
+}
+
+/* ===== 連假名稱 ===== */
+
+function runName(keys){
+  const names=keys
+    .map(key=>dayInfo(key)?.name||"")
+    .join("、");
+
+  if(keys.includes("2027-12-31")){
+    return "跨年元旦連假";
+  }
+
+  if(/春節|農曆除夕|小年夜/.test(names))
+    return "農曆春節";
+
+  if(/和平紀念/.test(names))
+    return "228 和平紀念日";
+
+  if(/兒童節|清明|民族掃墓/.test(names))
+    return "兒童節／清明節";
+
+  if(/勞動節/.test(names))
+    return "勞動節";
+
+  if(/端午/.test(names))
+    return "端午節";
+
+  if(/中秋/.test(names))
+    return "中秋節";
+
+  if(/國慶/.test(names))
+    return "國慶日";
+
+  if(/光復|古寧頭/.test(names))
+    return "光復節";
+
+  if(/行憲/.test(names))
+    return "行憲紀念日";
+
+  if(/開國紀念/.test(names))
+    return "元旦";
+
+  return "連續假期";
+}
+
+/* ===== 建立全年連假 ===== */
+
+function buildRuns(year){
+  const runs=[];
+  let group=[];
+
+  function finish(){
+    if(group.length>=3){
+      runs.push({
+        start:group[0],
+        end:group[group.length-1],
+        days:group.length,
+        keys:[...group],
+        name:runName(group)
+      });
+    }
+
+    group=[];
+  }
+
+  for(let date=new Date(year,0,1,12);
+      date.getFullYear()===year;
+      date=addDays(date)){
+
+    const key=dayKey(date);
+
+    if(dayInfo(key)?.off){
+      group.push(key);
+    }else{
+      finish();
+    }
+  }
+
+  /*
+   * 如果年底正好在連假中，
+   * 嘗試沿用下一年度已取得的完整資料。
+   * 未取得時僅使用明確核對的跨年邊界。
+   */
+  if(group.length){
+    let next=addDays(
+      dateFromKey(group[group.length-1])
+    );
+
+    for(let i=0;i<14;i++){
+      const key=dayKey(next);
+
+      if(!dayInfo(key)?.off)break;
+
+      group.push(key);
+      next=addDays(next);
+    }
+  }
+
+  finish();
+
+  return runs;
+}
+
+/* ===== 月份與年度統計 ===== */
+
+function monthData(year,month,runs){
+  const last=new Date(year,month,0).getDate();
+
+  let work=0;
+  const singles=[];
+
+  const monthRuns=runs.filter(run=>
+    run.keys.some(key=>{
+      const date=dateFromKey(key);
+
+      return date.getFullYear()===year&&
+        date.getMonth()+1===month;
+    })
+  );
+
+  for(let day=1;day<=last;day++){
+    const date=new Date(year,month-1,day,12);
+    const key=dayKey(date);
+    const info=dayInfo(key);
+
+    if(!info?.off){
+      work++;
+      continue;
+    }
+
+    if(![0,6].includes(date.getDay())&&
+       !monthRuns.some(run=>run.keys.includes(key))){
+      singles.push({
+        key,
+        name:info.name
+      });
+    }
+  }
+
+  return {
+    month,
+    work,
+    runs:monthRuns,
+    singles,
+    longest:monthRuns.length
+      ?Math.max(...monthRuns.map(run=>run.days))
+      :0
+  };
+}
+
+function monthStatus(item){
+  if(item.longest>=5){
+    return {
+      label:"放假旺季",
+      message:"行李箱可以準備了！",
+      className:"good"
+    };
+  }
+
+  if(item.longest>=3){
+    return {
+      label:"小旅行月",
+      message:"排個小旅行剛剛好。",
+      className:"trip"
+    };
+  }
+
+  if(item.work>=22){
+    return {
+      label:"上班耐力賽",
+      message:"這個月假比較少，記得安排休息。",
+      className:"tough"
+    };
+  }
+
+  return {
+    label:"日常模式",
+    message:"這個月先期待週末吧。",
+    className:"normal"
+  };
+}
+
+function yearData(year){
+  const runs=buildRuns(year);
+
+  const months=Array.from({length:12},(_,i)=>
+    monthData(year,i+1,runs)
+  );
+
+  const maxWork=Math.max(
+    ...months.map(item=>item.work)
+  );
+
+  const hardest=months.filter(item=>
+    item.work===maxWork
+  );
+
+  let totalOff=0;
+
+  for(let date=new Date(year,0,1,12);
+      date.getFullYear()===year;
+      date=addDays(date)){
+
+    if(dayInfo(dayKey(date))?.off){
+      totalOff++;
+    }
+  }
+
+  return {
+    runs,
+    months,
+    hardest,
+    maxWork,
+    totalOff
+  };
+}
+
+/* ===== 特休攻略 ===== */
+
+function candidatePlans(run){
+  const start=dateFromKey(run.start);
+  const end=dateFromKey(run.end);
+
+  const output=[];
+  const seen=new Set();
+
+  for(let before=0;before<=14;before++){
+    for(let after=0;after<=14;after++){
+
+      if(before===0&&after===0)continue;
+
+      const first=addDays(start,-before);
+      const last=addDays(end,after);
+
+      if(first<today)continue;
+
+      if(!dayInfo(dayKey(first))?.off)continue;
+      if(!dayInfo(dayKey(last))?.off)continue;
+
+      const leave=[];
+      let valid=true;
+
+      for(let date=new Date(first);
+          date<=last;
+          date=addDays(date)){
+
+        const info=dayInfo(dayKey(date));
+
+        if(!info||info.partial){
+          valid=false;
+          break;
+        }
+
+        if(!info.off){
+          leave.push(dayKey(date));
+        }
+
+        if(leave.length>7){
+          valid=false;
+          break;
+        }
+      }
+
+      if(!valid||leave.length===0)continue;
+
+      const total=Math.round(
+        (last-first)/86400000
+      )+1;
+
+      if(total<5||total<=run.days)continue;
+
+      const key=dayKey(first)+"|"+dayKey(last);
+
+      if(seen.has(key))continue;
+      seen.add(key);
+
+      output.push({
+        start:dayKey(first),
+        end:dayKey(last),
+        total,
+        used:leave.length,
+        leave,
+        name:run.name
+      });
+    }
+  }
+
+  return output;
+}
+
+function choosePlans(run){
+  const plans=candidatePlans(run);
+
+  if(!plans.length)return [];
+
+  const economical=[...plans].sort((a,b)=>
+    a.used-b.used||
+    b.total-a.total||
+    a.start.localeCompare(b.start)
+  )[0];
+
+  const longest=[...plans].sort((a,b)=>
+    b.total-a.total||
+    a.used-b.used||
+    a.start.localeCompare(b.start)
+  )[0];
+
+  const result=[{
+    ...economical,
+    kind:"省特休推薦"
+  }];
+
+  if(longest.start!==economical.start||
+     longest.end!==economical.end){
+
+    result.push({
+      ...longest,
+      kind:"長旅行推薦"
+    });
+  }
+
+  return result;
+}
+
+/* ===== 年度統計卡片 ===== */
+
+function drawSummary(data){
+  $("breakCount").innerHTML=
+    data.runs.length+" <small>組</small>";
+
+  const legal=VERIFIED_LEGAL_HOLIDAYS[selectedYear];
+
+  if(legal!==undefined){
+    $("holidayCount").innerHTML=
+      legal+" <small>天</small>";
+
+    $("holidayNote").textContent=
+      "法定國定假日・含勞動節";
+
+  }else{
+    $("holidayCount").textContent="待核對";
+
+    $("holidayNote").textContent=
+      "此年度法定日數尚未經官方核對";
+  }
+
+  $("hardestMonth").textContent=
+    data.hardest
+      .map(item=>item.month+" 月")
+      .join("、");
+
+  $("hardestDays").textContent=
+    "各 "+data.maxWork+" 個工作日";
+}
+
+/* ===== 12 個月份卡片 ===== */
+
+function drawMonths(data){
+  const holder=$("months");
+  holder.innerHTML="";
+
+  for(const item of data.months){
+    const state=monthStatus(item);
+
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="month "+state.className;
+
+    if(item.month===selectedMonth){
+      button.classList.add("selected");
+    }
+
+    if(selectedYear===currentYear&&
+       item.month<today.getMonth()+1){
+      button.classList.add("past");
+    }
+
+    const top=document.createElement("div");
+    top.className="month-top";
+
+    const number=document.createElement("span");
+    number.className="month-number";
+    number.textContent=item.month+" 月";
+
+    const star=document.createElement("span");
+    star.className="month-star";
+    star.textContent="✧";
+
+    top.append(number,star);
+
+    const label=document.createElement("div");
+    label.className="month-label";
+    label.textContent=state.label;
+
+    const copy=document.createElement("div");
+    copy.className="month-copy";
+    copy.textContent=state.message;
+
+    const foot=document.createElement("div");
+    foot.className="month-foot";
+
+    const work=document.createElement("span");
+    work.textContent="工作 "+item.work+" 天";
+
+    const breaks=document.createElement("span");
+    breaks.textContent=item.runs.length
+      ?"連假 "+item.runs.length+" 組"
+      :"無長連假";
+
+    foot.append(work,breaks);
+    button.append(top,label,copy,foot);
+
+    button.setAttribute(
+      "aria-pressed",
+      String(item.month===selectedMonth)
+    );
+
+    button.onclick=()=>{
+      selectedMonth=item.month;
+      drawMonths(data);
+      drawDetail(item);
+      drawPlanner(item);
+    };
+
+    holder.appendChild(button);
+  }
+}
+
+/* ===== 月份詳細資訊 ===== */
+
+function createHoliday(run){
+  const card=document.createElement("article");
+  card.className="holiday";
+
+  const cross=
+    run.start.slice(0,4)!==
+    run.end.slice(0,4);
+
+  const left=document.createElement("div");
+
+  const title=document.createElement("div");
+  title.className="holiday-name";
+  title.textContent=run.name;
+
+  const dates=document.createElement("div");
+  dates.className="holiday-range";
+
+  dates.textContent=
+    shortDate(run.start,cross)+"－"+
+    shortDate(run.end,cross);
+
+  left.append(title,dates);
+
+  const days=document.createElement("div");
+  days.className="holiday-days";
+  days.innerHTML="<strong>"+run.days+"</strong> 天";
+
+  card.append(left,days);
+  return card;
+}
+
+function drawDetail(item){
+  $("detailTitle").textContent=
+    selectedYear+" 年 "+item.month+" 月｜連假日程";
+
+  $("detailCount").textContent=
+    item.runs.length+" 組連假";
+
+  const holder=$("holidayList");
+  holder.innerHTML="";
+
+  if(item.runs.length){
+    item.runs.forEach(run=>{
+      holder.appendChild(createHoliday(run));
+    });
+  }else{
+    const empty=document.createElement("div");
+    empty.className="empty";
+    empty.textContent="這個月沒有三天以上連假。";
+    holder.appendChild(empty);
+  }
+
+  const other=$("otherDays");
+  other.hidden=!item.singles.length;
+
+  other.textContent=item.singles.length
+    ?"其他平日休假："+item.singles.map(day=>
+      shortDate(day.key)+
+      (day.name&&day.name!=="放假"&&
+       day.name!=="補假"
+        ?"（"+day.name+"）":"")
+    ).join("、")
+    :"";
+}
+
+/* ===== 日期色塊 ===== */
+
+function createRibbon(plan){
+  const scroll=document.createElement("div");
+  scroll.className="ribbon-scroll";
+
+  const ribbon=document.createElement("div");
+  ribbon.className="ribbon";
+
+  const leaveSet=new Set(plan.leave);
+
+  for(let date=dateFromKey(plan.start);
+      date<=dateFromKey(plan.end);
+      date=addDays(date)){
+
+    const key=dayKey(date);
+    const info=dayInfo(key);
+
+    const cell=document.createElement("div");
+    cell.className="day";
+
+    if(leaveSet.has(key)){
+      cell.classList.add("leave");
+    }else if(info?.type==="holiday"){
+      cell.classList.add("holiday");
+    }
+
+    if(date.getDate()===1){
+      cell.classList.add("month-start");
+    }
+
+    const number=document.createElement("strong");
+    number.textContent=date.getDate();
+
+    const weekday=document.createElement("small");
+    weekday.textContent=WEEK[date.getDay()];
+
+    cell.title=key+" · "+
+      (leaveSet.has(key)
+        ?"需要請特休"
+        :info?.name||"週休");
+
+    cell.append(number,weekday);
+    ribbon.appendChild(cell);
+  }
+
+  scroll.appendChild(ribbon);
+  return scroll;
+}
+
+/* ===== 特休攻略卡片 ===== */
+
+function createPlan(plan){
+  const card=document.createElement("article");
+  card.className="plan";
+
+  const top=document.createElement("div");
+  top.className="plan-top";
+
+  const left=document.createElement("div");
+
+  const title=document.createElement("div");
+  title.className="plan-title";
+  title.textContent=plan.name;
+
+  const range=document.createElement("div");
+  range.className="plan-range";
+
+  const cross=
+    plan.start.slice(0,4)!==
+    plan.end.slice(0,4);
+
+  range.textContent=
+    shortDate(plan.start,cross)+"－"+
+    shortDate(plan.end,cross);
+
+  left.append(title,range);
+
+  const badge=document.createElement("div");
+  badge.className="plan-badge";
+
+  const small=document.createElement("small");
+  small.textContent="請 "+plan.used+" 天";
+
+  const strong=document.createElement("strong");
+  strong.textContent="放 "+plan.total+" 天";
+
+  badge.append(small,strong);
+
+  top.append(left,badge);
+  card.appendChild(top);
+  card.appendChild(createRibbon(plan));
+
+  const leave=document.createElement("div");
+  leave.className="plan-leave";
+
+  leave.textContent=
+    "▦ 請假："+plan.leave
+      .map(key=>shortDate(key,cross))
+      .join("、");
+
+  const kind=document.createElement("div");
+  kind.className="plan-kind";
+  kind.textContent="✧ "+plan.kind;
+
+  card.append(leave,kind);
+  return card;
+}
+
+function drawPlanner(item){
+  const grid=$("planGrid");
+  grid.innerHTML="";
+  grid.className="plan-grid";
+
+  const plans=[];
+  const seen=new Set();
+
+  for(const run of item.runs){
+    for(const plan of choosePlans(run)){
+      const key=plan.start+"|"+plan.end;
+
+      if(seen.has(key))continue;
+
+      seen.add(key);
+      plans.push(plan);
+    }
+  }
+
+  $("planCount").textContent=
+    plans.length+" 組精選";
+
+  if(plans.length===1){
+    grid.classList.add("one");
+  }
+
+  if(plans.length===2){
+    grid.classList.add("two");
+  }
+
+  if(!plans.length){
+    grid.classList.add("one");
+
+    const empty=document.createElement("div");
+    empty.className="empty";
+
+    empty.textContent=item.runs.length
+      ?"目前沒有日期可完整核對的延長請假建議。"
+      :"這個月沒有三天以上連假，暫不提供特休攻略。";
+
+    grid.appendChild(empty);
+    return;
+  }
+
+  plans.forEach(plan=>{
+    grid.appendChild(createPlan(plan));
+  });
+}
+
+/* ===== 年度整體繪製 ===== */
+
+function drawYear(){
+  if(!calendars[selectedYear])return;
+
+  const data=yearData(selectedYear);
+  const messages=[];
+
+  const currentSource=sources[selectedYear];
+  const nextSource=sources[selectedYear+1];
+
+  if(currentSource?.source==="cache"||
+     nextSource?.source==="cache"){
+    messages.push(
+      "部分年度使用本機日曆快取，"+
+      "資料可能不是最新版本。"
+    );
+  }
+
+  /*
+   * 僅核對已經有官方確認摘要的年份。
+   * 不把 2026、2027 的數字套用到其他年份。
+   */
+  const verified=VERIFIED_YEAR_SUMMARY[selectedYear];
+
+  if(verified&&(
+    data.runs.length!==verified.breaks||
+    data.totalOff!==verified.offDays
+  )){
+    messages.push(
+      selectedYear+" 年日曆統計與已公布的 "+
+      verified.breaks+" 組連假、"+
+      verified.offDays+" 天放假不一致。"+
+      "請先以官方公告核對。"
+    );
+  }
+
+  if(VERIFIED_LEGAL_HOLIDAYS[selectedYear]===undefined){
+    messages.push(
+      selectedYear+
+      " 年法定國定假日日數尚未另外核對，"+
+      "因此不顯示推測數字。"
+    );
+  }
+
+  warning(messages.join(" "));
+
+  drawSummary(data);
+  drawMonths(data);
+
+  const month=data.months.find(item=>
+    item.month===selectedMonth
+  )||data.months[0];
+
+  drawDetail(month);
+  drawPlanner(month);
+}
+
+/* ===== 可收合區塊 ===== */
+
+function setMapOpen(open){
+  $("mapBody").hidden=!open;
+
+  $("mapToggle").setAttribute(
+    "aria-expanded",String(open)
+  );
+
+  $("mapAction").textContent=
+    open?"收合 −":"展開 ＋";
+
+  writeJSON(MAP_KEY,open);
+}
+
+$("mapToggle").onclick=()=>{
+  setMapOpen($("mapBody").hidden);
+};
+
+$("guideToggle").onclick=()=>{
+  const body=$("guideBody");
+  body.hidden=!body.hidden;
+
+  const open=!body.hidden;
+
+  $("guideToggle").setAttribute(
+    "aria-expanded",String(open)
+  );
+
+  $("guideAction").textContent=
+    open?"收起 −":"展開 ＋";
+};
+
+/* ===== 年份切換 ===== */
+
+$("year").onchange=()=>{
+  selectedYear=Number($("year").value);
+
+  selectedMonth=selectedYear===currentYear
+    ?today.getMonth()+1
+    :1;
+
+  writeJSON(YEAR_KEY,selectedYear);
+  drawYear();
+};
+
+/* ===== 啟動 ===== */
+
+async function init(){
+  const savedMap=readJSON(MAP_KEY);
+  const previousMap=readJSON("ball-toolbox-v64-map");
+
+  setMapOpen(
+    savedMap!==null
+      ?savedMap!==false
+      :previousMap!==false
+  );
+
+  availableYears=await discoverYears();
+
+  if(!availableYears.length){
+    warning(
+      "目前無法取得任何完整年度日曆。"+
+      "已停止顯示統計及特休攻略，"+
+      "以免提供錯誤日期。"
+    );
+
+    $("detailTitle").textContent=
+      "目前無法取得休假資料";
+
+    $("planCount").textContent="";
+
+    const empty=document.createElement("div");
+    empty.className="empty";
+    empty.textContent=
+      "請確認網路連線後重新整理頁面。";
+
+    $("planGrid").appendChild(empty);
+    return;
+  }
+
+  const saved=Number(
+    readJSON(YEAR_KEY)||
+    readJSON("ball-toolbox-v64-year")||
+    readJSON("ball-toolbox-v63-year")||
+    readJSON("ball-toolbox-v62-year")
+  );
+
+  selectedYear=availableYears.includes(saved)
+    ?saved
+    :availableYears[0];
+
+  selectedMonth=selectedYear===currentYear
+    ?today.getMonth()+1
+    :1;
+
+  const select=$("year");
+  select.innerHTML="";
+
+  for(const year of availableYears){
+    const option=document.createElement("option");
+    option.value=year;
+    option.textContent=year+" 年";
+    select.appendChild(option);
+  }
+
+  select.value=selectedYear;
+  select.disabled=false;
+
+  const cacheYears=availableYears.filter(year=>
+    sources[year]?.source==="cache"
+  );
+
+  $("sourceStatus").textContent=
+    "✧ 已取得 "+
+    availableYears.join("、")+
+    " 年完整日曆"+
+    (cacheYears.length
+      ?" · 部分使用本機快取"
+      :" · 線上資料");
+
+  drawYear();
+}
+
+init();
+</script>
+</body>
+</html>

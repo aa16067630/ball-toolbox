@@ -1,0 +1,1004 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>閉嘴我來抽｜有球必應</title>
+<style>
+:root{
+ --ink:#3D433B;--muted:#737C70;
+ --sage:#98A68D;--deep:#687B62;
+ --paper:#F8F7F2;--linen:#E8E3D9;
+ --gold:#B89D67;--darkgold:#927549;
+ --lightgold:#E4D1A7;
+ --line:rgba(184,157,103,.18)
+}
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--ink);
+ font:14px/1.65 "Segoe UI","Microsoft JhengHei UI","Microsoft JhengHei",sans-serif;
+ background:
+ radial-gradient(ellipse at 92% 6%,rgba(152,166,141,.27),transparent 48%),
+ radial-gradient(ellipse at 9% 87%,rgba(228,209,167,.19),transparent 42%),
+ linear-gradient(130deg,#FBFAF6 0%,#F0F3EB 60%,#EDF0E8 100%);
+ min-height:100vh
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+a{text-decoration:none;color:inherit}
+button:focus-visible,input:focus-visible,
+textarea:focus-visible,select:focus-visible,
+a:focus-visible{
+ outline:2px solid var(--gold);outline-offset:3px
+}
+/* 與「放假才是正事」一致的頁面、品牌與標題規格 */
+.page{width:min(1144px,calc(100% - 40px));margin:auto;padding:27px 0 40px}
+.brand{display:flex;align-items:center;gap:13px;margin-bottom:25px}
+.svg-defs{position:absolute;width:0;height:0;overflow:hidden}
+.brand-mark{
+ position:relative;isolation:isolate;width:42px;height:42px;flex:0 0 42px;
+ border:1px solid rgba(184,157,103,.28);border-radius:50%;
+ display:grid;place-items:center;
+ background:radial-gradient(circle at 29% 24%,#fff 0%,rgba(255,253,246,.87) 28%,rgba(247,237,213,.46) 66%,rgba(223,198,145,.15) 100%);
+ box-shadow:0 0 16px rgba(218,194,149,.13),0 5px 15px rgba(90,80,57,.055),inset 0 1px 0 white,inset 0 -1px 0 rgba(184,157,103,.08)
+}
+.brand-mark::before{
+ content:"";position:absolute;z-index:-1;inset:-11px;border-radius:50%;
+ background:radial-gradient(circle,rgba(226,200,151,.25),rgba(226,200,151,.10) 43%,transparent 72%);
+ filter:blur(5px);pointer-events:none
+}
+.brand-mark svg{display:block;width:24px;height:24px;filter:drop-shadow(0 1px 1px rgba(255,255,255,.9)) drop-shadow(0 2px 3px rgba(173,132,67,.23))}
+.brand-name{font-size:17px;font-weight:400;letter-spacing:.16em;line-height:1.35}
+.english{margin-top:4px;color:#A5967D;font:italic 12px Georgia,serif}
+.back{margin-left:auto;color:var(--deep);font-size:12px}
+.tool-heading{display:flex;align-items:center;gap:13px;min-width:0}
+.card-icon{position:relative;isolation:isolate;flex:0 0 33px;width:33px;height:33px;display:grid;place-items:center}
+.card-icon::before{
+ content:"";position:absolute;z-index:-1;inset:-10px;border-radius:50%;
+ background:radial-gradient(circle,rgba(242,224,187,.47),rgba(231,208,163,.20) 38%,rgba(231,208,163,.05) 60%,transparent 76%);
+ filter:blur(4px);pointer-events:none
+}
+.card-icon::after{content:"";position:absolute;z-index:-1;inset:2px;border-radius:50%;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.85),rgba(255,255,255,.07) 68%,transparent);pointer-events:none}
+.card-icon svg{display:block;width:30px;height:30px;filter:drop-shadow(0 1px 0 rgba(255,255,255,.9)) drop-shadow(0 2px 2px rgba(166,126,63,.23))}
+.tool-heading h2{margin:0;font-size:17px;font-weight:400;letter-spacing:.16em;line-height:1.35;color:var(--ink)}
+.tool-heading small{display:block;margin-top:5px;color:#A5967D;font:italic 12px Georgia,serif}
+.tabs{
+ display:flex;gap:9px;overflow-x:auto;white-space:nowrap;
+ padding:0 1px 16px;scrollbar-width:thin
+}
+.tab{
+ flex:none;border-radius:999px;padding:10px 16px;
+ border:1px solid rgba(184,157,103,.22);
+ color:var(--deep);font-size:13px;
+ background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.4));
+ box-shadow:inset 0 1px rgba(255,255,255,.95),0 5px 12px rgba(74,88,66,.04);
+ transition:box-shadow .2s,transform .2s
+}
+.tab:hover{transform:translateY(-1px)}
+.tab.active{
+ background:linear-gradient(135deg,#687B62,#889B80);
+ color:white;border-color:#82937B;
+ box-shadow:0 8px 18px rgba(104,123,98,.14)
+}
+.view{display:none}
+.view.active{display:block}
+.layout{
+ display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+ gap:18px;align-items:start
+}
+.wheel-layout{
+ display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+ gap:18px;align-items:start
+}
+.stack{display:grid;gap:18px}
+.glass{
+ position:relative;isolation:isolate;overflow:hidden;
+ border-radius:24px;
+ border:1px solid rgba(255,255,255,.92);
+ background:
+ linear-gradient(137deg,rgba(255,255,255,.79),rgba(255,255,255,.48) 62%,rgba(246,238,222,.30));
+ box-shadow:
+ 0 16px 32px rgba(71,85,65,.073),
+ inset 0 1px 0 rgba(255,255,255,.98);
+ backdrop-filter:blur(14px);
+ -webkit-backdrop-filter:blur(14px)
+}
+.glass:before{
+ content:"";position:absolute;inset:12px;z-index:-1;
+ border:1px solid rgba(184,157,103,.105);
+ border-radius:17px;pointer-events:none
+}
+.glass:after{
+ content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background:
+ radial-gradient(ellipse at 100% 0%,rgba(228,209,167,.19),transparent 55%),
+ linear-gradient(115deg,rgba(255,255,255,.18),transparent 50%)
+}
+.inner{padding:22px}
+.head{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:12px;margin-bottom:17px
+}
+.head h2{margin:0;font-weight:400;font-size:17px;letter-spacing:.035em}
+.head small{font:italic 12px Georgia,serif;color:#A5967D}
+.glyph{color:var(--gold);font-size:20px}
+.divider{
+ height:1px;margin:13px 0 17px;
+ background:linear-gradient(90deg,transparent,rgba(184,157,103,.43),transparent)
+}
+label{display:block;margin:14px 0 7px;color:var(--muted);font-size:12px}
+input,textarea,select{
+ display:block;width:100%;min-width:0;border-radius:13px;
+ padding:12px 13px;color:var(--ink);
+ border:1px solid rgba(152,166,141,.26);
+ background:linear-gradient(145deg,rgba(255,255,255,.89),rgba(255,255,255,.56));
+ box-shadow:inset 0 1px rgba(255,255,255,.85)
+}
+textarea{resize:vertical;min-height:153px;line-height:1.8}
+input:focus,textarea:focus,select:focus{
+ outline:none;border-color:var(--sage);
+ box-shadow:0 0 0 3px rgba(152,166,141,.13)
+}
+.inline{display:flex;gap:8px;align-items:center}
+.inline select{flex:1}
+.btns{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.btn{
+ border-radius:999px;padding:10px 16px;min-height:40px;
+ border:1px solid rgba(184,157,103,.24);
+ color:var(--deep);font-size:12px;
+ background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.42));
+ box-shadow:0 5px 13px rgba(74,88,66,.04),inset 0 1px rgba(255,255,255,.96);
+ transition:transform .2s,box-shadow .2s
+}
+.btn:hover:not(:disabled){
+ transform:translateY(-1px);
+ box-shadow:0 8px 18px rgba(74,88,66,.08),inset 0 1px white
+}
+.btn.primary{
+ color:#fff;background:linear-gradient(135deg,#687B62,#8C9F83);
+ border-color:rgba(104,123,98,.65);
+ box-shadow:0 8px 18px rgba(104,123,98,.17)
+}
+.btn.gold{color:#7F6640;background:linear-gradient(145deg,#FFFDF8,#F3E9D6)}
+.btn.danger{color:#8C6B5C}
+.btn.wide{width:100%;font-size:14px;padding:13px}
+.small{font-size:12px;color:var(--muted);line-height:1.8}
+.mode{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+.mode .selected{
+ background:rgba(152,166,141,.18);
+ border-color:rgba(104,123,98,.46)
+}
+.status{
+ border-radius:15px;padding:13px;margin-top:15px;
+ border:1px solid rgba(184,157,103,.19);
+ background:linear-gradient(135deg,rgba(255,252,246,.82),rgba(255,255,255,.39));
+ color:var(--deep);font-size:12px;line-height:1.75
+}
+.wheel-panel{text-align:center}
+.wheel-box{position:relative;width:min(100%,500px);margin:13px auto 15px}
+#wheelCanvas{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 13px rgba(78,67,47,.12))}
+.pointer{
+ width:46px;height:68px;position:absolute;top:-8px;left:50%;
+ transform:translateX(-50%);z-index:2;pointer-events:none;
+ filter:drop-shadow(0 2px 3px rgba(100,79,42,.17))
+}
+.result{
+ margin-top:13px;padding:19px 14px;border-radius:18px;
+ border:1px solid rgba(184,157,103,.23);
+ background:linear-gradient(145deg,rgba(255,251,240,.82),rgba(255,255,255,.4))
+}
+.result small{display:block;font:italic 12px Georgia,serif;color:#A39780}
+.result strong{
+ display:block;font-weight:400;color:var(--deep);
+ font-size:24px;margin-top:8px;overflow-wrap:anywhere
+}
+.output{
+ margin-top:18px;padding:20px;border-radius:17px;min-height:90px;
+ border:1px solid rgba(184,157,103,.19);
+ background:linear-gradient(140deg,rgba(255,251,241,.75),rgba(255,255,255,.5));
+ color:var(--deep);line-height:1.8;white-space:pre-wrap;
+ overflow-wrap:anywhere
+}
+.output.big{display:grid;place-items:center;text-align:center;font-size:24px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.history-list{display:grid;gap:9px;max-height:560px;overflow:auto}
+.history-entry{
+ border:1px solid rgba(184,157,103,.16);border-radius:15px;
+ background:rgba(255,255,255,.43);
+ box-shadow:inset 0 1px rgba(255,255,255,.78)
+}
+.history-entry summary{
+ display:flex;justify-content:space-between;gap:12px;
+ padding:13px 15px;cursor:pointer;list-style:none
+}
+.history-entry summary::-webkit-details-marker{display:none}
+.history-entry b{
+ display:block;font-size:13px;font-weight:400;overflow-wrap:anywhere
+}
+.history-entry small{font-size:11px;color:var(--muted)}
+.history-entry summary>span:last-child{color:var(--gold)}
+.history-detail{
+ padding:0 15px 14px;font-size:12px;line-height:1.75;
+ white-space:pre-wrap;overflow-wrap:anywhere;color:var(--muted)
+}
+.group-results{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:11px;margin-top:17px
+}
+.group-item{
+ padding:15px;border-radius:16px;
+ border:1px solid rgba(184,157,103,.16);
+ background:rgba(255,255,255,.47)
+}
+.group-item h3{font-size:14px;font-weight:400;color:var(--deep);margin:0 0 8px}
+.group-item p{
+ font-size:12px;line-height:1.8;white-space:pre-wrap;
+ margin:0;color:var(--muted)
+}
+.footer{text-align:center;margin-top:35px;font:italic 12px Georgia,serif;color:#A39780}
+@media(max-width:800px){
+ .layout,.wheel-layout{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+ .page{width:calc(100% - 26px);padding:20px 0 30px}
+ .inner{padding:19px 17px}
+ .two{grid-template-columns:1fr}
+ .group-results{grid-template-columns:1fr}
+ .tab{padding:9px 13px;font-size:12px}
+ .btns .btn{flex:1}
+ .pointer{width:39px;height:59px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+ <defs>
+  <linearGradient id="goldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+   <stop offset="0%" stop-color="#F0E1BF"/>
+   <stop offset="28%" stop-color="#BE9E63"/>
+   <stop offset="56%" stop-color="#E5CDA0"/>
+   <stop offset="100%" stop-color="#9A7845"/>
+  </linearGradient>
+  <radialGradient id="goldFill">
+   <stop offset="0%" stop-color="#FFF7E8"/>
+   <stop offset="48%" stop-color="#E7D0A2"/>
+   <stop offset="100%" stop-color="#B89D67"/>
+  </radialGradient>
+ </defs>
+</svg>
+<div class="page">
+<header class="brand">
+ <div class="brand-mark" aria-hidden="true">
+  <svg viewBox="0 0 32 32" fill="none">
+   <path d="M16 2.5 C17.8 12.3 19.7 14.2 29.5 16 C19.7 17.8 17.8 19.7 16 29.5 C14.2 19.7 12.3 17.8 2.5 16 C12.3 14.2 14.2 12.3 16 2.5Z" stroke="url(#goldStroke)" stroke-width=".9"/>
+   <circle cx="16" cy="16" r="2" fill="url(#goldFill)"/>
+   <path d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10L7.3 7.7L5 7L7.3 6.3Z" fill="url(#goldFill)" opacity=".75"/>
+  </svg>
+ </div>
+ <div>
+  <div class="brand-name">有球必應</div>
+  <div class="english">Hakuna Matata</div>
+ </div>
+ <a class="back" href="index.html">← 返回首頁</a>
+</header>
+
+<nav class="tabs" aria-label="選擇隨機工具">
+ <button class="tab" data-view="wheel">✧ 轉盤抽選</button>
+ <button class="tab" data-view="groups">♧ 隨機分組</button>
+ <button class="tab" data-view="number"># 隨機數字</button>
+ <button class="tab" data-view="draw">✦ 快速抽籤</button>
+ <button class="tab" data-view="shuffle">⇄ 洗牌</button>
+ <button class="tab" data-view="coin">◌ 擲硬幣</button>
+ <button class="tab" data-view="dice">⚄ 擲骰子</button>
+</nav>
+
+<main>
+<section class="view" id="view-wheel">
+ <div class="wheel-layout">
+  <div class="stack">
+   <article class="glass">
+    <div class="inner">
+     <div class="head">
+      <div class="tool-heading">
+       <div class="card-icon" aria-hidden="true">
+        <svg viewBox="0 0 36 36" fill="none">
+         <rect x="7" y="9" width="16" height="16" rx="2" transform="rotate(-13 7 9)" stroke="url(#goldStroke)" stroke-width="1.1"/>
+         <circle cx="12.5" cy="15" r="1.4" fill="url(#goldFill)"/>
+         <circle cx="18" cy="13.5" r="1.4" fill="url(#goldFill)"/>
+         <circle cx="15" cy="20.5" r="1.4" fill="url(#goldFill)"/>
+         <path d="M28 5L29 9L33 10L29 11L28 15L27 11L23 10L27 9Z" stroke="url(#goldStroke)" stroke-width=".85"/>
+        </svg>
+       </div>
+       <div><h2>閉嘴我來抽</h2><small>Shut Up &amp; Draw!</small></div>
+      </div>
+     </div>
+     <div class="divider"></div>
+     <div class="inline">
+      <select id="wheelSelect" aria-label="已儲存輪盤"></select>
+      <button class="btn gold" id="newWheel">＋ 新增</button>
+      <button class="btn danger" id="deleteWheel">刪除</button>
+     </div>
+     <label for="wheelName">輪盤名稱</label>
+     <input id="wheelName">
+     <label for="wheelOptions">選項（每行一個）</label>
+     <textarea id="wheelOptions"></textarea>
+     <p class="small">相同名稱也會視為不同選項。修改清單後記得儲存。</p>
+     <div class="mode">
+      <button class="btn selected" data-mode="repeat">有放回 · 可重複</button>
+      <button class="btn" data-mode="unique">無放回 · 不重複</button>
+     </div>
+     <div class="btns">
+      <button class="btn" id="saveWheel">儲存輪盤</button>
+      <button class="btn" id="resetRound">重新開始本輪</button>
+      <button class="btn" id="endRound">提前結束本輪</button>
+     </div>
+     <div class="status" id="wheelStatus" role="status"></div>
+    </div>
+   </article>
+   <article class="glass">
+    <div class="inner">
+     <div class="head">
+      <div><h2>☽ 轉盤歷史</h2><small>Wheel History</small></div>
+      <span class="glyph">✧</span>
+     </div>
+     <div class="divider"></div>
+     <div class="history-list" id="history-wheel"></div>
+     <div class="btns"><button class="btn danger" data-clear="wheel">清除轉盤紀錄</button></div>
+    </div>
+   </article>
+  </div>
+
+  <article class="glass">
+   <div class="inner wheel-panel">
+    <div class="head">
+     <div><h2>✧ 命運之輪</h2><small>Wheel of Choices</small></div>
+     <span class="glyph">✦</span>
+    </div>
+    <div class="wheel-box">
+     <svg class="pointer" viewBox="0 0 48 74" aria-hidden="true">
+      <defs>
+       <linearGradient id="needleGold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#97774A"/>
+        <stop offset=".3" stop-color="#F3E5C7"/>
+        <stop offset=".62" stop-color="#B89D67"/>
+        <stop offset="1" stop-color="#84663C"/>
+       </linearGradient>
+      </defs>
+      <path d="M24 7 C11 0 8 14 16 19
+       C25 24 32 15 25 12 C20 10 18 15 21 17"
+       fill="none" stroke="url(#needleGold)" stroke-width="1.6"
+       stroke-linecap="round"/>
+      <circle cx="24" cy="22" r="5.5"
+       fill="url(#needleGold)" stroke="#93794F" stroke-width=".6"/>
+      <path d="M21 27 C19 37 21 43 18 49
+       Q20 59 24 70 Q28 59 30 49
+       C27 43 29 37 27 27Z"
+       fill="url(#needleGold)" stroke="#94784F" stroke-width=".65"/>
+      <path d="M24 32 L24 59" fill="none"
+       stroke="rgba(255,255,255,.7)" stroke-width=".8"/>
+      <path d="M21 50 L24 70 L27 50"
+       fill="none" stroke="#81663D" stroke-width=".65"/>
+     </svg>
+     <canvas id="wheelCanvas" width="760" height="760"
+      role="img" aria-label="米白紙面、金色分隔線與金屬外框的輪盤"></canvas>
+    </div>
+    <button class="btn primary wide" id="spinWheel">旋轉輪盤 ✦</button>
+    <div class="result" aria-live="polite">
+     <small>Your Lucky Choice</small>
+     <strong id="wheelResult">準備開始 ✧</strong>
+    </div>
+   </div>
+  </article>
+ </div>
+</section>
+
+<section class="view" id="view-groups">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>♧ 隨機分組</h2><small>Random Groups</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <label for="groupList">成員名單（每行一位）</label>
+   <textarea id="groupList" placeholder="小明&#10;小美&#10;小華"></textarea>
+   <div class="two">
+    <div><label for="groupMethod">分組方式</label>
+     <select id="groupMethod">
+      <option value="count">指定組數</option>
+      <option value="size">每組最多人數</option>
+     </select>
+    </div>
+    <div><label for="groupValue">數量</label>
+     <input type="number" min="1" value="2" id="groupValue"></div>
+   </div>
+   <div class="btns"><button class="btn primary" id="makeGroups">開始分組 ✦</button></div>
+   <div class="group-results" id="groupOutput"></div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 分組歷史</h2><small>Group History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-groups"></div>
+   <div class="btns"><button class="btn danger" data-clear="groups">清除分組紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+
+<section class="view" id="view-number">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2># 隨機數字</h2><small>Random Number</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="two">
+    <div><label for="numMin">最小整數</label><input id="numMin" type="number" value="1"></div>
+    <div><label for="numMax">最大整數</label><input id="numMax" type="number" value="100"></div>
+   </div>
+   <div class="btns"><button class="btn primary" id="makeNumber">產生數字 ✦</button></div>
+   <div class="output big" id="numberOutput">✧</div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 數字歷史</h2><small>Number History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-number"></div>
+   <div class="btns"><button class="btn danger" data-clear="number">清除數字紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+
+<section class="view" id="view-draw">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>✦ 快速抽籤</h2><small>Quick Draw</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <label for="quickList">選項（每行一個）</label>
+   <textarea id="quickList" placeholder="選項 A&#10;選項 B&#10;選項 C"></textarea>
+   <div class="btns"><button class="btn primary" id="quickDraw">抽一個 ✦</button></div>
+   <div class="output big" id="drawOutput">✧</div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 抽籤歷史</h2><small>Draw History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-draw"></div>
+   <div class="btns"><button class="btn danger" data-clear="draw">清除抽籤紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+
+<section class="view" id="view-shuffle">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>⇄ 洗牌</h2><small>Shuffle List</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <p class="small">將清單順序重新打亂，不進行分組。</p>
+   <label for="shuffleList">清單（每行一個）</label>
+   <textarea id="shuffleList" placeholder="第一位&#10;第二位&#10;第三位"></textarea>
+   <div class="btns"><button class="btn primary" id="makeShuffle">重新排列 ✦</button></div>
+   <div class="output" id="shuffleOutput">等待洗牌 ✧</div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 洗牌歷史</h2><small>Shuffle History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-shuffle"></div>
+   <div class="btns"><button class="btn danger" data-clear="shuffle">清除洗牌紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+
+<section class="view" id="view-coin">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>◌ 擲硬幣</h2><small>Coin Flip</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <p class="small">正面還是反面？交給運氣決定。</p>
+   <div class="btns"><button class="btn primary" id="flipCoin">擲硬幣 ✦</button></div>
+   <div class="output big" id="coinOutput">✧</div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 硬幣歷史</h2><small>Coin History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-coin"></div>
+   <div class="btns"><button class="btn danger" data-clear="coin">清除硬幣紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+
+<section class="view" id="view-dice">
+ <div class="layout">
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>⚄ 擲骰子</h2><small>Dice Roll</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <label for="diceCount">骰子數量（1～10 顆）</label>
+   <input id="diceCount" type="number" min="1" max="10" value="1">
+   <div class="btns"><button class="btn primary" id="rollDice">擲骰子 ✦</button></div>
+   <div class="output big" id="diceOutput">✧</div>
+  </div></article>
+  <article class="glass"><div class="inner">
+   <div class="head"><div><h2>☽ 骰子歷史</h2><small>Dice History</small></div><span class="glyph">✧</span></div>
+   <div class="divider"></div>
+   <div class="history-list" id="history-dice"></div>
+   <div class="btns"><button class="btn danger" data-clear="dice">清除骰子紀錄</button></div>
+  </div></article>
+ </div>
+</section>
+</main>
+
+<footer class="footer">A little magic for everyday life.</footer>
+</div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const TAU=Math.PI*2;
+const STORAGE="ball-toolbox-random-suite-v3";
+const EMPTY={
+ wheels:[{id:"default",name:"今天吃什麼？",
+ options:"火鍋\n壽司\n義大利麵\n咖哩飯\n火鍋"}],
+ activeWheelId:"default",wheelMode:"repeat",
+ rounds:{},
+ histories:{wheel:[],groups:[],number:[],draw:[],
+ shuffle:[],coin:[],dice:[]}
+};
+const copy=x=>JSON.parse(JSON.stringify(x));
+let state;
+try{
+ const old=JSON.parse(localStorage.getItem(STORAGE));
+ state=old&&Array.isArray(old.wheels)?old:copy(EMPTY);
+}catch{state=copy(EMPTY)}
+if(!state.wheels.length)state.wheels=copy(EMPTY.wheels);
+if(!state.wheels.some(w=>w.id===state.activeWheelId))
+ state.activeWheelId=state.wheels[0].id;
+if(!["repeat","unique"].includes(state.wheelMode))
+ state.wheelMode="repeat";
+state.rounds=state.rounds||{};
+state.histories=state.histories||{};
+const TYPES=["wheel","groups","number","draw","shuffle","coin","dice"];
+TYPES.forEach(t=>{
+ if(!Array.isArray(state.histories[t]))state.histories[t]=[];
+});
+function save(){
+ try{localStorage.setItem(STORAGE,JSON.stringify(state))}
+ catch(e){console.warn("本機儲存未成功",e)}
+}
+function integer(max){
+ if(!Number.isSafeInteger(max)||max<=0||max>4294967296)
+  throw Error("Invalid range");
+ const buf=new Uint32Array(1);
+ const limit=Math.floor(4294967296/max)*max;
+ do{crypto.getRandomValues(buf)}while(buf[0]>=limit);
+ return buf[0]%max;
+}
+function shuffled(list){
+ const a=[...list];
+ for(let i=a.length-1;i>0;i--){
+  const j=integer(i+1);
+  [a[i],a[j]]=[a[j],a[i]];
+ }
+ return a;
+}
+const lines=s=>s.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+const clock=()=>new Date().toLocaleString("zh-TW");
+const wheel=()=>state.wheels.find(w=>w.id===state.activeWheelId);
+const items=()=>lines($("wheelOptions").value);
+
+function addHistory(type,title,meta,detail,extra={}){
+ state.histories[type].unshift({
+  time:clock(),title,meta,detail,...extra
+ });
+ state.histories[type]=state.histories[type].slice(0,70);
+ save();
+ renderHistory(type);
+}
+function renderHistory(type){
+ const el=$("history-"+type);
+ el.replaceChildren();
+ const list=state.histories[type];
+ if(!list.length){
+  const p=document.createElement("p");
+  p.className="small";p.textContent="目前還沒有紀錄。";
+  el.append(p);return;
+ }
+ const shown=type==="wheel"
+  ?list.filter(x=>!x.wheelId||x.wheelId===state.activeWheelId)
+  :list;
+ if(!shown.length){
+  const p=document.createElement("p");
+  p.className="small";p.textContent="這份輪盤還沒有紀錄。";
+  el.append(p);return;
+ }
+ shown.forEach(x=>{
+  const box=document.createElement("details");
+  box.className="history-entry";
+  const summary=document.createElement("summary");
+  const left=document.createElement("span");
+  const title=document.createElement("b");
+  title.textContent=x.title;
+  const small=document.createElement("small");
+  small.textContent=x.time+" · "+(x.meta||"");
+  left.append(title,small);
+  const mark=document.createElement("span");
+  mark.textContent="✧";
+  summary.append(left,mark);
+  const detail=document.createElement("div");
+  detail.className="history-detail";
+  detail.textContent=x.detail||"";
+  box.append(summary,detail);
+  el.append(box);
+ });
+}
+function renderAllHistory(){TYPES.forEach(renderHistory)}
+
+function showView(name,updateHash=true){
+ if(!TYPES.includes(name))name="wheel";
+ $$(".tab").forEach(b=>{
+  const active=b.dataset.view===name;
+  b.classList.toggle("active",active);
+  b.setAttribute("aria-current",active?"page":"false");
+ });
+ $$(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));
+ if(updateHash)history.replaceState(null,"","#"+name);
+}
+$$(".tab").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
+window.addEventListener("hashchange",()=>{
+ showView(location.hash.slice(1),false);
+});
+
+/* 輪盤：紙質底面、細金線、金屬外框 */
+const canvas=$("wheelCanvas"),c=canvas.getContext("2d");
+let rotation=0,spinning=false,frame=null;
+function paint(){
+ const w=canvas.width,cx=w/2,cy=w/2,r=319;
+ const a=items(),n=a.length;
+ c.clearRect(0,0,w,w);
+
+ c.save();
+ c.shadowColor="rgba(77,66,49,.22)";
+ c.shadowBlur=25;c.shadowOffsetY=11;
+ c.beginPath();c.arc(cx,cy,346,0,TAU);
+ c.fillStyle="#B89D67";c.fill();c.restore();
+
+ const metal=c.createLinearGradient(40,15,720,725);
+ metal.addColorStop(0,"#927549");
+ metal.addColorStop(.18,"#F5E8CA");
+ metal.addColorStop(.39,"#B39865");
+ metal.addColorStop(.65,"#E9D7B0");
+ metal.addColorStop(.85,"#9B7B48");
+ metal.addColorStop(1,"#F6EBD3");
+ c.beginPath();c.arc(cx,cy,346,0,TAU);
+ c.fillStyle=metal;c.fill();
+
+ c.lineWidth=2;
+ c.strokeStyle="rgba(255,255,255,.7)";
+ c.beginPath();c.arc(cx,cy,337,0,TAU);c.stroke();
+
+ const paper=c.createRadialGradient(cx-95,cy-110,10,cx,cy,329);
+ paper.addColorStop(0,"#FFFEFA");
+ paper.addColorStop(.58,"#F8F7F2");
+ paper.addColorStop(1,"#E8E3D9");
+ c.beginPath();c.arc(cx,cy,328,0,TAU);
+ c.fillStyle=paper;c.fill();
+
+ c.beginPath();c.arc(cx,cy,319,0,TAU);
+ c.strokeStyle="rgba(184,157,103,.65)";
+ c.lineWidth=1.6;c.stroke();
+
+ if(n){
+  const step=TAU/n,base=-Math.PI/2-step/2;
+  // 只畫金色的分隔線，不再填滿扇區。
+  c.save();c.beginPath();c.arc(cx,cy,r,0,TAU);c.clip();
+  for(let i=0;i<n;i++){
+   const angle=base+i*step+rotation;
+   c.beginPath();c.moveTo(cx,cy);
+   c.lineTo(cx+r*Math.cos(angle),cy+r*Math.sin(angle));
+   c.strokeStyle="rgba(184,157,103,.72)";
+   c.lineWidth=1.2;c.stroke();
+  }
+  c.restore();
+
+  for(let i=0;i<n;i++){
+   const angle=base+(i+.5)*step+rotation;
+   const fontSize=n<=6?32:n<=10?27:n<=16?22:n<=24?18:15;
+   const maxChars=n<=6?11:n<=10?9:n<=16?7:n<=24?5:4;
+   const str=Array.from(a[i]);
+   const label=str.length>maxChars
+    ?str.slice(0,maxChars-1).join("")+"…":a[i];
+   const d=n<=6?216:n<=15?235:250;
+   const x=cx+Math.cos(angle)*d;
+   const y=cy+Math.sin(angle)*d;
+   let spin=angle+Math.PI/2;
+   const normal=((spin%TAU)+TAU)%TAU;
+   if(normal>Math.PI/2&&normal<Math.PI*1.5)spin+=Math.PI;
+   c.save();c.translate(x,y);c.rotate(spin);
+   c.textAlign="center";c.textBaseline="middle";
+   c.font=`600 ${fontSize}px "Microsoft JhengHei",sans-serif`;
+   c.fillStyle="#455344";
+   c.fillText(label,0,0,n>24?110:175);
+   c.restore();
+  }
+ }else{
+  c.textAlign="center";c.textBaseline="middle";
+  c.fillStyle="#687B62";c.font="26px Microsoft JhengHei";
+  c.fillText("請輸入選項",cx,cy);
+ }
+ c.beginPath();c.arc(cx,cy,35,0,TAU);
+ const hub=c.createRadialGradient(cx-10,cy-13,1,cx,cy,37);
+ hub.addColorStop(0,"#FFF9EC");
+ hub.addColorStop(.4,"#E4D1A7");
+ hub.addColorStop(1,"#9A7D4B");
+ c.fillStyle=hub;c.fill();
+ c.strokeStyle="#9A7D4B";c.lineWidth=1;c.stroke();
+
+ c.beginPath();c.arc(cx,cy,26,0,TAU);
+ c.fillStyle="#F8F7F2";c.fill();
+ c.fillStyle="#B89D67";c.textAlign="center";c.textBaseline="middle";
+ c.font="30px Georgia";c.fillText("✦",cx,cy+2);
+}
+function currentRound(){return state.rounds[state.activeWheelId]}
+function updateStatus(){
+ const n=items().length,round=currentRound();
+ if(state.wheelMode==="repeat"){
+  $("wheelStatus").textContent=`有放回模式｜${n} 個選項，每次都可能再次抽中。`;
+ }else if(round&&!round.ended&&
+   JSON.stringify(round.snapshot)===JSON.stringify(items())){
+  $("wheelStatus").textContent=
+   `無放回模式｜本輪已抽 ${round.draws.length} 個，剩餘 ${round.remaining.length} 個。`;
+ }else{
+  $("wheelStatus").textContent=
+   `無放回模式｜${n} 個選項，旋轉後開始新一輪。`;
+ }
+}
+function renderWheelSelect(){
+ $("wheelSelect").replaceChildren();
+ state.wheels.forEach(x=>{
+  const option=document.createElement("option");
+  option.value=x.id;option.textContent=x.name;
+  $("wheelSelect").append(option);
+ });
+ $("wheelSelect").value=state.activeWheelId;
+}
+function loadWheel(){
+ const x=wheel();
+ $("wheelName").value=x.name;
+ $("wheelOptions").value=x.options;
+ rotation=0;
+ $("wheelResult").textContent="準備開始 ✧";
+ renderWheelSelect();
+ renderHistory("wheel");paint();updateStatus();
+}
+function stopSpin(){
+ if(frame!==null)cancelAnimationFrame(frame);
+ frame=null;spinning=false;
+ $("spinWheel").disabled=false;
+ $("wheelSelect").disabled=false;
+ $("wheelOptions").disabled=false;
+ $("newWheel").disabled=false;
+ $("deleteWheel").disabled=false;
+ $("saveWheel").disabled=false;
+ $("resetRound").disabled=false;
+ $("endRound").disabled=false;
+}
+function setSpinning(on){
+ spinning=on;
+ ["spinWheel","wheelSelect","wheelOptions","newWheel",
+ "deleteWheel","saveWheel","resetRound","endRound"].forEach(id=>{
+  $(id).disabled=on;
+ });
+ $$("[data-mode]").forEach(b=>b.disabled=on);
+}
+function spin(){
+ if(spinning)return;
+ const choices=items(),n=choices.length;
+ if(n<2)return alert("請至少輸入兩個選項。");
+ if(n>100)return alert("目前輪盤最多支援 100 個選項。");
+ let round=null,index;
+ if(state.wheelMode==="unique"){
+  round=currentRound();
+  if(!round||round.ended||
+   JSON.stringify(round.snapshot)!==JSON.stringify(choices)){
+   round={snapshot:[...choices],remaining:choices.map((_,i)=>i),
+    draws:[],ended:false};
+   state.rounds[state.activeWheelId]=round;
+  }
+  if(!round.remaining.length){
+   round.ended=true;save();updateStatus();
+   return alert("本輪已全部抽完，請重新開始本輪。");
+  }
+  index=round.remaining[integer(round.remaining.length)];
+ }else index=integer(n);
+
+ // 對準扇區中心，不以文字結果反推角度。
+ const step=TAU/n;
+ const target=(((-index*step)%TAU)+TAU)%TAU;
+ const current=((rotation%TAU)+TAU)%TAU;
+ const correction=(target-current+TAU)%TAU;
+ const from=rotation,to=rotation+5*TAU+correction;
+ const duration=4200;
+ let started=null;
+ setSpinning(true);
+ $("wheelResult").textContent="命運正在轉動…";
+ function tick(time){
+  if(started===null)started=time;
+  const t=Math.min(1,(time-started)/duration);
+  const eased=1-Math.pow(1-t,4);
+  rotation=from+(to-from)*eased;
+  paint();
+  if(t<1){frame=requestAnimationFrame(tick);return}
+  rotation=target;paint();
+  stopSpin();
+  if(round){
+   round.remaining=round.remaining.filter(v=>v!==index);
+   round.draws.push(index);
+   if(!round.remaining.length)round.ended=true;
+  }
+  const result=choices[index];
+  $("wheelResult").textContent=result;
+  addHistory("wheel",result,
+   `${wheel().name}｜${state.wheelMode==="unique"?"無放回":"有放回"}`,
+   `抽中：${result}\n輪盤：${wheel().name}\n當次選項：\n`+
+    choices.map((v,i)=>`${i+1}. ${v}`).join("\n"),
+   {wheelId:state.activeWheelId,index,snapshot:[...choices]});
+  save();updateStatus();
+ }
+ frame=requestAnimationFrame(tick);
+}
+$("spinWheel").onclick=spin;
+$("wheelOptions").addEventListener("input",()=>{
+ if(spinning)return;
+ rotation=0;paint();updateStatus();
+});
+$("wheelSelect").onchange=()=>{
+ if(spinning)return;
+ state.activeWheelId=$("wheelSelect").value;
+ save();loadWheel();
+};
+$("newWheel").onclick=()=>{
+ if(spinning)return;
+ const name=prompt("請輸入新輪盤名稱","我的新輪盤");
+ if(name===null)return;
+ if(!name.trim())return alert("輪盤名稱不可空白。");
+ const id="wheel-"+Date.now()+"-"+integer(100000);
+ state.wheels.push({id,name:name.trim(),options:"選項一\n選項二"});
+ state.activeWheelId=id;save();loadWheel();
+};
+$("deleteWheel").onclick=()=>{
+ if(spinning)return;
+ if(state.wheels.length===1)return alert("至少需要保留一個輪盤。");
+ if(!confirm("確定刪除此輪盤？"))return;
+ const id=state.activeWheelId;
+ state.wheels=state.wheels.filter(x=>x.id!==id);
+ delete state.rounds[id];
+ state.activeWheelId=state.wheels[0].id;
+ save();loadWheel();
+};
+$("saveWheel").onclick=()=>{
+ if(spinning)return;
+ const name=$("wheelName").value.trim();
+ if(!name)return alert("請輸入輪盤名稱。");
+ if(items().length<2)return alert("請至少輸入兩個選項。");
+ wheel().name=name;
+ wheel().options=$("wheelOptions").value;
+ save();renderWheelSelect();updateStatus();
+ alert("輪盤已儲存。");
+};
+$$("[data-mode]").forEach(b=>b.onclick=()=>{
+ if(spinning)return;
+ state.wheelMode=b.dataset.mode;
+ $$("[data-mode]").forEach(x=>x.classList.toggle("selected",x===b));
+ save();updateStatus();
+});
+$("resetRound").onclick=()=>{
+ if(spinning)return;
+ if(!confirm("重新開始本輪？原本尚未完成的進度將重設。"))return;
+ delete state.rounds[state.activeWheelId];
+ rotation=0;$("wheelResult").textContent="準備開始 ✧";
+ save();paint();updateStatus();
+};
+$("endRound").onclick=()=>{
+ if(spinning)return;
+ const round=currentRound();
+ if(!round||round.ended)return alert("目前沒有進行中的輪次。");
+ if(!confirm("確定提前結束本輪？"))return;
+ round.ended=true;save();updateStatus();
+};
+
+/* 其他工具 */
+$("makeGroups").onclick=()=>{
+ const original=lines($("groupList").value);
+ const val=Number($("groupValue").value);
+ const method=$("groupMethod").value;
+ if(original.length<2)return alert("請至少輸入兩位成員。");
+ if(!Number.isSafeInteger(val)||val<1)return alert("請輸入正整數。");
+ if(method==="count"&&val>original.length)
+  return alert("組數不能超過人數。");
+ const a=shuffled(original);
+ let groups;
+ if(method==="count"){
+  groups=Array.from({length:val},()=>[]);
+  a.forEach((x,i)=>groups[i%val].push(x));
+ }else{
+  groups=[];
+  for(let i=0;i<a.length;i+=val)groups.push(a.slice(i,i+val));
+ }
+ $("groupOutput").replaceChildren();
+ groups.forEach((g,i)=>{
+  const card=document.createElement("div");
+  card.className="group-item";
+  const title=document.createElement("h3");
+  title.textContent=`第 ${i+1} 組 · ${g.length} 人`;
+  const text=document.createElement("p");
+  text.textContent=g.join("\n");
+  card.append(title,text);$("groupOutput").append(card);
+ });
+ addHistory("groups",`分成 ${groups.length} 組`,
+  method==="count"?`指定 ${val} 組`:`每組最多 ${val} 人`,
+  "原始名單：\n"+original.join("\n")+"\n\n結果：\n"+
+  groups.map((g,i)=>`第 ${i+1} 組：${g.join("、")}`).join("\n"));
+};
+$("makeNumber").onclick=()=>{
+ const min=Number($("numMin").value),max=Number($("numMax").value);
+ const range=max-min+1;
+ if(!Number.isSafeInteger(min)||!Number.isSafeInteger(max)||
+  min>max||!Number.isSafeInteger(range)||range>4294967296)
+  return alert("請輸入有效整數範圍。");
+ const value=min+integer(range);
+ $("numberOutput").textContent=value;
+ addHistory("number",String(value),`${min}～${max}`,
+  `最小值：${min}\n最大值：${max}\n結果：${value}`);
+};
+$("quickDraw").onclick=()=>{
+ const a=lines($("quickList").value);
+ if(a.length<2)return alert("請至少輸入兩個選項。");
+ const value=a[integer(a.length)];
+ $("drawOutput").textContent=value;
+ addHistory("draw",value,`${a.length} 個選項`,
+  `抽中：${value}\n當次選項：\n${a.join("\n")}`);
+};
+$("makeShuffle").onclick=()=>{
+ const a=lines($("shuffleList").value);
+ if(a.length<2)return alert("請至少輸入兩個項目。");
+ const b=shuffled(a);
+ const output=b.map((x,i)=>`${i+1}. ${x}`).join("\n");
+ $("shuffleOutput").textContent=output;
+ addHistory("shuffle",`重新排列 ${a.length} 項`,"洗牌",
+  `原始：\n${a.join("\n")}\n\n新順序：\n${output}`);
+};
+$("flipCoin").onclick=()=>{
+ const result=integer(2)?"反面":"正面";
+ $("coinOutput").textContent=result+" ✧";
+ addHistory("coin",result,"擲硬幣",`結果：${result}`);
+};
+$("rollDice").onclick=()=>{
+ const n=Number($("diceCount").value);
+ if(!Number.isSafeInteger(n)||n<1||n>10)
+  return alert("請選擇 1～10 顆骰子。");
+ const rolls=Array.from({length:n},()=>integer(6)+1);
+ const total=rolls.reduce((a,b)=>a+b,0);
+ $("diceOutput").textContent=rolls.join(" · ")+"\n總和："+total;
+ addHistory("dice",`總和 ${total}`,`${n} 顆骰子`,
+  `每顆點數：${rolls.join("、")}\n總和：${total}`);
+};
+
+$$("[data-clear]").forEach(b=>b.onclick=()=>{
+ const type=b.dataset.clear;
+ if(!confirm("確定清除這項工具的歷史紀錄？"))return;
+ if(type==="wheel"){
+  state.histories.wheel=state.histories.wheel.filter(
+   x=>x.wheelId&&x.wheelId!==state.activeWheelId);
+ }else state.histories[type]=[];
+ save();renderHistory(type);
+});
+
+/* 啟動 */
+renderWheelSelect();
+loadWheel();
+$$("[data-mode]").forEach(b=>{
+ b.classList.toggle("selected",b.dataset.mode===state.wheelMode);
+});
+renderAllHistory();
+showView(location.hash.slice(1),false);
+save();
+</script>
+</body>
+</html>

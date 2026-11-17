@@ -1,0 +1,1392 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F5F6F0">
+<title>幣值換算｜有球必應</title>
+<style>
+:root{
+  --ink:#3D433B;
+  --muted:#737C70;
+  --sage:#98A68D;
+  --deep:#687B62;
+  --gold:#B89D67;
+  --gold-dark:#927549;
+  --line:rgba(184,157,103,.18);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--ink);
+  font-family:"Segoe UI","Microsoft JhengHei",sans-serif;
+  background:
+    radial-gradient(ellipse at 90% 8%,
+      rgba(152,166,141,.25),transparent 44%),
+    radial-gradient(ellipse at 7% 85%,
+      rgba(228,209,167,.24),transparent 42%),
+    linear-gradient(130deg,#FBFAF6,#EDF1E9);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+a{text-decoration:none;color:inherit}
+button:focus-visible,input:focus-visible,
+a:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
+.page{
+  width:min(1144px,calc(100% - 40px));
+  max-width:none;
+  margin:auto;
+  padding:27px 0 40px;
+}
+
+/* 品牌與導覽 */
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:25px;
+}
+.logo{
+  position:relative;
+  isolation:isolate;
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border:1px solid rgba(184,157,103,.28);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle at 29% 24%,
+    #fff 0%,rgba(255,253,246,.87) 28%,
+    rgba(247,237,213,.46) 66%,
+    rgba(223,198,145,.15) 100%);
+  box-shadow:
+    0 0 16px rgba(218,194,149,.13),
+    0 5px 15px rgba(90,80,57,.055),
+    inset 0 1px 0 white,
+    inset 0 -1px 0 rgba(184,157,103,.08);
+}
+.logo::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-11px;
+  border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(226,200,151,.25),
+    rgba(226,200,151,.10) 43%,
+    transparent 72%);
+  filter:blur(5px);
+  pointer-events:none;
+}
+.logo svg{
+  width:24px;
+  height:24px;
+  display:block;
+  filter:
+    drop-shadow(0 1px 1px rgba(255,255,255,.9))
+    drop-shadow(0 2px 3px rgba(173,132,67,.23));
+}
+.brand-name{
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:.16em;
+  line-height:1.35;
+}
+
+.english{
+  margin-top:4px;
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+.back{
+  margin-left:auto;
+  color:var(--deep);
+  font-size:12px;
+}
+.kicker{
+  color:var(--gold);
+  letter-spacing:.23em;
+  font-size:10px;
+}
+h1{
+  font-weight:400;
+  font-size:24px;
+  letter-spacing:.1em;
+  margin:8px 0 4px;
+}
+.subtitle{
+  font:italic 14px Georgia,serif;
+  color:#A39780;
+  margin:0;
+}
+.tagline{
+  color:#737C70;
+  font-size:12px;
+  font-weight:400;
+  letter-spacing:.03em;
+  line-height:1.65;
+  margin:7px 0 0;
+}
+
+/* 工具內容 */
+.workspace{
+  width:100%;
+  max-width:none;
+  margin:0 auto;
+}
+.glass{
+  position:relative;
+  isolation:isolate;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.92);
+  background:linear-gradient(
+    140deg,
+    rgba(255,255,255,.77),
+    rgba(255,255,255,.49) 57%,
+    rgba(249,245,235,.29)
+  );
+  box-shadow:
+    0 16px 32px rgba(71,85,65,.073),
+    inset 0 1px 0 rgba(255,255,255,.96);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+.glass::before{
+  content:"";
+  position:absolute;
+  inset:9px;
+  border:1px solid rgba(184,157,103,.12);
+  border-radius:18px;
+  pointer-events:none;
+  z-index:0;
+}
+.glass::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:
+    radial-gradient(ellipse at 100% 0%,
+      rgba(228,209,167,.19),transparent 55%),
+    linear-gradient(115deg,
+      rgba(255,255,255,.18),transparent 50%);
+  pointer-events:none;
+  z-index:-1;
+}
+.inner{padding:22px}
+.head{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:12px;
+  margin-bottom:17px;
+  padding:0;
+}
+
+.head h2{
+  margin:0;
+  font-size:17px;
+  font-weight:400;
+  letter-spacing:.16em;
+  line-height:1.35;
+  color:#3D433B;
+}
+
+.head small{
+  display:block;
+  margin-top:5px;
+  color:#A5967D;
+  font:italic 12px Georgia,serif;
+}
+/* 工具標題：與放假才是正事統一 */
+.tool-heading{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:13px;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+
+/* 首頁同款柔金工具圖示 */
+.card-icon{
+  position:relative;
+  isolation:isolate;
+  flex:0 0 33px;
+  width:33px;
+  height:33px;
+  display:grid;
+  place-items:center;
+}
+
+/* 幣值換算：首頁同款柔金光暈 */
+.card-icon::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-10px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(242,224,187,.47) 0%,
+    rgba(231,208,163,.20) 38%,
+    rgba(231,208,163,.05) 60%,
+    transparent 76%
+  );
+  filter:blur(4px);
+  pointer-events:none;
+}
+
+.card-icon::after{
+  content:none;
+}
+
+.card-icon svg{
+  display:block;
+  width:30px;
+  height:30px;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.9))
+    drop-shadow(0 2px 2px rgba(166,126,63,.23));
+}
+
+.glyph{
+  color:var(--gold);
+  font-size:20px;
+}
+.divider{
+  display:none;
+}
+.field-label{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:9px;
+}
+.selector-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 46px minmax(0,1fr);
+  align-items:end;
+  gap:13px;
+}
+
+/* 幣別選擇 */
+.currency-field{
+  position:relative;
+  min-width:0;
+}
+.currency-select{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  text-align:left;
+  gap:10px;
+  width:100%;
+  min-height:62px;
+  padding:12px 15px;
+  border-radius:15px;
+  border:1px solid rgba(152,166,141,.26);
+  background:linear-gradient(
+    145deg,rgba(255,255,255,.89),
+    rgba(255,255,255,.56));
+  box-shadow:inset 0 1px rgba(255,255,255,.85);
+  color:var(--ink);
+}
+.currency-select:hover{
+  border-color:rgba(184,157,103,.48);
+}
+.currency-code{
+  font-size:19px;
+  font-weight:400;
+  color:var(--deep);
+  letter-spacing:.06em;
+}
+.currency-name{
+  display:block;
+  margin-top:3px;
+  font-size:11px;
+  color:var(--muted);
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.chevron{
+  flex-shrink:0;
+  color:var(--gold);
+  font-size:15px;
+}
+.swap{
+  width:40px;
+  height:40px;
+  margin:0 auto 11px;
+  border-radius:50%;
+  color:var(--gold-dark);
+  border:1px solid rgba(184,157,103,.30);
+  background:linear-gradient(
+    135deg,rgba(255,255,255,.95),
+    rgba(234,216,178,.46));
+  box-shadow:
+    0 5px 14px rgba(184,157,103,.10),
+    inset 0 1px 0 white;
+  font-size:19px;
+  transition:transform .25s,box-shadow .25s;
+}
+.swap:hover{
+  transform:rotate(180deg);
+  box-shadow:
+    0 8px 18px rgba(184,157,103,.16),
+    inset 0 1px 0 white;
+}
+
+/* 搜尋選單 */
+.picker{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  width:100%;
+  min-width:235px;
+  z-index:20;
+  padding:10px;
+  border-radius:17px;
+  border:1px solid rgba(184,157,103,.25);
+  background:#FBFAF6;
+  box-shadow:0 16px 36px rgba(56,67,51,.18);
+}
+.picker[hidden]{display:none}
+.search{
+  width:100%;
+  padding:11px 12px;
+  color:var(--ink);
+  border:1px solid rgba(152,166,141,.30);
+  border-radius:11px;
+  background:white;
+  outline:none;
+  font-size:13px;
+}
+.search:focus{
+  border-color:var(--sage);
+  box-shadow:0 0 0 3px rgba(152,166,141,.12);
+}
+.options{
+  max-height:260px;
+  overflow:auto;
+  margin-top:7px;
+  display:grid;
+  gap:3px;
+}
+.option{
+  width:100%;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:var(--ink);
+  padding:10px 9px;
+  text-align:left;
+}
+.option:hover,
+.option:focus-visible{
+  background:rgba(152,166,141,.14);
+}
+.option strong{
+  color:var(--deep);
+  font-weight:500;
+  margin-right:8px;
+}
+.option span{
+  font-size:11px;
+  color:var(--muted);
+}
+.option[aria-selected="true"]{
+  background:rgba(228,209,167,.23);
+}
+.no-match{
+  padding:12px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+
+/* 金額 */
+.amount-section{
+  margin-top:25px;
+}
+.amount-wrap{
+  position:relative;
+}
+.amount-input{
+  display:block;
+  width:100%;
+  min-width:0;
+  border-radius:15px;
+  padding:14px 19px;
+  color:var(--ink);
+  font-size:25px;
+  font-weight:400;
+  border:1px solid rgba(152,166,141,.26);
+  background:linear-gradient(
+    145deg,rgba(255,255,255,.89),
+    rgba(255,255,255,.56));
+  box-shadow:inset 0 1px rgba(255,255,255,.85);
+  outline:none;
+}
+.amount-input:focus{
+  border-color:var(--sage);
+  box-shadow:0 0 0 3px rgba(152,166,141,.13);
+}
+.amount-hint{
+  margin-top:7px;
+  color:#A0A69A;
+  font-size:11px;
+}
+
+/* 換算結果 */
+.result{
+  margin-top:23px;
+  padding:25px 21px;
+  border-radius:19px;
+  text-align:center;
+  border:1px solid rgba(184,157,103,.23);
+  background:linear-gradient(
+    145deg,rgba(255,251,240,.82),
+    rgba(255,255,255,.43));
+}
+.result-label{
+  font:italic 12px Georgia,serif;
+  color:#A39780;
+}
+.result-number{
+  margin-top:10px;
+  font-size:clamp(27px,4vw,38px);
+  font-weight:400;
+  line-height:1.4;
+  color:var(--deep);
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.result-code{
+  margin-top:3px;
+  color:#87917E;
+  font-size:12px;
+  letter-spacing:.09em;
+}
+.rate-line{
+  margin-top:14px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  overflow-wrap:anywhere;
+}
+.info{
+  margin-top:17px;
+  padding:12px 14px;
+  border:1px solid rgba(184,157,103,.17);
+  border-radius:13px;
+  background:rgba(255,255,255,.37);
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.8;
+}
+.info.warning{
+  color:#886B44;
+  border-color:rgba(184,157,103,.35);
+  background:rgba(249,239,212,.45);
+}
+.info.error{
+  color:#966C61;
+  border-color:rgba(162,105,92,.23);
+}
+.info a{
+  color:var(--deep);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.note{
+  margin-top:18px;
+  color:#929A8D;
+  font-size:11px;
+  line-height:1.9;
+}
+.footer{
+  text-align:center;
+  margin-top:35px;
+  font:italic 12px Georgia,serif;
+  color:#A39780;
+}
+@media(max-width:700px){
+  .selector-grid{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .swap{
+    margin:0 auto;
+    transform:rotate(90deg);
+  }
+  .swap:hover{
+    transform:rotate(270deg);
+  }
+  .picker{
+    min-width:0;
+  }
+}
+@media(max-width:520px){
+  .page{
+  width:calc(100% - 26px);
+  padding:20px 0 30px;
+}
+  .inner{padding:21px 17px}
+  .brand-name{font-size:17px}
+  h1{font-size:22px}
+  .amount-input{font-size:23px}
+  .result{padding:22px 14px}
+}
+@media(prefers-reduced-motion:reduce){
+  .swap{transition:none}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<header class="brand">
+<div class="logo" aria-hidden="true">
+  <svg viewBox="0 0 32 32" fill="none"
+       width="24" height="24">
+    <defs>
+      <linearGradient id="brandGoldStroke"
+        x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F0E1BF"/>
+        <stop offset="28%" stop-color="#BE9E63"/>
+        <stop offset="56%" stop-color="#E5CDA0"/>
+        <stop offset="100%" stop-color="#9A7845"/>
+      </linearGradient>
+      <radialGradient id="brandGoldFill">
+        <stop offset="0%" stop-color="#FFF7E8"/>
+        <stop offset="48%" stop-color="#E7D0A2"/>
+        <stop offset="100%" stop-color="#B89D67"/>
+      </radialGradient>
+    </defs>
+
+    <path
+      d="M16 2.5
+         C17.8 12.3 19.7 14.2 29.5 16
+         C19.7 17.8 17.8 19.7 16 29.5
+         C14.2 19.7 12.3 17.8 2.5 16
+         C12.3 14.2 14.2 12.3 16 2.5Z"
+      stroke="url(#brandGoldStroke)"
+      stroke-width=".9"/>
+
+    <circle cx="16" cy="16" r="2"
+      fill="url(#brandGoldFill)"/>
+
+    <path
+      d="M8 4L8.7 6.3L11 7L8.7 7.7L8 10
+         L7.3 7.7L5 7L7.3 6.3Z"
+      fill="url(#brandGoldFill)"
+      opacity=".75"/>
+  </svg>
+</div>
+  <div>
+    <div class="brand-name">有球必應</div>
+    <div class="english">Hakuna Matata</div>
+  </div>
+  <a class="back" href="index.html">← 返回首頁</a>
+</header>
+
+<main class="workspace">
+  <section class="glass" aria-label="幣值換算工具">
+    <div class="inner">
+
+<div class="head">
+  <div class="tool-heading">
+
+    <div class="card-icon" aria-hidden="true">
+      <svg viewBox="0 0 36 36" fill="none">
+        <path
+          d="M6 14H28M6 14L12 9M6 14L12 19
+             M30 23H8M30 23L24 18M30 23L24 28"
+          stroke="url(#brandGoldStroke)"
+          stroke-width="1.1"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+        <path
+          d="M28 4L29 7L32 8L29 9L28 12
+             L27 9L24 8L27 7Z"
+          stroke="url(#brandGoldStroke)"
+          stroke-width=".85"/>
+      </svg>
+    </div>
+
+    <div>
+      <h2>幣值換算</h2>
+      <small>Currency Converter</small>
+    </div>
+
+  </div>
+</div>
+      <div class="divider"></div>
+
+      <div class="selector-grid">
+
+        <div class="currency-field" id="field-from">
+          <label class="field-label" for="button-from">
+            原始幣別
+          </label>
+          <button
+            class="currency-select"
+            id="button-from"
+            type="button"
+            aria-expanded="false"
+            aria-controls="picker-from">
+            <span>
+              <span class="currency-code" id="code-from">TWD</span>
+              <span class="currency-name" id="name-from">
+                新臺幣
+              </span>
+            </span>
+            <span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+
+          <div class="picker" id="picker-from" hidden>
+            <input
+              class="search"
+              id="search-from"
+              type="search"
+              placeholder="搜尋幣別、國家或代碼"
+              aria-label="搜尋原始幣別">
+            <div class="options" id="options-from"></div>
+          </div>
+        </div>
+
+        <button class="swap"
+          id="swap"
+          type="button"
+          aria-label="交換原始和換算幣別"
+          title="交換幣別">⇄</button>
+
+        <div class="currency-field" id="field-to">
+          <label class="field-label" for="button-to">
+            換算幣別
+          </label>
+          <button
+            class="currency-select"
+            id="button-to"
+            type="button"
+            aria-expanded="false"
+            aria-controls="picker-to">
+            <span>
+              <span class="currency-code" id="code-to">JPY</span>
+              <span class="currency-name" id="name-to">
+                日圓
+              </span>
+            </span>
+            <span class="chevron" aria-hidden="true">⌄</span>
+          </button>
+
+          <div class="picker" id="picker-to" hidden>
+            <input
+              class="search"
+              id="search-to"
+              type="search"
+              placeholder="搜尋幣別、國家或代碼"
+              aria-label="搜尋換算幣別">
+            <div class="options" id="options-to"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="amount-section">
+        <label class="field-label" for="amount">
+          輸入金額
+        </label>
+        <div class="amount-wrap">
+          <input
+            class="amount-input"
+            id="amount"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            value="1000"
+            placeholder="輸入想換算的金額">
+        </div>
+        <div class="amount-hint">
+          輸入數字後自動換算，不用按確認。
+        </div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <div class="result-label">Your Converted Amount</div>
+        <div class="result-number" id="result">
+          讀取匯率中…
+        </div>
+        <div class="result-code" id="result-code">JPY</div>
+        <div class="rate-line" id="rate-line">
+          正在取得參考匯率
+        </div>
+      </div>
+
+      <div class="info" id="info" role="status">
+        正在載入可用幣別與參考匯率…
+      </div>
+
+      <p class="note">
+        ✧ 匯率來自 Frankfurter 的公開參考資料，
+        並非銀行現鈔買賣價、刷卡結算價或實際成交價。
+        假日或資料尚未發布時，可能沿用最近公布的匯率。
+        本工具不會記錄你的換算歷史。
+      </p>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  A little magic for everyday life.
+</footer>
+</div>
+
+<script>
+"use strict";
+
+/* 免費公開 API，不需要 API Key 或登入 */
+const API = "https://api.frankfurter.dev/v2";
+
+/* 所有資料只存於使用者自己的瀏覽器 */
+const PREF_KEY = "ball-toolbox-currency-preferences-v1";
+const CURRENCY_KEY = "ball-toolbox-currency-list-v1";
+const RATE_PREFIX = "ball-toolbox-rate-v1-";
+
+/* 常用幣別先顯示，其餘依字母順序排列 */
+const COMMON = [
+  "TWD","USD","JPY","KRW","CNY",
+  "HKD","EUR","GBP","THB","SGD",
+  "AUD","CAD","MYR","VND","PHP"
+];
+
+/* 中文搜尋別名 */
+const ALIASES = {
+  TWD:"台幣 臺幣 新台幣 新臺幣 台灣 臺灣",
+  USD:"美金 美元 美國",
+  JPY:"日幣 日圓 日元 日本",
+  KRW:"韓元 韓幣 韓圜 韓國",
+  CNY:"人民幣 人民币 中國 大陸",
+  HKD:"港幣 港元 香港",
+  EUR:"歐元 歐洲",
+  GBP:"英鎊 英國",
+  THB:"泰銖 泰幣 泰國",
+  SGD:"新幣 新加坡幣 新加坡",
+  AUD:"澳幣 澳元 澳洲",
+  CAD:"加幣 加拿大",
+  MYR:"馬幣 馬來西亞",
+  VND:"越南盾 越南",
+  PHP:"披索 菲律賓",
+  CHF:"瑞士法郎 瑞士",
+  IDR:"印尼盾 印尼",
+  INR:"印度盧比 印度",
+  NZD:"紐幣 紐西蘭",
+  SEK:"瑞典克朗 瑞典",
+  NOK:"挪威克朗 挪威",
+  DKK:"丹麥克朗 丹麥"
+};
+
+const $ = id => document.getElementById(id);
+
+let from = "TWD";
+let to = "JPY";
+let currencies = [];
+let currentRate = null;
+let requestId = 0;
+let refreshPromise = null;
+
+const currencyDisplay = typeof Intl.DisplayNames === "function"
+  ? new Intl.DisplayNames(["zh-TW"],{type:"currency"})
+  : null;
+
+/* 安全讀取本機資料 */
+function readStore(key){
+  try{
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  }catch{
+    return null;
+  }
+}
+
+function writeStore(key,value){
+  try{
+    localStorage.setItem(key,JSON.stringify(value));
+  }catch(error){
+    console.warn("瀏覽器本機儲存失敗",error);
+  }
+}
+
+function isCode(code){
+  return /^[A-Z]{3}$/.test(code);
+}
+
+function getName(code){
+  const item = currencies.find(c=>c.code===code);
+  if(!item)return code;
+  return item.zh || item.name || code;
+}
+
+function localName(code,name){
+  try{
+    if(currencyDisplay){
+      const translated = currencyDisplay.of(code);
+      if(translated && translated!==code)return translated;
+    }
+  }catch{}
+  return name || code;
+}
+
+/* 載入上次選擇的幣別 */
+function loadPreferences(){
+  const saved = readStore(PREF_KEY);
+  if(saved && isCode(saved.from))from=saved.from;
+  if(saved && isCode(saved.to))to=saved.to;
+}
+
+function savePreferences(){
+  writeStore(PREF_KEY,{from,to});
+}
+
+/* 相同幣別最小不需查匯率 */
+function sameCurrency(){
+  return from===to;
+}
+
+/* API 資料正規化，支援 v2 幣別陣列 */
+function normalizeCurrencies(data){
+  let result=[];
+
+  if(Array.isArray(data)){
+    result=data.map(item=>{
+      const code=String(
+        item.iso_code || item.code || ""
+      ).toUpperCase();
+
+      const name=String(item.name || code);
+
+      return {
+        code,
+        name,
+        zh:localName(code,name)
+      };
+    });
+  }else if(data && typeof data==="object"){
+    result=Object.entries(data).map(([key,value])=>{
+      const code=key.toUpperCase();
+      const name=typeof value==="string"
+        ?value:String(value?.name || code);
+      return {code,name,zh:localName(code,name)};
+    });
+  }
+
+  const known = new Set();
+
+  return result.filter(item=>{
+    if(!isCode(item.code) || known.has(item.code))
+      return false;
+    known.add(item.code);
+    return true;
+  });
+}
+
+function sortedCurrencies(){
+  const priority = new Map(
+    COMMON.map((code,index)=>[code,index])
+  );
+
+  return [...currencies].sort((a,b)=>{
+    const ai=priority.has(a.code)
+      ?priority.get(a.code):999;
+    const bi=priority.has(b.code)
+      ?priority.get(b.code):999;
+    if(ai!==bi)return ai-bi;
+    return a.code.localeCompare(b.code);
+  });
+}
+
+/* 每天檢查一次；連線失敗沿用有效舊清單 */
+function cacheIsToday(entry){
+  if(!entry || !entry.checkedAt)return false;
+
+  return new Date(entry.checkedAt).toDateString()===
+         new Date().toDateString();
+}
+
+async function fetchJSON(url){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),12000);
+
+  try{
+    const response=await fetch(url,{
+      signal:controller.signal,
+      cache:"no-store"
+    });
+
+    if(!response.ok){
+      throw new Error("HTTP "+response.status);
+    }
+
+    return await response.json();
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
+async function loadCurrencies(){
+  const saved=readStore(CURRENCY_KEY);
+  let usingCache=false;
+
+  if(saved && Array.isArray(saved.list)){
+    const normalized=normalizeCurrencies(saved.list);
+    if(normalized.length){
+      currencies=normalized;
+      usingCache=true;
+    }
+  }
+
+  if(!currencies.length){
+    currencies=[
+      {code:"TWD",name:"New Taiwan Dollar",zh:"新臺幣"},
+      {code:"JPY",name:"Japanese Yen",zh:"日圓"}
+    ];
+  }
+
+  renderSelectors();
+
+  if(cacheIsToday(saved) && usingCache){
+    return;
+  }
+
+  try{
+    const raw=await fetchJSON(API+"/currencies");
+    const fresh=normalizeCurrencies(raw);
+
+    if(!fresh.length){
+      throw new Error("無幣別清單");
+    }
+
+    currencies=fresh;
+    writeStore(CURRENCY_KEY,{
+      checkedAt:Date.now(),
+      list:raw
+    });
+
+    if(!currencies.some(c=>c.code===from))from="TWD";
+    if(!currencies.some(c=>c.code===to))to="JPY";
+
+    savePreferences();
+    renderSelectors();
+  }catch(error){
+    console.warn("幣別清單更新失敗",error);
+
+    if(!usingCache){
+      showInfo(
+        "目前無法取得完整幣別清單。" +
+        "可以先使用 TWD 與 JPY，待連線恢復後重新整理。",
+        "warning"
+      );
+    }
+  }
+}
+
+/* 幣別選單 */
+function renderSelectors(){
+  $("code-from").textContent=from;
+  $("code-to").textContent=to;
+  $("name-from").textContent=getName(from);
+  $("name-to").textContent=getName(to);
+  $("result-code").textContent=to;
+}
+
+function closePickers(){
+  ["from","to"].forEach(side=>{
+    $("picker-"+side).hidden=true;
+    $("button-"+side).setAttribute("aria-expanded","false");
+  });
+}
+
+function openPicker(side){
+  const picker=$("picker-"+side);
+  const isOpen=!picker.hidden;
+
+  closePickers();
+  if(isOpen)return;
+
+  picker.hidden=false;
+  $("button-"+side).setAttribute("aria-expanded","true");
+
+  const search=$("search-"+side);
+  search.value="";
+  renderOptions(side,"");
+  search.focus();
+}
+
+function renderOptions(side,term){
+  const target=$("options-"+side);
+  target.replaceChildren();
+
+  const keyword=term.trim().toLocaleLowerCase();
+  const items=sortedCurrencies().filter(c=>{
+    const combined=[
+      c.code,c.name,c.zh,
+      ALIASES[c.code] || ""
+    ].join(" ").toLocaleLowerCase();
+
+    return combined.includes(keyword);
+  }).slice(0,250);
+
+  if(!items.length){
+    const empty=document.createElement("div");
+    empty.className="no-match";
+    empty.textContent="找不到符合的幣別，試試英文代碼。";
+    target.append(empty);
+    return;
+  }
+
+  items.forEach(item=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="option";
+    button.setAttribute(
+      "aria-selected",
+      String(item.code===(side==="from"?from:to))
+    );
+
+    const code=document.createElement("strong");
+    code.textContent=item.code;
+
+    const name=document.createElement("span");
+    name.textContent=item.zh;
+
+    button.append(code,name);
+
+    button.addEventListener("click",()=>{
+      chooseCurrency(side,item.code);
+    });
+
+    target.append(button);
+  });
+}
+
+function chooseCurrency(side,code){
+  if(side==="from")from=code;
+  else to=code;
+
+  savePreferences();
+  renderSelectors();
+  closePickers();
+  updateConversion();
+}
+
+/* 金額處理 */
+function parseAmount(){
+  const raw=$("amount").value.trim().replace(/,/g,"");
+
+  if(!raw)return {empty:true};
+
+  if(!/^\d+(\.\d*)?$/.test(raw)){
+    return {error:"請輸入有效的非負數字。"};
+  }
+
+  const value=Number(raw);
+
+  if(!Number.isFinite(value) || value>1e15){
+    return {error:"金額太大，請輸入較小的數字。"};
+  }
+
+  return {value};
+}
+
+function decimalsFor(code){
+  try{
+    const formatter=new Intl.NumberFormat("zh-TW",{
+      style:"currency",
+      currency:code
+    });
+    return formatter.resolvedOptions()
+      .maximumFractionDigits;
+  }catch{
+    return 2;
+  }
+}
+
+function formatNumber(value,code){
+  if(!Number.isFinite(value))return "—";
+
+  const decimals=decimalsFor(code);
+
+  return new Intl.NumberFormat("zh-TW",{
+    minimumFractionDigits:0,
+    maximumFractionDigits:decimals
+  }).format(value);
+}
+
+function formatRate(value){
+  if(!Number.isFinite(value))return "—";
+
+  return new Intl.NumberFormat("zh-TW",{
+    maximumSignificantDigits:10
+  }).format(value);
+}
+
+function showInfo(message,type="normal"){
+  const el=$("info");
+  el.textContent=message;
+  el.className="info";
+
+  if(type==="warning")el.classList.add("warning");
+  if(type==="error")el.classList.add("error");
+}
+
+function renderResult(){
+  const parsed=parseAmount();
+
+  if(parsed.empty){
+    $("result").textContent="—";
+    $("rate-line").textContent="請先輸入金額。";
+    return;
+  }
+
+  if(parsed.error){
+    $("result").textContent="—";
+    $("rate-line").textContent=parsed.error;
+    return;
+  }
+
+  if(!currentRate){
+    $("result").textContent="—";
+    $("rate-line").textContent="目前沒有可用的參考匯率。";
+    return;
+  }
+
+  const converted=parsed.value*currentRate.rate;
+
+  if(!Number.isFinite(converted)){
+    $("result").textContent="—";
+    $("rate-line").textContent="金額超出可換算範圍。";
+    return;
+  }
+
+  $("result").textContent=formatNumber(converted,to);
+  $("result-code").textContent=to;
+
+  $("rate-line").textContent=
+    "1 "+from+" ≈ "+
+    formatRate(currentRate.rate)+" "+to+
+    "｜資料日期："+currentRate.date;
+}
+
+/* 每一組幣別分開快取 */
+function rateKey(base,quote){
+  return RATE_PREFIX+base+"-"+quote;
+}
+
+function validRate(item,base,quote){
+  return !!(
+    item &&
+    item.base===base &&
+    item.quote===quote &&
+    typeof item.date==="string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(item.date) &&
+    typeof item.rate==="number" &&
+    Number.isFinite(item.rate) &&
+    item.rate>0
+  );
+}
+
+/* 同一天成功查詢過，就不反覆請求 */
+function validTodayCache(cache,base,quote){
+  return validRate(cache,base,quote) &&
+         cacheIsToday(cache);
+}
+
+async function updateConversion(){
+  const base=from;
+  const quote=to;
+  const seq=++requestId;
+
+  renderSelectors();
+
+  if(sameCurrency()){
+    currentRate={
+      base,quote,rate:1,
+      date:new Date().toLocaleDateString("sv-SE")
+    };
+    renderResult();
+    showInfo("相同幣別，換算比例為 1：1。");
+    return;
+  }
+
+  const key=rateKey(base,quote);
+  const cached=readStore(key);
+
+  if(validTodayCache(cached,base,quote)){
+    currentRate=cached;
+    renderResult();
+    showInfo(
+      "已使用今日檢查過的參考匯率。" +
+      "資料日期："+cached.date+"。"
+    );
+    return;
+  }
+
+  /* 有舊快取先暫時顯示，同時嘗試更新 */
+  if(validRate(cached,base,quote)){
+    currentRate=cached;
+    renderResult();
+    showInfo(
+      "正在檢查最新匯率；畫面目前顯示舊資料。" +
+      "資料日期："+cached.date+"。",
+      "warning"
+    );
+  }else{
+    currentRate=null;
+    $("result").textContent="讀取匯率中…";
+    $("result-code").textContent=quote;
+    $("rate-line").textContent="正在取得參考匯率";
+    showInfo("正在連線取得參考匯率…");
+  }
+
+  try{
+    const data=await fetchJSON(
+      API+"/rate/"+
+      encodeURIComponent(base)+"/"+
+      encodeURIComponent(quote)
+    );
+
+    if(seq!==requestId)return;
+
+    const fresh={
+      base,quote,
+      date:data.date,
+      rate:data.rate,
+      checkedAt:Date.now()
+    };
+
+    if(!validRate(fresh,base,quote)){
+      throw new Error("匯率格式不正確");
+    }
+
+    writeStore(key,fresh);
+
+    currentRate=fresh;
+    renderResult();
+
+    showInfo(
+      "參考匯率已取得。" +
+      "資料日期："+fresh.date+"。" +
+      "此為參考數值，實際交易匯率可能不同。"
+    );
+  }catch(error){
+    if(seq!==requestId)return;
+
+    console.warn("匯率更新失敗",error);
+
+    if(validRate(cached,base,quote)){
+      currentRate=cached;
+      renderResult();
+      showInfo(
+        "⚠ 無法更新匯率，現在使用之前儲存的資料。" +
+        "資料日期："+cached.date+"。" +
+        "這筆匯率可能已過期，請勿直接作為交易價格。",
+        "warning"
+      );
+    }else{
+      currentRate=null;
+      $("result").textContent="—";
+      $("result-code").textContent=quote;
+      $("rate-line").textContent="目前無法提供換算結果。";
+      showInfo(
+        "⚠ 暫時無法取得 "+base+" → "+quote+
+        " 的參考匯率，且沒有可使用的本機資料。" +
+        "可能是網路問題，也可能是資料來源未提供此組合。" +
+        "請稍後再試或改選其他幣別。",
+        "error"
+      );
+    }
+  }
+}
+
+/* 事件 */
+$("button-from").addEventListener("click",()=>{
+  openPicker("from");
+});
+
+$("button-to").addEventListener("click",()=>{
+  openPicker("to");
+});
+
+["from","to"].forEach(side=>{
+  $("search-"+side).addEventListener("input",event=>{
+    renderOptions(side,event.target.value);
+  });
+
+  $("search-"+side).addEventListener("keydown",event=>{
+    if(event.key==="Enter"){
+      const first=$("options-"+side)
+        .querySelector(".option");
+
+      if(first){
+        event.preventDefault();
+        first.click();
+      }
+    }
+  });
+});
+
+$("swap").addEventListener("click",()=>{
+  [from,to]=[to,from];
+
+  closePickers();
+  savePreferences();
+  renderSelectors();
+  updateConversion();
+});
+
+$("amount").addEventListener("input",()=>{
+  renderResult();
+});
+
+document.addEventListener("click",event=>{
+  if(
+    !$("field-from").contains(event.target) &&
+    !$("field-to").contains(event.target)
+  ){
+    closePickers();
+  }
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closePickers();
+});
+
+/* 啟動：先顯示介面，再取得所需資料 */
+async function init(){
+  loadPreferences();
+  renderSelectors();
+
+  /* 先載入完整幣別清單 */
+  await loadCurrencies();
+
+  /* 之後只請求目前需要的幣別組合 */
+  await updateConversion();
+}
+
+init();
+</script>
+
+</body>
+</html>
